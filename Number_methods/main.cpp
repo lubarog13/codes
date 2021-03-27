@@ -27,7 +27,6 @@ int main() {
         }
         if(sum>max) max=sum;
     }
-    std::cout<<max<<std::endl;
     if(max>1) std::cout << "Matrix doesn't well" << std::endl;
     else{
         for(int i=0; i<n;i++){
@@ -48,9 +47,11 @@ int main() {
             }
         }
     }
+    std::cout<<"X answer: ";
     for (int i = 0; i < n; ++i) {
         std::cout<<x[i]<<" ";
     }
-    std::cout<<std::endl<<k;
+
+    std::cout<<std::endl<<"Iterations: "<<k;
     return 0;
 }
