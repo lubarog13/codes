@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cmath>
 const int n=4;
-float searchX(float *c, float *x){
+float searchX(float c[], float x[]){
     float newX =0;
     for (int i=0; i<n; i++){
         newX +=c[i]* x[i];
@@ -18,7 +18,7 @@ int main() {
     float b[n]={1.27, -0.78, -0.58, 1.51};
     float x0[n] ={0, 0, 0, 0};
     float x[n] ={0, 0, 0, 0};
-    int k=0, e=0.001; float buf[n];
+    int k=0, e=0.001;
     float sum, max=0;
     for(int i=0; i<n; i++){
         sum=0;
@@ -36,16 +36,15 @@ int main() {
             C[i][n]=b[i];
         }
         while(max/(1-max)*fabs(x[0]-x0[0])>e){
-
             k++;
             for(int i=0;i<n;i++){
-                buf[i]=x[i];
-                x[i]=searchX(C[i], x0);
+                x0[i]=x[i];
+                x[i]=0;
+                for (int j=0; j<n; j++){
+                    x[i] += C[i][j] * x0[j];
+                }
+                x[i]+=C[i][n];
             }
-            for(int i=0; i<n;i++){
-                x0[i]= buf[i];
-            }
-            std::cout<<std::endl;
         }
     }
     for (int i = 0; i < n; ++i) {
