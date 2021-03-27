@@ -11,11 +11,10 @@ float searchX(float c[], float x[]){
 }
 
 int main() {
-    double C[n][n+1] = {0.22, (-0.14), 0.06, (-0.16), 0,
-                   0.12, 0, 0.32, (-0.18), 0,
-                   0.08, (-0.12), 0.23, 0.32, 0,
-                   0.25, 0.21, 0.19, 0, 0};
-    double b[n]={1.27, -0.78, -0.58, 1.51};
+    double C[n][n+1] = {0.22, (-0.14), 0.06, (-0.16), 1.27,
+                   0.12, 0, 0.32, (-0.18), (-0.78),
+                   0.08, (-0.12), 0.23, 0.32, -(0.58),
+                   0.25, 0.21, 0.19, 0, 1.51};
     double x0[n] ={0, 0, 0, 0};
     double x[n] ={0, 0, 0, 0};
     double k=0, e=0.001;
@@ -27,14 +26,10 @@ int main() {
         }
         if(sum>max) max=sum;
     }
-    std::cout<<max<<std::endl;
     if(max>1) std::cout << "Matrix doesn't well" << std::endl;
     else{
         for(int i=0; i<n;i++){
-            x[i]=b[i];
-        }
-        for(int i=0; i<n;i++){
-            C[i][n]=b[i];
+            x[i]=C[i][n];
         }
         while((max/(1-max))*fabs(x[0]-x0[0])>e){
             k++;
@@ -48,9 +43,11 @@ int main() {
             }
         }
     }
+    std::cout<<"X answer: ";
     for (int i = 0; i < n; ++i) {
         std::cout<<x[i]<<" ";
     }
-    std::cout<<std::endl<<k;
+
+    std::cout<<std::endl<<"Iterations: "<<k;
     return 0;
 }
