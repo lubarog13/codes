@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cmath>
-const int n=4;
+const int n=3;
 float searchX(float c[], float x[]){
     float newX =0;
     for (int i=0; i<n; i++){
@@ -11,18 +11,42 @@ float searchX(float c[], float x[]){
 }
 
 int main() {
-    double C[n][n+1] = {0.22, (-0.14), 0.06, (-0.16), 1.27,
-                   0.12, 0, 0.32, (-0.18), (-0.78),
-                   0.08, (-0.12), 0.23, 0.32, -(0.58),
-                   0.25, 0.21, 0.19, 0, 1.51};
-    double x0[n] ={0, 0, 0, 0};
-    double x[n] ={0, 0, 0, 0};
+    double C[n][n+1];
+    std::cout<<"Enter system: "<<std::endl;
+    for(int i=0;i<n;i++){
+        for (int (j) = 0; (j) < n; ++(j)) {
+            std::cin>>C[i][j];
+        }
+    }
+    C[1][1] = ((-1)*C[1][1] + 8)/8;
+    C[2][2] = ((-1)*C[2][2] + 8)/8;
+        for(int j=0; j<n; j++){
+            if(0==j) C[0][0]= ((-1)*C[0][j] + 10)/10;
+            else C[0][j] = (-1)*C[0][j]/10;
+            C[1][j]  = (-1)*C[1][j]/8;
+            C[2][j]  = (-1)*C[2][j]/18;
+        }
+    std::cout<<"Enter b"<<std::endl;
+    for(int i=0;i<n;i++){
+        std::cin>>C[i][n];
+    }
+    C[0][n]/=10;
+    C[1][n]/=8;
+    C[2][n]/=8;
+    for(int i=0;i<n;i++){
+        for (int (j) = 0; (j) < n+1; ++(j)) {
+            std::cout<<C[i][j]<<" ";
+        }
+        std::cout<<std::endl;
+    }
+    double x0[n] ={0, 0, 0};
+    double x[n] ={0, 0, 0};
     double k=0, e=0.001;
     float sum, max=0;
     for(int i=0; i<n; i++){
         sum=0;
         for (int j = 0; j < n; j++) {
-            sum+=fabs(C[i][j]);
+            sum+=fabs(C[j][i]);
         }
         if(sum>max) max=sum;
     }
