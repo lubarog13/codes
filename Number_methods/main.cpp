@@ -36,8 +36,11 @@ int main() {
             for(int i=0;i<n;i++){
                 x0[i]=x[i];
                 x[i]=0;
+                int m=0;
                 for (int j=0; j<n; j++){
-                    x[i] += C[i][j] * x0[j];
+                    if(j<m) x[i]+=C[i][j] * x[m];
+                    else x[i] += C[i][j] * x0[j];
+                    m++;
                 }
                 x[i]+=C[i][n];
             }
