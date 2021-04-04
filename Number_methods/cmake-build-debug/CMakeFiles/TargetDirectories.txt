@@ -1,3 +1,3 @@
-C:/Users/DNS/Desktop/VS_code/Number_methods/cmake-build-debug/CMakeFiles/Number_methods.dir
-C:/Users/DNS/Desktop/VS_code/Number_methods/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/DNS/Desktop/VS_code/Number_methods/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+C:/Users/lubar/Documents/codes/Number_methods/cmake-build-debug/CMakeFiles/Number_methods.dir
+C:/Users/lubar/Documents/codes/Number_methods/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/lubar/Documents/codes/Number_methods/cmake-build-debug/CMakeFiles/rebuild_cache.dir

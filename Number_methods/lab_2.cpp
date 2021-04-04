@@ -1,16 +1,8 @@
 #include <iostream>
 #include <cmath>
 const int n=3;
-float searchX(float c[], float x[]){
-    float newX =0;
-    for (int i=0; i<n; i++){
-        newX +=c[i]* x[i];
-    }
-    newX+=c[n];
-    return newX;
-}
 
-int main() {
+int lab_2() {
     double C[n][n+1];
     std::cout<<"Enter system: "<<std::endl;
     for(int i=0;i<n;i++){

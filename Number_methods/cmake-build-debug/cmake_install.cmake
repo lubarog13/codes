@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/DNS/Desktop/VS_code/Number_methods
+# Install script for directory: C:/Users/lubar/Documents/codes/Number_methods
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/DNS/Desktop/VS_code/Number_methods/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/lubar/Documents/codes/Number_methods/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
