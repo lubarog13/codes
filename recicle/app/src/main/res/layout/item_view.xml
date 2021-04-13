@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginStart="16dp"
-        android:textSize="30sp"
+        android:textSize="22sp"
         android:id="@+id/item_name"
         android:layout_toEndOf="@+id/item_image"
         android:text="Android 1.0"
