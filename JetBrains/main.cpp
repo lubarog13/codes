@@ -94,21 +94,24 @@ int main() {
     double x0[n] ={0, 0, 0};
     double x[n] ={0, 0, 0};
     double k=0, e=0.001;
-    float sum, max=0;
+    float sum, max=0, max1=0, sum1;
     for(int i=0; i<n; i++){
         sum=0;
+        sum1=0;
         for (int j = 0; j < n; j++) {
+            sum1+=fabs(C[i][j]);
             sum+=fabs(C[j][i]);
         }
         if(sum>max) max=sum;
+        if(sum1>max1) max1=sum;
     }
     std::cout<<max<<std::endl;
-    if(max>1) std::cout << "Matrix doesn't well" << std::endl;
+    if(max1>1) std::cout << "Matrix doesn't well" << std::endl;
     else{
         for(int i=0; i<n;i++){
             x[i]=C[i][n];
         }
-        while((max/(1-max))*fabs(x[0]-x0[0])>e){
+        while(fabs(x[0]-x0[0])>e){
             k++;
             for(int i=0;i<n;i++){
                 x0[i]=x[i];
@@ -116,15 +119,11 @@ int main() {
                 int m=0;
                 for (int j=0; j<n; j++){
                     //2
-                   /*  if(j<m) x[i]+=C[i][j] * x[m];
+                   if(j<m) x[i]+=C[i][j] * x[m];
                     else x[i] += C[i][j] * x0[j]; 
-                    m++;
-                    for (int i = 0; i < n; ++i) {
-                        std::cout<<x[i]<<" ";
-                    } */
-                    //std::cout<<std::endl;
+                    m++; 
                     //1
-                    x[i] += C[i][j] * x0[j];
+                    //x[i] += C[i][j] * x0[j];
                 }
                 x[i]+=C[i][n];
             }
