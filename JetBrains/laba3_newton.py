@@ -1,5 +1,4 @@
 import numpy as np
-import cProfile
 import scipy.interpolate
 import matplotlib.pyplot as plt
 def one_diff(x, y):
