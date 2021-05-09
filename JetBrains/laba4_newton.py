@@ -42,7 +42,7 @@ class Integral(object):
     def rectangle_rule(self, n):
         h = abs(self.a - self.b) / n
         sum = 0
-        for i in range(0, n):
+        for i in range(0, n+1):
             sum += h * self.func(self.a + h * i)
         return sum
 
@@ -50,7 +50,7 @@ class Integral(object):
     def trapezoid_rule(self, n):
         h = abs(self.a - self.b) / n
         sum = 0
-        for i in range(0, n):
+        for i in range(0, n+1):
             sum += h * (self.func(self.a + h * i) + self.func(self.a + h * (i + 1))) * 0.5
         return sum
 
@@ -69,7 +69,7 @@ class Integral(object):
     def runge_rule(self, rule, n0, o, e):
         I1 = 0
         I2 = 100 * e
-        while o * (I2 - I1) > e:
+        while o * (abs(I2 - I1)) > e:
             I2 = rule(n0)
             I1 = rule(2 * n0)
             n0 *= 2
@@ -97,3 +97,4 @@ print(newton_integral.runge_rule(newton_integral.trapezoid_rule, n0, float(1 / 3
 print("\n")
 print(newton_integral.runge_rule(newton_integral.simpsone_rule, n0, float(1 / 15), e))
 print("\n")
+# По проверке на онлайн-калькуляторе метод симпсона - самый точный
