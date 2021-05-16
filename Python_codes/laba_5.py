@@ -35,33 +35,29 @@ def search_n(a, b, y0, e):
     y1 = runge_meth_in_dot(a, y0, h0)
     y_1 = runge_meth_in_dot(a, y0, 2 * h0)
     y2 = runge_meth_in_dot(a + h0, y1, h0)
-    y_2 = runge_meth_in_dot(a + h0, y_1, 2 * h0)
     print(y2)
-    print(y_2)
-    print(abs(y2-y_2))
+    print(abs(y2-y_1))
     print("N = ")
-    if abs(y2- y_2)<e:
-        while abs(y2-y_2)<e:
+    if abs(y2- y_1)<e:
+        while abs(y2-y_1)<e:
             h0=2*h0
             y1 = runge_meth_in_dot(a, y0, h0)
             y_1 = runge_meth_in_dot(a, y0, 2 * h0)
             y2 = runge_meth_in_dot(a + h0, y1, h0)
-            y_2 = runge_meth_in_dot(a + h0, y_1, 2 * h0)
         n = (b - a) / h0
         if (n % 2 != 0):
             n = n + pribl(a, b, n, e, y0)
         else:
             n=2*n
         print(n)
-    elif abs(y2- y_2)>e:
-        while abs(y2-y_2)>e:
+    elif abs(y2- y_1)>e:
+        while abs(y2-y_1)>e:
             h0 = h0 / 2
             print(h0)
             y1 = runge_meth_in_dot(a, y0, h0)
             y_1= runge_meth_in_dot(a, y0, 2*h0)
             y2 = runge_meth_in_dot(a + h0, y1, h0)
-            y_2 = runge_meth_in_dot(a + h0, y_1, 2*h0)
-            print(abs(y2-y_2))
+            print(abs(y2-y_1))
         n = (b - a) / h0
         if(n % 2 != 0):
             n=n+pribl(a, b, n, e, y0)
@@ -76,7 +72,7 @@ def pribl(a, b, n, e, y0):
     h0=(float) (a-b)/(n+1)
     y1 = runge_meth_in_dot(a, y0, h0)
     y_1=runge_meth_in_dot(a, y0, 2*h0)
-    if(abs(runge_meth_in_dot(a + h0, y1, h0) - runge_meth_in_dot(a + h0, y_1, 2 * h0))<e):
+    if(abs(runge_meth_in_dot(a + h0, y1, h0) - y_1)<e):
         return 1
     else:
         return -1
@@ -89,14 +85,18 @@ h=(b-a)/n
 xpoints=np.arange(a, b, h)
 ypoints = runge_meth(a, b, n, y0)
 print("yi in Runge-Kutt: ")
+print(ypoints)
 plt.figure()
 plt.plot(xpoints, ypoints,'b-',label = "Метод Рунге-Кутта")
 y_points = meth_eiler(a, b, n, y0)
+print("yi in Eiler: ")
+print(ypoints)
 plt.plot(xpoints, y_points,',-.g',label = "Метод Эйлера")
 max=0
 for i in range(0, len(y_points)):
     if(abs(y_points[i]-ypoints[i])>max):
         max=abs(y_points[i]-ypoints[i])
+print("MAX delta: ")
 print(max)
 plt.legend()
 plt.grid(True)
