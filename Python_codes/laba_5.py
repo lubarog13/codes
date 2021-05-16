@@ -2,8 +2,11 @@ import math
 import matplotlib.pyplot as plt
 import numpy as np
 def func(x, y):
-    d = -1*math.exp(-2*x)*(2+3*math.cos(x))/(3*y) + y*math.cos(x)
+    d = 2*x*pow(y,2)+y
     return d
+def func_right(x):
+    y=-1*math.exp(x)/(-1*math.exp(-1)+2*math.exp(x)*(x-1))
+    return y
 def runge_meth_in_dot(x0, y0, h):
     f1=func(x0, y0)
     f2=func(x0+h/2, y0+h*0.5*f1)
@@ -35,8 +38,6 @@ def search_n(a, b, y0, e):
     y1 = runge_meth_in_dot(a, y0, h0)
     y_1 = runge_meth_in_dot(a, y0, 2 * h0)
     y2 = runge_meth_in_dot(a + h0, y1, h0)
-    print(y2)
-    print(abs(y2-y_1))
     print("N = ")
     if abs(y2- y_1)<e:
         while abs(y2-y_1)<e:
@@ -76,9 +77,9 @@ def pribl(a, b, n, e, y0):
         return 1
     else:
         return -1
-a=0
-b=0.8
-y0=1.1
+a=-1
+b=0.6
+y0=0.2
 e=0.0001
 n = search_n(a, b, y0, e)
 h=(b-a)/n
@@ -96,6 +97,18 @@ max=0
 for i in range(0, len(y_points)):
     if(abs(y_points[i]-ypoints[i])>max):
         max=abs(y_points[i]-ypoints[i])
+print("MAX delta: ")
+print(max)
+ypoints_=[]
+for x in xpoints:
+    ypoints_.append(func_right(x))
+print("Right solution:")
+print(ypoints_)
+plt.plot(xpoints, ypoints_, ',-.r', label="Точное решение")
+max=0
+for i in range(0, len(y_points)):
+    if(abs(ypoints[i]-ypoints_[i])>max):
+        max=abs(ypoints[i]-ypoints_[i])
 print("MAX delta: ")
 print(max)
 plt.legend()
