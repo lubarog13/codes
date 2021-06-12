@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,10 +30,21 @@ class HomeFragment : Fragment() {
         recyclerView.setLayoutManager(LinearLayoutManager(view?.getContext()));
         val coffeeClickListener: CoffeeAdapter.onCoffeeClickListener = object : CoffeeAdapter.onCoffeeClickListener {
             override fun onCoffeeClick(coffee: Coffee?, position: Int) {
-                val text = "Цена: "+ coffee?.cost.toString()
+                /*val text = "Цена: "+ coffee?.cost.toString()
                 val duration = Toast.LENGTH_SHORT
                 val toast = Toast.makeText(getActivity(), text, duration)
-                toast.show()
+                toast.show()*/
+                val ft: FragmentTransaction = requireActivity().getSupportFragmentManager().beginTransaction();
+                val coffeeFragment = coffee?.let { CoffeeFragment.newInstance(it.name, it.image, it.cost, it.description) }
+                if (coffeeFragment != null) {
+                    ft.replace(R.id.container, coffeeFragment)
+                }
+                else {
+                    val text = "Цена: "+ coffee?.cost.toString()
+                    val duration = Toast.LENGTH_SHORT
+                    val toast = Toast.makeText(getActivity(), text, duration)
+                    toast.show()
+                }
             }
         }
         val adapter: RecyclerView.Adapter<*> = CoffeeAdapter(generateCoffee(), coffeeClickListener)

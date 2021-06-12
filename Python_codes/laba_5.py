@@ -82,7 +82,8 @@ b=0.6
 y0=0.2
 e=0.0001
 n = search_n(a, b, y0, e)
-h=(b-a)/n
+h=0.01
+n=(float)(b-a)/h
 xpoints=np.arange(a, b, h)
 ypoints = runge_meth(a, b, n, y0)
 print("yi in Runge-Kutt: ")
