@@ -100,7 +100,7 @@ Delimiter //
  on motorship
  for each row
  begin
- if new.ticket_price_by_firstcat < 0 or new.ticket_price_by_second_cat < 0 or new.ticket_price_by_third_cat < 0 or date_of_issue > current_date() 
+ if new.`ticket_price_by_first cat` < 0 or new.ticket_price_by_second_cat < 0 or new.ticket_price_by_third_cat < 0 or date_of_issue > current_date() 
  or new.service_life<0 or team_members_number<0 then
  kill connection_id();
 end if;
@@ -113,7 +113,7 @@ Delimiter //
  on motorship
  for each row
  begin
- if new.ticket_price_by_firstcat < 0 or new.ticket_price_by_second_cat < 0 or new.ticket_price_by_third_cat < 0 or date_of_issue > current_date() 
+ if new.`ticket_price_by_first cat` < 0 or new.ticket_price_by_second_cat < 0 or new.ticket_price_by_third_cat < 0 or date_of_issue > current_date() 
  or new.service_life<0 or team_members_number<0 then
  kill connection_id();
 end if;
@@ -149,3 +149,61 @@ Delimiter //
  delete from booking where conducted_excursions_id_excursions = old.id_excursions;
 end //
 Delimiter ;
+drop table money;
+drop procedure money_count;
+Delimiter //
+create procedure money_count( percent int, st_date date, end_date date)
+begin
+create temporary table money (motorship_name varchar(45), cruise_date datetime, cost float);
+insert into money select motorship_name, departure_date, (`ticket_price_by_first cat`*tickets_numb_sold_by_first_cat + ticket_price_by_second_cat*tickets_numb_sold_by_second_cat 
++ ticket_price_by_third_cat*tickets_numb_sold_by_third_cat)*percent*0.01 from motorship join conducted_excursions on motorship_name = motorship_motorship_name 
+where departure_date between st_date and end_date;
+select * from money;
+drop table money;
+end //
+Delimiter ;
+call money_count (5, '2020-12-01', '2021-02-01');
+
+Delimiter //
+create function day_money_count( motorship_nam varchar(45), percent int, st_date date) returns float
+not deterministic
+ READS SQL DATA
+ begin
+ declare prib float;
+ select sum((`ticket_price_by_first cat`*tickets_numb_sold_by_first_cat + ticket_price_by_second_cat*tickets_numb_sold_by_second_cat 
++ ticket_price_by_third_cat*tickets_numb_sold_by_third_cat)*percent*0.01) into prib from motorship join conducted_excursions on motorship_name = motorship_motorship_name 
+where departure_date = st_date and motorship_name = motorship_nam;
+return prib;
+end //
+Delimiter ;
+
+select day_money_count('Titanic', 5, '2021-01-08');
+drop view profit;
+
+create view profit as select motorship_name, registration_number, sum(`ticket_price_by_first cat`*tickets_numb_sold_by_first_cat + ticket_price_by_second_cat*tickets_numb_sold_by_second_cat 
++ ticket_price_by_third_cat*tickets_numb_sold_by_third_cat) as moneys from conducted_excursions right join motorship on motorship_name = motorship_motorship_name group by motorship_name order by motorship_name;
+
+select * from profit;
+drop view not_redeemed;
+
+create view not_redeemed as select cruise_route_cruise_name, departure_date, first_cat_solding_tickets - tickets_numb_sold_by_first_cat  as first_class, 
+second_cat_solding_tickets - tickets_numb_sold_by_second_cat  as second_class, third_cat_solding_tickets - tickets_numb_sold_by_third_cat  as third_class from 
+conducted_excursions join booking on conducted_excursions_id_excursions = id_excursions order by cruise_route_cruise_name;
+
+select * from not_redeemed;
+drop function avg_money_count_on_day;
+
+Delimiter //
+create function avg_money_count_on_day( motorship_nam varchar(45), percent int, st_date date) returns float
+not deterministic
+ READS SQL DATA
+ begin
+ declare prib float;
+ select format(sum((`ticket_price_by_first cat`*tickets_numb_sold_by_first_cat + ticket_price_by_second_cat*tickets_numb_sold_by_second_cat 
++ ticket_price_by_third_cat*tickets_numb_sold_by_third_cat)*percent*0.01)/team_members_number / number_of_days, 2)  into prib from motorship join conducted_excursions on motorship_name = motorship_motorship_name 
+inner join cruise_route on cruise_route_cruise_name = cruise_name
+where departure_date = st_date and motorship_name = motorship_nam;
+return prib;
+end //
+Delimiter ;
+select avg_money_count_on_day('Titanic', 5, '2021-01-08');
