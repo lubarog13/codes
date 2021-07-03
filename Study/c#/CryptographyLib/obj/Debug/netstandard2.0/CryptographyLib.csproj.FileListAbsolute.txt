@@ -1,0 +1,8 @@
+C:\Users\DNS\Desktop\VS_code\Study\c#\CryptographyLib\bin\Debug\netstandard2.0\CryptographyLib.deps.json
+C:\Users\DNS\Desktop\VS_code\Study\c#\CryptographyLib\bin\Debug\netstandard2.0\CryptographyLib.dll
+C:\Users\DNS\Desktop\VS_code\Study\c#\CryptographyLib\bin\Debug\netstandard2.0\CryptographyLib.pdb
+C:\Users\DNS\Desktop\VS_code\Study\c#\CryptographyLib\obj\Debug\netstandard2.0\CryptographyLib.csprojAssemblyReference.cache
+C:\Users\DNS\Desktop\VS_code\Study\c#\CryptographyLib\obj\Debug\netstandard2.0\CryptographyLib.AssemblyInfoInputs.cache
+C:\Users\DNS\Desktop\VS_code\Study\c#\CryptographyLib\obj\Debug\netstandard2.0\CryptographyLib.AssemblyInfo.cs
+C:\Users\DNS\Desktop\VS_code\Study\c#\CryptographyLib\obj\Debug\netstandard2.0\CryptographyLib.dll
+C:\Users\DNS\Desktop\VS_code\Study\c#\CryptographyLib\obj\Debug\netstandard2.0\CryptographyLib.pdb

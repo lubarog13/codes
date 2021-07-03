@@ -27,20 +27,41 @@ before insert
 on booking
 for each row
 begin
-if new.first_cat_solding_tickets > (select tickets_numb_sold_by_first_cat from conducted_excursions where new.conducted_excursions_id_excursion = id_excursions)
+if new.first_cat_solding_tickets > (select tickets_numb_sold_by_first_cat from conducted_excursions where new.conducted_excursions_id_excursions = id_excursions)
 then
 kill connection_id();
 end if;
-if new.second_cat_solding_tickets > (select tickets_numb_sold_by_second_cat from conducted_excursions where new.conducted_excursions_id_excursion = id_excursions)
+if new.second_cat_solding_tickets > (select tickets_numb_sold_by_second_cat from conducted_excursions where new.conducted_excursions_id_excursions = id_excursions)
 then
 kill connection_id();
 end if;
-if new.third_cat_solding_tickets > (select tickets_numb_sold_by_third_cat from conducted_excursions where new.conducted_excursions_id_excursion = id_excursions)
+if new.third_cat_solding_tickets > (select tickets_numb_sold_by_third_cat from conducted_excursions where new.conducted_excursions_id_excursions = id_excursions)
 then
 kill connection_id();
 end if;
 end //
 Delimiter ;
+Delimiter //
+create trigger trigger_update_booking
+before update
+on booking
+for each row
+begin
+if new.first_cat_solding_tickets > (select tickets_numb_sold_by_first_cat from conducted_excursions where id_excursions = new.conducted_excursions_id_excursions )
+then
+kill connection_id();
+end if;
+if new.second_cat_solding_tickets > (select tickets_numb_sold_by_second_cat from conducted_excursions where id_excursions = new.conducted_excursions_id_excursions)
+then
+kill connection_id();
+end if;
+if new.third_cat_solding_tickets > (select tickets_numb_sold_by_third_cat from conducted_excursions where id_excursions = new.conducted_excursions_id_excursions)
+then
+kill connection_id();
+end if;
+end //
+Delimiter ;
+
 
 Delimiter //
  create trigger insert_cruise_route
@@ -138,8 +159,6 @@ Delimiter //
  begin
  delete from conducted_excursions where cruise_route_cruise_name = old.cruise_name;
 end //
-Delimiter ;
-
 Delimiter //
  create trigger delete_cond
  before delete
@@ -149,6 +168,8 @@ Delimiter //
  delete from booking where conducted_excursions_id_excursions = old.id_excursions;
 end //
 Delimiter ;
+
+
 drop table money;
 drop procedure money_count;
 Delimiter //
@@ -171,13 +192,13 @@ not deterministic
  begin
  declare prib float;
  select sum((`ticket_price_by_first cat`*tickets_numb_sold_by_first_cat + ticket_price_by_second_cat*tickets_numb_sold_by_second_cat 
-+ ticket_price_by_third_cat*tickets_numb_sold_by_third_cat)*percent*0.01) into prib from motorship join conducted_excursions on motorship_name = motorship_motorship_name 
-where departure_date = st_date and motorship_name = motorship_nam;
++ ticket_price_by_third_cat*tickets_numb_sold_by_third_cat)*percent*0.01) into prib from motorship join conducted_excursions on motorship_name = motorship_motorship_name join cruise_route on cruise_route_cruise_name = cruise_name
+where departure_date = date_sub(st_date, interval  number_of_days day) and motorship_name = motorship_nam;
 return prib;
 end //
 Delimiter ;
-
-select day_money_count('Titanic', 5, '2021-01-08');
+drop function day_money_count;
+select day_money_count('Titanic', 5, '2021-01-20');
 drop view profit;
 #представление выводит пролученые от экскурсии деньги
 create view profit as select motorship_name, registration_number, sum(`ticket_price_by_first cat`*tickets_numb_sold_by_first_cat + ticket_price_by_second_cat*tickets_numb_sold_by_second_cat 
@@ -189,6 +210,8 @@ drop view not_redeemed;
 create view not_redeemed as select cruise_route_cruise_name, departure_date, first_cat_solding_tickets - tickets_numb_sold_by_first_cat  as first_class, 
 second_cat_solding_tickets - tickets_numb_sold_by_second_cat  as second_class, third_cat_solding_tickets - tickets_numb_sold_by_third_cat  as third_class from 
 conducted_excursions join booking on conducted_excursions_id_excursions = id_excursions order by cruise_route_cruise_name;
+
+create index dat on conducted_excursions(departure_date);
 
 select * from not_redeemed;
 drop function avg_money_count_on_day;
@@ -208,22 +231,24 @@ end //
 Delimiter ;
 
 select format(avg_money_count_on_day('Titanic', 5, '2021-01-08'), 2);
-
-select motorship_motorship_name, registration_number from conducted_excursions join motorship on  motorship_name = motorship_motorship_name
+create index f_cls on conducted_excursions(tickets_numb_sold_by_first_cat);
+explain select motorship_motorship_name, registration_number from conducted_excursions join motorship on  motorship_name = motorship_motorship_name
 inner join cruise_route on cruise_route_cruise_name = cruise_name where date_add(departure_date, interval number_of_days DAY) = '2021-03-17';
 
-select cruise_route_cruise_name, sum(tickets_numb_sold_by_first_cat) as first_cat_count, `ticket_price_by_first cat` as first_cat_price,
+explain select cruise_route_cruise_name, sum(tickets_numb_sold_by_first_cat) as first_cat_count, `ticket_price_by_first cat` as first_cat_price,
 sum(tickets_numb_sold_by_second_cat) as second_cat_count, ticket_price_by_second_cat as second_cat_price,
 sum(tickets_numb_sold_by_third_cat) as third_cat_count, ticket_price_by_third_cat as third_cat_price from conducted_excursions join
 motorship on motorship_name = motorship_motorship_name group by cruise_route_cruise_name order by cruise_route_cruise_name;
 
-select motorship_motorship_name, sum(day_money_count(motorship_motorship_name, 100, departure_date)) from conducted_excursions where departure_date between '2021-01-01' and '2021-04-01' group by motorship_motorship_name;
+explain select motorship_motorship_name, sum(`ticket_price_by_first cat`*tickets_numb_sold_by_first_cat + ticket_price_by_second_cat*tickets_numb_sold_by_second_cat 
++ ticket_price_by_third_cat*tickets_numb_sold_by_third_cat) as sum from conducted_excursions join motorship on motorship_name = motorship_motorship_name where departure_date between '2021-01-01' and '2021-04-01' group by motorship_motorship_name
+union select motorship_motorship_name, 0 from conducted_excursions where departure_date not  between '2021-01-01' and '2021-04-01' group by motorship_motorship_name order by motorship_motorship_name;
 
-select cruise_route.*, sum(tickets_numb_sold_by_first_cat+tickets_numb_sold_by_second_cat+tickets_numb_sold_by_third_cat) from cruise_route join conducted_excursions
+explain select cruise_route.*, sum(tickets_numb_sold_by_first_cat+tickets_numb_sold_by_second_cat+tickets_numb_sold_by_third_cat) from cruise_route join conducted_excursions
 on cruise_route_cruise_name = cruise_name group by cruise_route_cruise_name having  sum(tickets_numb_sold_by_first_cat+tickets_numb_sold_by_second_cat+tickets_numb_sold_by_third_cat) >= all (select
 sum(tickets_numb_sold_by_first_cat+tickets_numb_sold_by_second_cat+tickets_numb_sold_by_third_cat) from conducted_excursions group by cruise_route_cruise_name);
 
-select motorship.*,  sum(tickets_numb_sold_by_first_cat+tickets_numb_sold_by_second_cat+tickets_numb_sold_by_third_cat) from motorship join conducted_excursions
+explain select motorship.*,  sum(tickets_numb_sold_by_first_cat+tickets_numb_sold_by_second_cat+tickets_numb_sold_by_third_cat) from motorship join conducted_excursions
 on motorship_name = motorship_motorship_name group by motorship_motorship_name having count(id_excursions) >= all(select count(id_excursions) from
 conducted_excursions group by motorship_motorship_name);
 
@@ -232,7 +257,7 @@ select not_redeemed.cruise_route_cruise_name, not_redeemed.departure_date, first
 join conducted_excursions on not_redeemed.cruise_route_cruise_name = conducted_excursions.cruise_route_cruise_name and not_redeemed.departure_date = conducted_excursions.departure_date join motorship on motorship_name = motorship_motorship_name order by not_redeemed.departure_date;
 
 #вывести информацию о маршруте с максимальной среденей зарплатой за 2021 год
-select cruise_route_cruise_name, departure_date, motorship_motorship_name, format(max(avg_money_count_on_day(motorship_motorship_name, 5, departure_date)), 2) from conducted_excursions 
+explain select cruise_route_cruise_name, departure_date, motorship_motorship_name, format(max(avg_money_count_on_day(motorship_motorship_name, 5, departure_date)), 2) from conducted_excursions 
 where departure_date between '2021-01-01' and '2021-12-31';
 
 #вывести информацию о самом старом корабле
@@ -245,3 +270,5 @@ motorship_name = motorship_motorship_name where departure_date <= all (select de
 #вывести название маршрута и количество забронированных билетов у маршрутов, длина которых более 10000 или название включает в себя атлантику
 select cruise_name, sum(first_cat_solding_tickets+second_cat_solding_tickets+third_cat_solding_tickets) from booking join conducted_excursions on conducted_excursions_id_excursions = id_excursions
 join cruise_route on cruise_route_cruise_name = cruise_name where total_length >10000 or lower(cruise_name) like '%atlantic%' group by cruise_route_cruise_name;
+
+delete from cruise_route where cruise_name = 'Volga river';

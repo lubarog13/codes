@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.1",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "EncryptionApp/1.0.0": {
+        "dependencies": {
+          "CryptographyLib": "1.0.0"
+        },
+        "runtime": {
+          "EncryptionApp.dll": {}
+        }
+      },
+      "CryptographyLib/1.0.0": {
+        "runtime": {
+          "CryptographyLib.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "EncryptionApp/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "CryptographyLib/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

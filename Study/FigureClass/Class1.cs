@@ -4,9 +4,10 @@ namespace FigureClass
 {
     public abstract class Figure
     {
-        protected float heigh { get; set; }
-        protected float width{ get; set; }
+        public float heigh { get; set; }
+       public float width{ get; set; }
         public float area;
+        public Figure() { }
         public Figure(float heigh, float width)
         {
             this.heigh = heigh;
@@ -23,6 +24,7 @@ namespace FigureClass
     }
     public class Rectangle : Figure
     {
+        public Rectangle() : base() { }
         public Rectangle(float heigh, float width) : base(heigh, width) { }
         public override float SearchArea()
         {
@@ -31,6 +33,7 @@ namespace FigureClass
     }
     public class Square : Figure
     {
+        public Square () : base() { }
 
         public Square(float width) : base(0, width) { }
         public override float SearchArea()
@@ -44,6 +47,7 @@ namespace FigureClass
     }
     public class Circle : Figure
     {
+        public Circle () : base() { }
         public Circle( float width) : base(0, width) { }
         public override float SearchArea()
         {
