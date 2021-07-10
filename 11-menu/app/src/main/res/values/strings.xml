@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">MyFirstApplication</string>
+    <string name="login_hint">Логин</string>
+    <string name="password">Пароль</string>
+    <string name="password_enter">Введите пароль</string>
+    <string name="password_enter_again">Введите пароль ещё раз</string>
+    <string name="login_enter">Войти</string>
+    <string name="register">Зарегистрироваться</string>
+    <string name="input_error">Ошибка ввода данных!</string>
+    <string name="email">Email</string>
+    <string name="login_register_error">Login уже занят!</string>
+    <string name="login_register_success">Успешно!</string>
+    <string name="logout">Логаут</string>
+    <string name="login_error">Ошибка логина. Неверный логин или пароль.</string>
+</resources>

@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">SimpleProject</string>
+    <string name="hint_text">Показать текст</string>
+    <string name="show_text">Пишите здесь</string>
+</resources>
