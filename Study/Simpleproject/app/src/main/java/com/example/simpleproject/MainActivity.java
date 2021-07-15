@@ -23,8 +23,6 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra(EXTRA_MESSAGE, text.getText().toString());
                 startActivity(intent);
             }
-            else
-                Toast.makeText(MainActivity.this, startText, Toast.LENGTH_LONG).show();
         }
     };
 
