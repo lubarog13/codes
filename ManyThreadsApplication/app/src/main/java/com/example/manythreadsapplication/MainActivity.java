@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.Arrays;
+
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Boolean>, Loader.OnLoadCanceledListener<Boolean> {
     ProgressBar progressBar;
     Button startButton;
@@ -44,6 +46,18 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             loader.startLoading();
         }
     }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("TEXT", (String) textView.getText());
+    }
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        textView.setText(savedInstanceState.getString("TEXT"));
+    }
+
     private void clickButtonStart(){
         if(loaderManager.getLoader(LOADER_ID)==null) {
             LoaderManager.LoaderCallbacks<Boolean> loaderCallbacks = this;
