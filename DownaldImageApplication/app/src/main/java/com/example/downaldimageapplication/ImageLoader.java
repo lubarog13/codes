@@ -27,7 +27,7 @@ public class ImageLoader extends AsyncTaskLoader<String> {
         try {
             byte[] array = new byte[15]; // length is bounded by 7
             new Random().nextBytes(array);
-            String generatedString = new String(array, Charset.forName("UNICODE"));
+            String generatedString = new String(array, Charset.forName("US-ASCII"));
             DownloadManager downloadManager = (DownloadManager) getContext().getSystemService(Context.DOWNLOAD_SERVICE);
             Uri Download_Uri = Uri.parse(url);
             DownloadManager.Request request = new DownloadManager.Request(Download_Uri);

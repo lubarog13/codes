@@ -52,17 +52,24 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             public void onClick(View v) {
                 if (mEditText.getText() == null) {
                     Toast.makeText(MainActivity.this, "Введите данные", Toast.LENGTH_SHORT).show();
-                } else {
+                } else if((!mEditText.getText().toString().contains("/")) || (!mEditText.getText().toString().contains("."))) {
+                    Toast.makeText(MainActivity.this, "Введен текст, а не ссылка", Toast.LENGTH_SHORT).show();
+                }
+                else {
                     String purl = mEditText.getText().toString();
                     String[] strings = purl.split("/");
-                    String ext = strings[strings.length -1].split("\\.")[1];
-                    Log.d("1", ext);
-                    if (ext.equals("jpeg") || ext.equals("png") || ext.equals("bmp") || ext.equals("jpg")) {
-                        url = purl;
-                        downloadWithPermissions();
-                    }
-                    else {
-                        Toast.makeText(MainActivity.this, "Неправильная ссылка", Toast.LENGTH_LONG).show();
+                    try {
+                        String ext = strings[strings.length - 1].split("\\.")[1];
+                        Log.d("1", ext);
+                        if (ext.equals("jpeg") || ext.equals("png") || ext.equals("bmp")) {
+                            url = purl;
+                            downloadWithPermissions();
+                        }
+                        else {
+                            Toast.makeText(MainActivity.this, "Неправильная ссылка", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        Toast.makeText(MainActivity.this, "Введен текст, а не ссылка", Toast.LENGTH_SHORT).show();
                     }
                 }
                 mButton2.setOnClickListener(new View.OnClickListener() {
