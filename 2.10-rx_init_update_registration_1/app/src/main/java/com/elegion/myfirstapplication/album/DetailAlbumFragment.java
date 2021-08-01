@@ -16,6 +16,8 @@ import com.elegion.myfirstapplication.R;
 import com.elegion.myfirstapplication.model.Album;
 import com.elegion.myfirstapplication.model.Albums;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -78,28 +80,21 @@ public class DetailAlbumFragment extends Fragment implements SwipeRefreshLayout.
     }
 
     private void getAlbum() {
-
-        ApiUtils.getApiService().getAlbum(mAlbum.getId()).enqueue(new Callback<Album>() {
-            @Override
-            public void onResponse(Call<Album> call, Response<Album> response) {
-                if (response.isSuccessful()) {
-                    mErrorView.setVisibility(View.GONE);
-                    mRecyclerView.setVisibility(View.VISIBLE);
-                    mSongsAdapter.addData(response.body().getData().getSongs(), true);
-                } else {
-                    mErrorView.setVisibility(View.VISIBLE);
-                    mRecyclerView.setVisibility(View.GONE);
-                }
-                mRefresher.setRefreshing(false);
-            }
-
-            @Override
-            public void onFailure(Call<Album> call, Throwable t) {
-                mErrorView.setVisibility(View.VISIBLE);
-                mRecyclerView.setVisibility(View.GONE);
-                mRefresher.setRefreshing(false);
-            }
-        });
+        ApiUtils.getApiService().getAlbum(mAlbum.getId())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> mRefresher.setRefreshing(true))
+                .doFinally(() -> mRefresher.setRefreshing(false))
+                .subscribe(
+                        albums -> {
+                            mErrorView.setVisibility(View.GONE);
+                            mRecyclerView.setVisibility(View.VISIBLE);
+                            mSongsAdapter.addData(albums.getData().getSongs(), true);
+                        },
+                        throwable -> {
+                            mErrorView.setVisibility(View.VISIBLE);
+                            mRecyclerView.setVisibility(View.GONE);
+                        });
     }
 
 }

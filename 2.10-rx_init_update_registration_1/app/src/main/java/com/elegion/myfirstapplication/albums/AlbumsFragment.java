@@ -17,6 +17,8 @@ import com.elegion.myfirstapplication.R;
 import com.elegion.myfirstapplication.album.DetailAlbumFragment;
 import com.elegion.myfirstapplication.model.Albums;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -78,29 +80,21 @@ public class AlbumsFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
     private void getAlbums() {
 
-        ApiUtils.getApiService().getAlbums().enqueue(new Callback<Albums>() {
-            @Override
-            public void onResponse(Call<Albums> call, Response<Albums> response) {
-                if (response.isSuccessful()) {
-                    mErrorView.setVisibility(View.GONE);
-                    mRecyclerView.setVisibility(View.VISIBLE);
-                    mAlbumAdapter.addData(response.body().getData(), true);
-                } else {
-                    Log.e("error" , response.message());
-                    mErrorView.setVisibility(View.VISIBLE);
-                    mRecyclerView.setVisibility(View.GONE);
-                }
-                mRefresher.setRefreshing(false);
-            }
-
-            @Override
-            public void onFailure(Call<Albums> call, Throwable t) {
-                Log.e("error" , t.getMessage());
-                mErrorView.setVisibility(View.VISIBLE);
-                mRecyclerView.setVisibility(View.GONE);
-                mRefresher.setRefreshing(false);
-            }
-        });
+        ApiUtils.getApiService().getAlbums()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> mRefresher.setRefreshing(true))
+                .doFinally(() -> mRefresher.setRefreshing(false))
+                .subscribe(
+                        albums -> {
+                            mErrorView.setVisibility(View.GONE);
+                            mRecyclerView.setVisibility(View.VISIBLE);
+                            mAlbumAdapter.addData(albums.getData(), true);
+                        },
+                        throwable -> {
+                            mErrorView.setVisibility(View.VISIBLE);
+                            mRecyclerView.setVisibility(View.GONE);
+                        });
     }
 
 }
