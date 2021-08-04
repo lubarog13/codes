@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.elegion.myfirstapplication.ApiUtils;
 import com.elegion.myfirstapplication.App;
 import com.elegion.myfirstapplication.R;
+import com.elegion.myfirstapplication.album.CommentsAlbumFragment;
 import com.elegion.myfirstapplication.album.DetailAlbumFragment;
 import com.elegion.myfirstapplication.db.MusicDao;
 

@@ -1,7 +1,9 @@
 package com.elegion.myfirstapplication.album;
 
+import android.arch.persistence.room.Ignore;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,8 @@ import com.elegion.myfirstapplication.R;
 import com.elegion.myfirstapplication.model.Song;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class SongsAdapter extends RecyclerView.Adapter<SongsHolder> {
@@ -39,7 +43,13 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsHolder> {
         if (isRefreshed) {
             mSongs.clear();
         }
-
+        Collections.sort(data, new Comparator<Song>() {
+            @Override
+            public int compare(Song song, Song t1) {
+                return t1.getId() > song.getId() ? -1 : (t1.getId() < song.getId()) ? 1 : 0;
+            }
+        });
+            Log.d("data", Integer.toString(data.get(0).getId()) + " " + Integer.toString(data.get(1).getId()));
         mSongs.addAll(data);
         notifyDataSetChanged();
     }

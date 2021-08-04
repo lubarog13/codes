@@ -1,6 +1,7 @@
 package com.elegion.myfirstapplication;
 
 import com.elegion.myfirstapplication.model.Album;
+import com.elegion.myfirstapplication.model.Comment;
 import com.elegion.myfirstapplication.model.Song;
 import com.elegion.myfirstapplication.model.User;
 
@@ -32,6 +33,9 @@ public interface AcademyApi {
 
     @GET("albums/{id}")
     Single<Album> getAlbum(@Path("id") int id);
+
+    @GET("albums/{id}/comments")
+    Single<List<Comment>> getComments(@Path("id") int id);
 
     @GET("songs")
     Call<List<Song>> getSongs();

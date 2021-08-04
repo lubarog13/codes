@@ -10,4 +10,5 @@ public class AlbumsActivity extends SingleFragmentActivity {
     protected Fragment getFragment() {
         return AlbumsFragment.newInstance();
     }
+
 }

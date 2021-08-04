@@ -9,6 +9,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -44,6 +47,7 @@ public class DetailAlbumFragment extends Fragment implements SwipeRefreshLayout.
 
         DetailAlbumFragment fragment = new DetailAlbumFragment();
         fragment.setArguments(args);
+        fragment.setHasOptionsMenu(true);
 
         return fragment;
     }
@@ -125,9 +129,25 @@ public class DetailAlbumFragment extends Fragment implements SwipeRefreshLayout.
                             }
                         });
     }
-
     private MusicDao getMusicDao() {
         return ((App) getActivity().getApplication()).getDatabase().getMusicDao();
     }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.comment:
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.fragmentContainer, CommentsAlbumFragment.newInstance(mAlbum))
+                        .addToBackStack(CommentsAlbumFragment.class.getSimpleName())
+                        .commit();
+            default:
+                // Not one of ours. Perform default menu processing
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }
