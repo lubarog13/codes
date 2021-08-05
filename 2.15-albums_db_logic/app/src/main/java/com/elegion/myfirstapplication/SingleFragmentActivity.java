@@ -40,6 +40,8 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.comments_menu, menu);
+        MenuItem item = menu.findItem(R.id.comment);
+        item.setVisible(false);
         return super.onCreateOptionsMenu(menu);
     }
 

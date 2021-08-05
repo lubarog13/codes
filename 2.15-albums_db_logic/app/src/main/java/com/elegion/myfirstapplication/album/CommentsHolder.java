@@ -27,14 +27,15 @@ public class CommentsHolder extends RecyclerView.ViewHolder{
 
     public void bind(Comment item) {
         mText.setText(item.getmText());
-        mAuthor.setText(item.getmText());
+        mAuthor.setText("author: " + item.getmText());
         Date today = new Date();
         long minus = today.getTime() - item.getmTimestamp().getTime();
         if(minus/(1000 * 60 * 60 * 24) >1) {
-            String d1  = new SimpleDateFormat("dd-M-yyyy").format(item.getmTimestamp());
+            String d1  = new SimpleDateFormat("dd-MM-yyyy").format(item.getmTimestamp());
             mTimestamp.setText(d1);
         } else {
-            String d1 =  new SimpleDateFormat("mm:HH").format(item.getmTimestamp());
+            String d1 =  new SimpleDateFormat("HH:mm").format(item.getmTimestamp());
+            mTimestamp.setText(d1);
         }
     }
 }

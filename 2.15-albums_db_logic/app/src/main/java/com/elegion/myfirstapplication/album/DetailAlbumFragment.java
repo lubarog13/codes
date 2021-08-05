@@ -135,6 +135,8 @@ public class DetailAlbumFragment extends Fragment implements SwipeRefreshLayout.
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
+        MenuItem item = menu.findItem(R.id.comment);
+        item.setVisible(true);
     }
 
     @Override

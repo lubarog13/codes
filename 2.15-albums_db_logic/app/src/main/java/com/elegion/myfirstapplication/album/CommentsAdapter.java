@@ -9,8 +9,11 @@ import android.widget.Toast;
 import com.elegion.myfirstapplication.R;
 import com.elegion.myfirstapplication.albums.AlbumsActivity;
 import com.elegion.myfirstapplication.model.Comment;
+import com.elegion.myfirstapplication.model.Song;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import io.reactivex.annotations.NonNull;
@@ -41,6 +44,12 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsHolder> {
         if (isRefreshed) {
             mComments.clear();
         }
+        Collections.sort(data, new Comparator<Comment>() {
+            @Override
+            public int compare(Comment song, Comment t1) {
+                return t1.getmId() < song.getmId() ? -1 : (t1.getmId() > song.getmId()) ? 1 : 0;
+            }
+        });
         mComments.addAll(data);
         notifyDataSetChanged();
     }

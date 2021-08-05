@@ -6,6 +6,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import com.elegion.myfirstapplication.ApiUtils;
 import com.elegion.myfirstapplication.R;
 import com.elegion.myfirstapplication.albums.AlbumsActivity;
+import com.elegion.myfirstapplication.help_class;
 import com.elegion.myfirstapplication.model.Album;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -31,6 +33,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.elegion.myfirstapplication.ApiUtils;
@@ -51,7 +55,11 @@ public class CommentsAlbumFragment extends Fragment implements SwipeRefreshLayou
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mRefresher;
     private View mErrorView;
+    private View mNoObjectsView;
     private Album mAlbum;
+    private EditText mEditText;
+    private Button mEnter;
+    private boolean firstRefresh = true;
     @NonNull
     private final CommentsAdapter mCommentsAdapter = new CommentsAdapter();
 
@@ -62,6 +70,7 @@ public class CommentsAlbumFragment extends Fragment implements SwipeRefreshLayou
         fragment.setArguments(args);
         return fragment;
     }
+
 
     @Nullable
     @Override
@@ -75,6 +84,34 @@ public class CommentsAlbumFragment extends Fragment implements SwipeRefreshLayou
         mRefresher = view.findViewById(R.id.refresher_comment);
         mRefresher.setOnRefreshListener(this);
         mErrorView = view.findViewById(R.id.errorView);
+        mNoObjectsView = view.findViewById(R.id.noObjectsView);
+        mEditText = view.findViewById(R.id.enter_comment);
+        mEnter  = view.findViewById(R.id.buttonEnterComment);
+        mEditText.setOnKeyListener(new View.OnKeyListener() {
+
+            @Override
+            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+                if (keyEvent.getAction()==KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+                    if (mEditText.getText().length() != 0) {
+                        postComments();
+                        mEditText.setText("");
+                        mEditText.clearFocus();
+                    }
+                    return true;
+                } else {
+                    Log.e("key", KeyEvent.keyCodeToString(keyCode));
+                }
+                return false;
+            }
+        });
+        mEnter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mEditText.getText().length() != 0){
+                    postComments();
+                }
+            }
+        });
     }
 
     @Override
@@ -106,10 +143,41 @@ public class CommentsAlbumFragment extends Fragment implements SwipeRefreshLayou
 //                            Toast.makeText(getActivity(),  comments.get(0).toString(), Toast.LENGTH_LONG);
                             mErrorView.setVisibility(View.GONE);
                             mRecyclerView.setVisibility(View.VISIBLE);
+                            if(comments.size()==0){
+                                mNoObjectsView.setVisibility(View.VISIBLE);
+                            } else {
+                                mNoObjectsView.setVisibility(View.GONE);
+                            }
+                            if(mCommentsAdapter.getItemCount()==comments.size() && !firstRefresh) {
+                                Toast.makeText(getActivity(), "Новых комментариев нет", Toast.LENGTH_SHORT).show();
+                            } else if(mCommentsAdapter.getItemCount()!=0 && !firstRefresh) {
+                                Toast.makeText(getActivity(), "Комментарии обновлены", Toast.LENGTH_SHORT).show();
+                            }
+                            firstRefresh=false;
                             mCommentsAdapter.addData(comments, true);
                         },
                         throwable -> {
                             mErrorView.setVisibility(View.VISIBLE);
+                            mNoObjectsView.setVisibility(View.GONE);
+                            mRecyclerView.setVisibility(View.GONE);
+                            Log.e("error", throwable.getMessage());
+                        }
+                );
+    }
+    private void postComments() {
+        mRefresher.setRefreshing(true);
+        ApiUtils.getApiService().postComment(new help_class(mEditText.getText().toString(), mAlbum.getId()))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> mRefresher.setRefreshing(true))
+                .doFinally(() -> mRefresher.setRefreshing(false))
+                .subscribe(
+                        ()-> {
+                            onRefresh();
+                        },
+                        throwable -> {
+                            mErrorView.setVisibility(View.VISIBLE);
+                            mNoObjectsView.setVisibility(View.GONE);
                             mRecyclerView.setVisibility(View.GONE);
                             Log.e("error", throwable.getMessage());
                         }
