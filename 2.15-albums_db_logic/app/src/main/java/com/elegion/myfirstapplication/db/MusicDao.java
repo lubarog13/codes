@@ -2,11 +2,13 @@ package com.elegion.myfirstapplication.db;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 
 import com.elegion.myfirstapplication.model.Album;
+import com.elegion.myfirstapplication.model.Comment;
 import com.elegion.myfirstapplication.model.Song;
 
 import java.util.List;
@@ -53,4 +55,15 @@ public interface MusicDao {
     @Query("DELETE FROM song where id = :songId")
     void deleteSongById(int songId);
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertComments(List<Comment> comments);
+
+    @Query("SELECT * FROM comment where album_id = :album_id")
+    List<Comment> getComments(int album_id);
+
+    @Query("SELECT * from comment where album_id = :album_id and id<0")
+    List<Comment> getNotPushedComments(int album_id);
+
+    @Delete
+    void deleteComment(Comment comment);
 }

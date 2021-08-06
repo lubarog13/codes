@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.elegion.myfirstapplication.R;
+import com.elegion.myfirstapplication.model.Comment;
 import com.elegion.myfirstapplication.model.Song;
 
 import java.util.ArrayList;

@@ -6,7 +6,6 @@ import android.widget.TextView;
 
 import com.elegion.myfirstapplication.R;
 import com.elegion.myfirstapplication.model.Comment;
-import com.elegion.myfirstapplication.model.Song;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,15 +25,15 @@ public class CommentsHolder extends RecyclerView.ViewHolder{
     }
 
     public void bind(Comment item) {
-        mText.setText(item.getmText());
-        mAuthor.setText("author: " + item.getmText());
+        mText.setText(item.getText());
+        mAuthor.setText("author: " + item.getAuthor());
         Date today = new Date();
-        long minus = today.getTime() - item.getmTimestamp().getTime();
+        long minus = today.getTime() - item.getTimestamp().getTime();
         if(minus/(1000 * 60 * 60 * 24) >1) {
-            String d1  = new SimpleDateFormat("dd-MM-yyyy").format(item.getmTimestamp());
+            String d1  = new SimpleDateFormat("dd-MM-yyyy").format(item.getTimestamp());
             mTimestamp.setText(d1);
         } else {
-            String d1 =  new SimpleDateFormat("HH:mm").format(item.getmTimestamp());
+            String d1 =  new SimpleDateFormat("HH:mm").format(item.getTimestamp());
             mTimestamp.setText(d1);
         }
     }

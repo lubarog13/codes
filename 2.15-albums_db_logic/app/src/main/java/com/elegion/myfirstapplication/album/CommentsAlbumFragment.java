@@ -13,41 +13,27 @@ import android.view.ViewGroup;
 
 import com.elegion.myfirstapplication.ApiUtils;
 import com.elegion.myfirstapplication.R;
-import com.elegion.myfirstapplication.albums.AlbumsActivity;
 import com.elegion.myfirstapplication.help_class;
 import com.elegion.myfirstapplication.model.Album;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import android.os.Bundle;
+
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.elegion.myfirstapplication.ApiUtils;
 import com.elegion.myfirstapplication.App;
-import com.elegion.myfirstapplication.R;
 import com.elegion.myfirstapplication.db.MusicDao;
-import com.elegion.myfirstapplication.model.Album;
-import com.elegion.myfirstapplication.model.Song;
+import com.elegion.myfirstapplication.model.Comment;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class CommentsAlbumFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private static final String ALBUM_KEY = "ALBUM_KEY";
@@ -93,7 +79,7 @@ public class CommentsAlbumFragment extends Fragment implements SwipeRefreshLayou
             public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
                 if (keyEvent.getAction()==KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
                     if (mEditText.getText().length() != 0) {
-                        postComments();
+                        postComments(mEditText.getText().toString());
                         mEditText.setText("");
                         mEditText.clearFocus();
                     }
@@ -108,7 +94,9 @@ public class CommentsAlbumFragment extends Fragment implements SwipeRefreshLayou
             @Override
             public void onClick(View view) {
                 if(mEditText.getText().length() != 0){
-                    postComments();
+                    postComments(mEditText.getText().toString());
+                    mEditText.setText("");
+                    mEditText.clearFocus();
                 }
             }
         });
@@ -135,6 +123,31 @@ public class CommentsAlbumFragment extends Fragment implements SwipeRefreshLayou
     private void getComments() {
         ApiUtils.getApiService().getComments(mAlbum.getId())
                 .subscribeOn(Schedulers.io())
+                .doOnSuccess(comments -> {
+                    List<Comment> notPushedComments = getMusicDao().getNotPushedComments(mAlbum.getId());
+                    if(notPushedComments.size()!=0) {
+                        int val = 0;
+                        for (Comment comment : notPushedComments) {
+                            val = pushComments(comment);
+                            if(val==0) {
+                                getMusicDao().deleteComment(comment);
+                            }
+                        }
+                        getComments();
+                    }
+                    getMusicDao().insertComments(comments);
+                })
+                .onErrorReturn(throwable -> {
+                    if(ApiUtils.NETWORK_EXCEPTIONS.contains(throwable.getClass())) {
+                        try {
+                            List<Comment> comments = getMusicDao().getComments(mAlbum.getId());
+                            return comments;
+                        } catch (Exception e) {
+                            Log.e("error", e.getMessage());
+                            return null;
+                        }
+                    } else return null;
+                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> mRefresher.setRefreshing(true))
                 .doFinally(() -> mRefresher.setRefreshing(false))
@@ -164,23 +177,58 @@ public class CommentsAlbumFragment extends Fragment implements SwipeRefreshLayou
                         }
                 );
     }
-    private void postComments() {
+    private void postComments( String text) {
         mRefresher.setRefreshing(true);
-        ApiUtils.getApiService().postComment(new help_class(mEditText.getText().toString(), mAlbum.getId()))
+        ApiUtils.getApiService().postComment(new help_class(text, mAlbum.getId()))
+                .subscribeOn(Schedulers.io())
+                .doOnError(throwable -> {
+                    if(ApiUtils.NETWORK_EXCEPTIONS.contains(throwable.getClass())){
+                        try {
+                            Random random = new Random();
+                            Comment comment = new Comment(-1 * random.nextInt(10000), text, "me", new Date(), mAlbum.getId() );
+//                            Toast.makeText(getActivity(),"Нет подключения к интернету", Toast.LENGTH_SHORT).show();
+                            List<Comment> comments = new ArrayList<>();
+                            comments.add(comment);
+                            getMusicDao().insertComments(comments);
+                        } catch (Exception e){
+                            Log.e("error", e.getMessage());
+                        }
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> mRefresher.setRefreshing(true))
+                .doFinally(() -> mRefresher.setRefreshing(false))
+                .subscribe(
+                        ()-> {
+                            firstRefresh = true;
+                            onRefresh();
+                        },
+                        throwable -> {
+                            firstRefresh = true;
+                            onRefresh();
+                            Toast.makeText(getActivity(),"Нет подключения к интернету", Toast.LENGTH_SHORT).show();
+                        }
+
+                );
+    }
+    private int pushComments( Comment comment) {
+        mRefresher.setRefreshing(true);
+        AtomicInteger value = new AtomicInteger();
+        ApiUtils.getApiService().postComment(new help_class(comment.getText().toString(), mAlbum.getId()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> mRefresher.setRefreshing(true))
                 .doFinally(() -> mRefresher.setRefreshing(false))
                 .subscribe(
                         ()-> {
-                            onRefresh();
                         },
                         throwable -> {
-                            mErrorView.setVisibility(View.VISIBLE);
-                            mNoObjectsView.setVisibility(View.GONE);
-                            mRecyclerView.setVisibility(View.GONE);
-                            Log.e("error", throwable.getMessage());
+                            value.set(1);
                         }
                 );
+        return value.get();
+    }
+    private MusicDao getMusicDao() {
+        return ((App) getActivity().getApplication()).getDatabase().getMusicDao();
     }
 }

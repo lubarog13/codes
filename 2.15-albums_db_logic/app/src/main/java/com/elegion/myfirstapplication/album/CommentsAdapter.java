@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Predicate;
 
 import io.reactivex.annotations.NonNull;
 
@@ -47,10 +48,24 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsHolder> {
         Collections.sort(data, new Comparator<Comment>() {
             @Override
             public int compare(Comment song, Comment t1) {
-                return t1.getmId() < song.getmId() ? -1 : (t1.getmId() > song.getmId()) ? 1 : 0;
+                if(t1.getId()<0 && song.getId()>=0) {
+                    return 1;
+                } else if(song.getId()<0 && t1.getId()>=0) {
+                    return -1;
+                }
+                return t1.getId() < song.getId() ? -1 : (t1.getId() > song.getId()) ? 1 : 0;
             }
         });
-        mComments.addAll(data);
+        int val =0;
+        for (Comment comment : data) {
+            if(comment.getId() <0){
+                val = data.indexOf(comment);
+                break;
+            }
+        }
+        List<Comment> comments = data.subList(val, data.size());
+
+            mComments.addAll(data);
         notifyDataSetChanged();
     }
 }
