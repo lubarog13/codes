@@ -13,11 +13,19 @@ namespace Pact.CS7
         public string Salt { get; set; }
         public string SaledHashedPassword { get; set; }
     }
+    public class Customer1
+    {
+        public string name { get; set; }
+        public string creditcard { get; set; }
+        public string SaledHashedPassword { get; set; }
+        public Customer1() { }
+    }
     public static class Protector
     {
         private static readonly byte[] salt = Encoding.Unicode.GetBytes("lubarog13");
         private static readonly int iterations = 2000;
         private static Dictionary<string, User> Users = new Dictionary<string, User>();
+        private static Dictionary<string, Customer1> Customers= new Dictionary<string, Customer1>();
         public static string Encrypt(string plainText, string password)
         {
             byte[] plainBytes = Encoding.Unicode.GetBytes(plainText);
@@ -78,6 +86,38 @@ namespace Pact.CS7
             var saltedHashedPassword = Convert.ToBase64String(sha.ComputeHash(Encoding.Unicode.GetBytes(saltedPassword)));
             return (saltedHashedPassword == user.SaledHashedPassword);
         }
+        public static Customer1 SaltedHashedPassword(string username, string creditcard, string password)
+        {
+            var saltText = Convert.ToBase64String(salt);
+            var sha = SHA256.Create();
+            var saltedPassword = password + saltText;
+            var saltedHashedPassword = Convert.ToBase64String(sha.ComputeHash(Encoding.Unicode.GetBytes(saltedPassword)));
+            var customer = new Customer1
+            {
+                name = username,
+                creditcard = creditcard,
+                SaledHashedPassword = saltedHashedPassword
+            };
+            Customers.Add(customer.name, customer);
+            return customer;
+        }
+        public static string ReturnPassword(string username, string password)
+        {
+            var saltText = Convert.ToBase64String(salt);
+            var sha = SHA256.Create();
+            var saltedPassword = password + salt;
+            var saltedHashedPassword = Convert.ToBase64String(sha.ComputeHash(Encoding.Unicode.GetBytes(saltedPassword)));
+            if (!Customers.ContainsKey(username))
+            {
+                return null;
+            }
+            if (!(Customers[username].SaledHashedPassword == saltedHashedPassword))
+            {
+                return null;
+            }
+            return saltedHashedPassword;
+        }
+
     }
 
 }
