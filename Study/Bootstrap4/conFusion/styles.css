@@ -21,9 +21,38 @@
     background-color: #9575CD ;
     color:floralwhite;
 }
+body{
+    padding:50px 0px 0px 0px;
+    z-index:0;
+}
+
+.navbar-dark {
+     background-color: #512DA8;
+}
+.form-row {
+    margin-bottom: 20px;
+}
 
 address{
     font-size:80%;
     margin:0px;
     color:#0f0f0f;
+}
+/* .card-header {
+    background-color:gold;
+    color: white;
+} */
+.carousel {
+    background:#512DA8;
+}
+
+.carousel-item {
+  height: 300px;
+}
+
+.carousel-item img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-height: 300px;
 }
