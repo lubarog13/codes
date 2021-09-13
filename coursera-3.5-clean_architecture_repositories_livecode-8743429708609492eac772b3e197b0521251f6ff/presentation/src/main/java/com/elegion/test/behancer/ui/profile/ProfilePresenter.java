@@ -1,8 +1,8 @@
 package com.elegion.test.behancer.ui.profile;
 
+import com.elegion.data.Storage;
+import com.elegion.data.api.BehanceApi;
 import com.elegion.test.behancer.common.BasePresenter;
-import com.elegion.test.behancer.data.Storage;
-import com.elegion.test.behancer.data.api.BehanceApi;
 import com.elegion.test.behancer.utils.ApiUtils;
 
 import javax.inject.Inject;
@@ -12,7 +12,6 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.schedulers.Schedulers;
 
 public class ProfilePresenter extends BasePresenter {
-    @Inject
     ProfileView mProfileView;
     @Inject
     Storage mStorage;
@@ -27,20 +26,20 @@ public class ProfilePresenter extends BasePresenter {
         mProfileView = view;
     }
 
-    public void getProfile(@NonNull String mUsername) {
-        mCompositeDisposable.add(mApi.getUserInfo(mUsername)
+    public void getProfile() {
+        mCompositeDisposable.add(mApi.getUserInfo(mProfileView.getUsername())
                 .subscribeOn(Schedulers.io())
-                .doOnSuccess(response -> mStorage.insertUser(response))
+                .doOnSuccess(mStorage::insertUser)
                 .onErrorReturn(throwable ->
                         ApiUtils.NETWORK_EXCEPTIONS.contains(throwable.getClass()) ?
-                                mStorage.getUser(mUsername) :
+                                mStorage.getUser(mProfileView.getUsername()) :
                                 null)
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> mProfileView.showRefresh())
-                .doFinally(() -> mProfileView.hideRefresh())
+                .doFinally(mProfileView::hideRefresh)
                 .subscribe(
                         response -> {
-                            mProfileView.showUser(response);
+                            mProfileView.showUser(response.getUser());
                         },
                         throwable -> {
                             mProfileView.showError();
