@@ -1,10 +1,7 @@
 package com.elegion.test.behancer.ui.projects;
 
-import com.elegion.data.Storage;
-import com.elegion.data.api.BehanceApi;
 import com.elegion.domain.service.ProjectService;
 import com.elegion.test.behancer.common.BasePresenter;
-import com.elegion.test.behancer.utils.ApiUtils;
 
 import javax.inject.Inject;
 

@@ -1,6 +1,5 @@
 package com.elegion.test.behancer.di;
 
-import com.elegion.test.behancer.ui.profile.ProfileFragment;
 import com.elegion.test.behancer.ui.projects.ProjectsFragment;
 
 import javax.inject.Singleton;
@@ -16,5 +15,4 @@ import dagger.Component;
 public interface AppComponent {
 
     void inject(ProjectsFragment injector);
-    void inject(ProfileFragment injector);
 }
