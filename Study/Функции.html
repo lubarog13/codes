@@ -1,0 +1,82 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		
+	</head>
+	<body style="background-image:url('201712.jpg')">
+		<script type="text/javascript">
+
+			function f1()
+				{
+				var res = 0;
+					let shelter = function()
+						{
+						let result = 0;
+						if(confirm("Оборудовали ли вы убежище на случай нашествия зомби?"))
+							{
+							if(confirm("Созданы в убежище запасы еды?")){result++;}
+							if(confirm("Созданы в убежище запасы воды?")){result++;}
+							if(confirm("Достаточно ли налажена система вентиляции?")){result++;}							
+							;}
+						else{return 0;}
+						if(result>=2){return(2);}
+						else{return 0;}					
+						;}				
+					
+					let weapon = function()
+						{
+						let result = 0;
+						let k=false;
+						if(confirm("Есть ли у вас оружие?"))
+							{
+							if(confirm("Умеете ли вы им владеть?")){result++;}
+							if(confirm("Имеются ли запасы боеприпасов?")){result++;
+							k=true;}
+							if(confirm("В наличии ли ремонтный комплект?")){result++;}							
+							;}
+							else{return 0;}
+						if(result>=2&&k){return(2);}
+						else{return 0;}					
+						;}					
+								
+					let health = function()
+						{
+						let result = 0;
+						switch(prompt("В какой физической форме вы находитесь?"))
+							{
+							case "отличная": return 2; 
+							case "удовлетворительная": return 1; 
+							case "дохляк": return 0;
+							default: return 0;
+							;}	
+						;}				
+								
+					let callousness = function()
+						{
+						result = 0;
+						alert("Пожертвуете ли близкими если:")
+						if(confirm("Их схватили зомби и начали ими завтракать?")){result++;}
+						if(confirm("Еды осталось мало, и делиться не хочется?")){result++;}
+						if(confirm("Они собираются совершить самоубийство от отчаяния?")){result++;}
+						return result;
+						;}	
+					
+					shelter_points = shelter();
+					res+=shelter_points;
+							
+					weapon_points = weapon();
+					res+=weapon_points;
+				
+					health_points = health();
+					res+=health_points;
+					
+					callousness_points = callousness();
+					res+=callousness_points;
+					if(res>=6){alert("Поздравляем, вы выжили!");}
+					else {f1()};
+				;}
+				f1()
+
+		</script>
+	</body>
+</html>

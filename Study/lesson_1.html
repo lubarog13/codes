@@ -1,0 +1,90 @@
+<html>	
+	<head>
+		<meta charset="utf-8">
+		<style>
+		
+		#container
+			{
+			width:300px;
+			border:3px solid yellow;
+			background:blue;
+			color:red;
+			position:absolute;
+			left:50%;
+			border-radius:10%;			
+			;}
+		
+		
+		</style>
+		<script type="text/javascript">
+		window.onload = function(){	
+									STUDENTS = {};
+									students_count = prompt("Введите количество добавляемых студентов");
+									
+									createStudent = function()
+										{
+										this.fio = prompt("Введите ФИО нового студента");
+										this.birthday = prompt("Введите дату рождения нового студента");		
+										this.group = prompt("Введите группу зачисления");			
+										this[prompt("Введите название дополнительного параметра")] = prompt("Введите значение дополнительного параметра");
+
+										;}
+									
+									for(let i=0; i<students_count; i++)
+										{
+										STUDENTS["student"+i] = new createStudent();								
+										;}
+									
+									
+									GROUPS_COUNT = {};
+									for(let next_student in STUDENTS)
+										{
+										if(GROUPS_COUNT[STUDENTS[next_student].group] != undefined)
+											{
+											GROUPS_COUNT[STUDENTS[next_student].group]++;				
+											;}
+										else
+											{
+											GROUPS_COUNT[STUDENTS[next_student].group]=1;
+											;}
+										;}
+									
+									let summary_all_groups="Сводка по группам:<br>"
+									for(let next_groups in GROUPS_COUNT)
+										{
+										summary_all_groups=summary_all_groups + "<BR>Группа №" + next_groups + " : " + GROUPS_COUNT[next_groups] + " человек";
+										 
+										;}
+										container.innerHTML = container.innerHTML + summary_all_groups;
+									for(let next_group in GROUPS_COUNT)
+										{
+										container.innerHTML = container.innerHTML + "<br><br>Список группы №" + next_group;
+										for(let next_student in STUDENTS)
+											{											
+											if(next_group == STUDENTS[next_student].group)		
+												{
+												
+												for (property in STUDENTS[next_student])
+													{
+													container.innerHTML = container.innerHTML + "<br>"+ property + ":" + STUDENTS[next_student][property];	
+													;}
+												container.innerHTML = container.innerHTML+"<br>";
+												;}
+											;}									 
+										;}										
+									;}
+		</script>
+				
+		
+	</head>
+	<body>
+	
+	<div id="container">
+	
+	
+	
+	
+	</div>
+		
+	</body>
+</html>
