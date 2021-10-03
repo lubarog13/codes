@@ -1,0 +1,83 @@
+<html>	
+	<head>
+		<meta charset="utf-8">
+		<style>
+		img	
+			{
+			width:300px;		
+			}
+			
+		#cardboard	
+			{
+			width:100%;		
+			}			
+		td	
+			{
+			width:25%;
+			;}	
+		body
+			{
+			background:url("TXQf.gif");
+			;}
+		</style>
+
+		<script type="text/javascript">
+			window.onload = function()
+				{
+				let card1 = false;
+				let card2 = false;
+				let card1_id=undefined;
+				openCard = function()
+					{
+						if(card1_id===this.id){return;}
+						card1_id=this.id;
+					this.src = this.className+".jpg";
+					if(card1){card2 = this.className; 
+						setTimeout(() => checkCards(), 2000);}
+					else{card1 = this.className;}
+					;}
+				
+				checkCards = function()
+					{
+					if(card1 == card2)
+						{						
+						document.getElementsByClassName(card1)[0].style.display = "none";
+						document.getElementsByClassName(card2)[1].style.display = "none";
+						;}
+					else
+						{
+						document.getElementsByClassName(card1)[0].src = "back.jpg";
+						document.getElementsByClassName(card2)[0].src = "back.jpg";
+						document.getElementsByClassName(card1)[1].src = "back.jpg";
+						document.getElementsByClassName(card2)[1].src = "back.jpg";
+						;}					
+					card1 = false;
+					card2 = false;
+					card1_id=undefined;
+					;}
+				
+				let CARDS = document.getElementsByTagName("img");
+				for (let card of CARDS) 
+					{
+					card.onclick = openCard;	
+					;}
+				;}
+		</script>		
+	</head>
+	<body>
+		<table id=cardboard>
+			<tr>
+				<td><img src="back.jpg" class=card1 id=c1></td>
+				<td><img src="back.jpg" class=card4 id=c2></td>
+				<td><img src="back.jpg" class=card1 id=c3></td>
+				<td><img src="back.jpg" class=card3 id=c4></td>
+			</tr>
+			<tr>
+				<td><img src="back.jpg" class=card2 id=c5></td>
+				<td><img src="back.jpg" class=card2 id=c6></td>
+				<td><img src="back.jpg" class=card3 id=c7></td>
+				<td><img src="back.jpg" class=card4 id=c8></td>
+			</tr>
+		</table>
+	</body>
+</html>

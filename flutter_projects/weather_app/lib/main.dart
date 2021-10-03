@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
-
+import './search.dart';
+import './week.dart';
+import './settings.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -63,8 +65,8 @@ class _MyHomePageState extends State<MyHomePage> {
         drawer: Drawer(
           child: ListView(
             padding: EdgeInsets.zero,
-            children: const <Widget>[
-              Padding(padding: EdgeInsets.only(top: 30, left: 20, bottom: 20),
+            children: <Widget>[
+              const Padding(padding: EdgeInsets.only(top: 30, left: 20, bottom: 20),
                 child: Text(
                   'Weather App',
                   style: TextStyle(
@@ -76,6 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
 
               ListTile(
+                onTap: () => {_navigateToSettingsScreen(context)},
                 leading: Icon(Icons.settings),
                 title: Text('Настройки'),
               ),
@@ -437,7 +440,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ),
                           OutlinedButton(
-                            onPressed: () {},
+                            onPressed: () { _navigateToWeatherScreen(context);},
                             child: const Text('Прогноз на неделю'),
                           ),
                         ],
@@ -453,45 +456,10 @@ class _MyHomePageState extends State<MyHomePage> {
   void _navigateToNextScreen(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => NewScreen()));
   }
-}
-class NewScreen extends StatelessWidget {
-  var _controller = TextEditingController();
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        margin: EdgeInsets.only(top: 35),
-        height: 35.0,
-        width: MediaQuery.of(context).size.width,
-        child: Row(
-          children: [
-            IconButton(
-              onPressed: () => _navigateToPreviousScreen(context),
-              icon: const Icon(
-                Icons.arrow_back_ios,
-                size: 20,
-              ),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width*0.80,
-              height: 35.0,
-              child: TextFormField(
-                controller: _controller,
-                decoration: InputDecoration(
-                  hintText: 'Введите название города...',
-                  suffixIcon: IconButton(
-                    onPressed: _controller.clear,
-                    icon: Icon(Icons.clear),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+  void _navigateToWeatherScreen(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => WeekScreen()));
   }
-  void _navigateToPreviousScreen(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => MyHomePage(title: "Погода")));
+  void _navigateToSettingsScreen(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingsScreen()));
   }
 }
