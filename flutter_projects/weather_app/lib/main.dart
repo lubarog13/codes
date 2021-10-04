@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import './search.dart';
 import './week.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:weather_icons/weather_icons.dart';
 import './settings.dart';
 void main() {
   runApp(const MyApp());
@@ -63,6 +65,8 @@ class _MyHomePageState extends State<MyHomePage> {
         key: _scaffoldKey,
         backgroundColor: Colors.lightBlue,
         drawer: Drawer(
+          child: Container(
+            color: Color.fromRGBO(226, 235, 255, 1),
           child: ListView(
             padding: EdgeInsets.zero,
             children: <Widget>[
@@ -92,6 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ],
           ),
+        ),
         ),
         body: Stack(
           children: <Widget>[
@@ -199,9 +204,15 @@ class _MyHomePageState extends State<MyHomePage> {
             Positioned(
                 bottom: 00,
                 width: MediaQuery.of(context).size.width,
-                height: 270,
-                child: Container (
-                    decoration: const BoxDecoration(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(minHeight: 100, maxHeight: 450),
+                      child:  ListView.builder(
+                        shrinkWrap: true,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Container(
+                            height: 440,
+                            margin: EdgeInsets.only(top: 150),
+                        decoration: const BoxDecoration(
                       color: Color(0xFFDAE5EA),
                       borderRadius: BorderRadius.only(
                           topRight: Radius.circular(20.0),
@@ -209,19 +220,20 @@ class _MyHomePageState extends State<MyHomePage> {
                           topLeft: Radius.circular(20.0),
                           bottomLeft: Radius.circular(0.0)),
                     ),
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width,
                       child: Column(
                         children: [
                           Column(
                             children: [
                               Container(
+                                key: Key('_pB'),
                                   width: 80,
                                   height: 3.3,
                                   margin: EdgeInsets.only(top: 10),
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue,
-                                  )
+                                  child: RawMaterialButton(
+                                    onPressed: () => {
+                                    },
+                                    fillColor: Colors.blueAccent,
+                                  ),
                               )
                             ],
                           ),
@@ -443,11 +455,225 @@ class _MyHomePageState extends State<MyHomePage> {
                             onPressed: () { _navigateToWeatherScreen(context);},
                             child: const Text('Прогноз на неделю'),
                           ),
+                          Container(
+                            margin: EdgeInsets.only(top: 20),
+                            padding: EdgeInsets.only(left: 30, right: 30),
+                            child: Column(
+                              children: [
+                            Row(
+                              children:
+                               [
+                              Expanded(
+                                flex: 2,
+                                child: Container(
+                                  height: 70,
+                                  margin: EdgeInsets.only(right: 10),
+                                      decoration: const BoxDecoration(
+                                        color: Color(0xFFDAE5EA),
+                                        borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(10.0),
+                                            bottomRight: Radius.circular(10.0),
+                                            topLeft: Radius.circular(10.0),
+                                            bottomLeft: Radius.circular(10.0)
+                                        ),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey,
+                                            spreadRadius: 1,
+                                            blurRadius: 3,
+                                            offset: Offset(0, 2), // changes position of shadow
+                                          ),
+                                        ],
+                                      ),
+                                      child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children:  [
+                                    Icon(
+                                      WeatherIcons.thermometer,
+                                      size: 30,
+                                      color: Color.fromRGBO(90, 90, 90, 100),
+                                    ),
+                                    Text(
+                                      '  8\u00B0',
+                                      style:  GoogleFonts.manrope(
+                  fontWeight: FontWeight.bold, 
+                  fontSize: 18),
+                                    ),
+                                    Text(
+                                        'C',
+                                        style:  GoogleFonts.manrope(
+                  fontWeight: FontWeight.bold, 
+                  fontSize: 14, color: Colors.grey),
+                                    )
+                                  ],
+                                ),
+                                )
+                                ),
+                                Expanded(
+                                flex: 2,
+                              
+                                child: Container(
+                                  height: 70,
+                                  margin: EdgeInsets.only(left: 10),
+                                      decoration: const BoxDecoration(
+                                        color: Color(0xFFDAE5EA),
+                                        borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(10.0),
+                                            bottomRight: Radius.circular(10.0),
+                                            topLeft: Radius.circular(10.0),
+                                            bottomLeft: Radius.circular(10.0)
+                                        ),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey,
+                                            spreadRadius: 1,
+                                            blurRadius: 3,
+                                            offset: Offset(0, 2), // changes position of shadow
+                                          ),
+                                        ],
+                                      ),
+                                      child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children:  [
+                                    Icon(
+                                      WeatherIcons.humidity,
+                                      size: 30,
+                                      color: Color.fromRGBO(90, 90, 90, 100),
+                                    ),
+                                    Text(
+                                      '  87',
+                                      style:  GoogleFonts.manrope(
+                  fontWeight: FontWeight.bold, 
+                  fontSize: 18),
+                                    ),
+                                    Text(
+                                        '%',
+                                        style:  GoogleFonts.manrope(
+                  fontWeight: FontWeight.bold, 
+                  fontSize: 14, color: Colors.grey),
+                                    ),
+                                  ],
+
+                                ),
+                                )
+                                )
+                            ],),
+                            Row(
+                              children:
+                               [
+                              Expanded(
+                                flex: 2,
+                                child: Container(
+                                  height: 70,
+                                  
+                                  margin: EdgeInsets.only(right: 10, top: 20),
+                                      decoration: const BoxDecoration(
+                                        color: Color(0xFFDAE5EA),
+                                        borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(10.0),
+                                            bottomRight: Radius.circular(10.0),
+                                            topLeft: Radius.circular(10.0),
+                                            bottomLeft: Radius.circular(10.0)
+                                        ),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey,
+                                            spreadRadius: 1,
+                                            blurRadius: 3,
+                                            offset: Offset(0, 2), // changes position of shadow
+                                          ),
+                                        ],
+                                      ),
+                                      child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children:  [
+                                    Icon(
+                                      WeatherIcons.strong_wind,
+                                      size: 30,
+                                      color: Color.fromRGBO(90, 90, 90, 100),
+                                    ),
+                                    Text(
+                                      '    9',
+                                      style:  GoogleFonts.manrope(
+                  fontWeight: FontWeight.bold, 
+                  fontSize: 18),
+                                    ),
+                                    Text(
+                                        'м/с',
+                                        style:  GoogleFonts.manrope(
+                  fontWeight: FontWeight.bold, 
+                  fontSize: 14, color: Colors.grey),
+                                    )
+                                  ],
+                                ),
+                                )
+                                ),
+                                Expanded(
+                                flex: 2,
+                              
+                                child: Container(
+                                  height: 70,
+                                  padding: EdgeInsets.only(bottom: 30),
+                                  margin: EdgeInsets.only(left: 10, top: 20),
+                                      decoration: const BoxDecoration(
+                                        color: Color(0xFFDAE5EA),
+                                        borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(10.0),
+                                            bottomRight: Radius.circular(10.0),
+                                            topLeft: Radius.circular(10.0),
+                                            bottomLeft: Radius.circular(10.0)
+                                        ),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey,
+                                            spreadRadius: 1,
+                                            blurRadius: 3,
+                                            offset: Offset(0, 2), // changes position of shadow
+                                          ),
+                                        ],
+                                      ),
+                                      child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+
+                                  children:  [
+                                    Icon(
+                                      WeatherIcons.barometer,
+                                      size: 30,
+                                      color: Color.fromRGBO(90, 90, 90, 100),
+                                    ),
+                                    Text(
+                                      '    761',
+                                     style:  GoogleFonts.manrope(
+                  fontWeight: FontWeight.bold, 
+                  fontSize: 18),
+                                    ),
+                                    Text(
+                                        'мм.рт.ст',
+                                        style:  GoogleFonts.manrope(
+                  fontWeight: FontWeight.bold, 
+                  fontSize: 14, color: Colors.grey),
+                                    )
+                                  ],
+
+                                ),
+                                )
+                                )
+                            ],),
+                              ]
+                            )
+                          )
                         ],
-                      ),
+                      ));
+                        },
+                        itemCount: 1,
+                      )
+                      
                     )
                 )
-            ),
           ],
         )
       // This trailing comma makes auto-formatting nicer for build methods.

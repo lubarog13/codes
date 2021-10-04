@@ -45,8 +45,7 @@ class SettingsScreen extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(top: 20),
             width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height*0.3,
-            padding: EdgeInsets.only(top: 40, left: 10, right: 20),
+            padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 20),
             decoration: BoxDecoration(
               color: Color.fromRGBO(226, 235, 255, 1),
               borderRadius: const BorderRadius.only(
@@ -100,7 +99,7 @@ class SettingsScreen extends StatelessWidget {
               )
               ]),
               child: ToggleSwitch(
-                        minWidth: 82,
+                        minWidth: 79.5,
                           cornerRadius: 20.0,
                           activeBgColors: [[Color.fromRGBO(75, 95, 136, 1)], [Color.fromRGBO(75, 95, 136, 1)]],
                           activeFgColor: Colors.white,
@@ -156,7 +155,7 @@ class SettingsScreen extends StatelessWidget {
               )
               ]),
                         child: ToggleSwitch(
-                        minWidth: 82,
+                        minWidth: 79.5,
                           cornerRadius: 20.0,
                           activeBgColors: [[Color.fromRGBO(75, 95, 136, 1)], [Color.fromRGBO(75, 95, 136, 1)]],
                           activeFgColor: Colors.white,
@@ -211,7 +210,7 @@ class SettingsScreen extends StatelessWidget {
               )
               ]),
                         child: ToggleSwitch(
-                        minWidth: 82,
+                        minWidth: 79.5,
                         fontSize: 12,
                           cornerRadius: 30.0,
                           activeBgColors: [[Color.fromRGBO(75, 95, 136, 1)], [Color.fromRGBO(75, 95, 136, 1)]],
