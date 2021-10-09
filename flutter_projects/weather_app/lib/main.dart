@@ -5,6 +5,7 @@ import './week.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:weather_icons/weather_icons.dart';
 import './settings.dart';
+import './about.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -93,6 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ListTile(
                 leading: Icon(Icons.person),
                 title: Text('О приложении'),
+                onTap: () => {_navigateToAboutScreen(context)},
               ),
             ],
           ),
@@ -187,7 +189,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     flex: 1,
                       child: Container(
                           child: MaterialButton(
-                            onPressed: () {},
+                            onPressed: () => {_navigateToNextScreen(context)},
                             color: Colors.blueAccent,
                             textColor: Colors.white,
                             child: Icon(
@@ -687,5 +689,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   void _navigateToSettingsScreen(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingsScreen()));
+  }
+  void _navigateToAboutScreen(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => AboutScreen()));
   }
 }
