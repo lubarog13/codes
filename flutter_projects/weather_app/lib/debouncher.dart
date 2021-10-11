@@ -4,15 +4,15 @@ import 'dart:ui';
 
 class Debouncer {
   final int milliseconds;
-  late VoidCallback action;
-  late Timer _timer;
+  Function? action;
+   Timer? _timer;
 
   Debouncer({required this.milliseconds});
 
-  run(VoidCallback action) {
+  run(Function action, String s) {
     if (null != _timer) {
-      _timer.cancel();
+      _timer?.cancel();
     }
-    _timer = Timer(Duration(milliseconds: milliseconds), action);
+    _timer = Timer(Duration(milliseconds: milliseconds), action(s));
   }
 }
