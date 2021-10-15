@@ -5,7 +5,7 @@ import 'dart:ui';
 class Debouncer {
   final int milliseconds;
   Function? action;
-   Timer? _timer;
+  Timer? _timer;
 
   Debouncer({required this.milliseconds});
 

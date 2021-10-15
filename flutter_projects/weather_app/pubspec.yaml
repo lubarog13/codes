@@ -29,6 +29,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  shared_preferences: 2.0.8
   http: 0.13.4
   toggle_switch: ^1.2.0
   weather_icons: ^3.0.0-nullsafety.0

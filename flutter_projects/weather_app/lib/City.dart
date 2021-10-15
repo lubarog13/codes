@@ -13,9 +13,17 @@ class City {
     required this.country,
     required this.state,
   });
+  Map<String, dynamic> toJson() => {
+    'name': local_names,
+    'local_names': local_names,
+    'lat': lat,
+    'lon': lon,
+    'country': country,
+    'state': state
+  };
   factory City.fromJson(Map<String, dynamic> json) {
-    return City(name: json['name'], 
-    local_names: json['local_names'],
-     lat: json['lat'], lon: json['lon'], country: json['country'], state: json['state']);
+    return City(name: json['name'],
+        local_names: (json['local_names']['ru'] ?? json['name']) ,
+        lat: json['lat'], lon: json['lon'], country: json['country'], state: json['state']);
   }
 }
