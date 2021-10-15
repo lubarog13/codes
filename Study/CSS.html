@@ -1,0 +1,76 @@
+<HTML>
+	<HEAD>
+		<META charset=utf-8>
+		<STYLE>
+		#rocket	{
+				position:absolute;
+				left:30%;
+				top:500px;		
+				;}
+		.fly	{
+				transition: top;
+				top:0%;
+				;}
+		#alarm	{
+				font-size:80pt;
+				width:95%;
+				color:red;
+				text-align:center;
+				position:absolute;
+				z-index:100;
+				display:none;
+				;}
+		</STYLE>
+		<SCRIPT>
+		window.onload  = function()
+		{
+			blinkID = null;
+			function launch()
+				{
+				if(isNaN(counter.value)){blinkID = setInterval(alarmBlink,1000);}
+				else{
+					clearInterval(blinkID);
+					alarm.style.display="none";
+					rocketLaunchCount();}
+				;}
+			start.onclick = launch;
+		
+			function rocketLaunchCount()
+				{
+					if(counter.value <= 0 && speed.value!=0)
+						{
+						rocket.className = "fly";
+						rocket.style.top = "-500px";
+						rocket.style.webkitTransitionDuration = (1000/(speed.value)).toString() + "s";
+						;}
+					else if (counter.value!=0){counter.value--; setTimeout(rocketLaunchCount,1000);}	
+				;}
+				
+			function alarmBlink()
+				{
+				if(alarm.style.display == "block"){alarm.style.display = "none";}
+				else{alarm.style.display = "block";}
+				;}
+		;}
+		</SCRIPT>
+	</HEAD>
+	<BODY>
+		<H1>Nasa at work</H1>
+		<H2>Параметры запуска ракеты</H2>
+		<TABLE>
+			<TR>
+				<TD>Таймер отсчета запуска (укажите в секундах)</TD>
+				<TD><INPUT size=20 value=0 id=counter></TD>
+			<TR>
+			<TR>
+				<TD>Скорость полета (в пикселях/секунду)</TD>
+				<TD><INPUT size=20 value=0 id=speed></TD>
+			<TR>			
+		</TABLE>
+		<INPUT type=button id=start value=Пуск>
+		<IMG src="rocket.png" id=rocket >	
+		<div id=alarm>АХТУНГ!!!<br>Введено не число в поле отсчета!</div>
+	</BODY>
+</HTML>
+		
+		

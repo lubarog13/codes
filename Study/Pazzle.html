@@ -1,0 +1,92 @@
+<HTML>
+	<HEAD>
+		<META charset=utf-8>
+		<STYLE>
+		img	{
+			width:300px;
+			margin:100px;
+			margin:0px;			
+			}
+		#gamefield
+			{
+			width:904px;
+			height:904px;			
+			;}
+		td	{
+			width:33%;
+			height:33%;
+			;}
+		</STYLE>
+		<SCRIPT>
+		window.onload  = function()
+		{	
+			let currentObject = {style:null};
+			currentObject.style = {border:null};
+			let CELLS = document.getElementsByTagName("TD");
+			pic1.angle = 90;
+			pic2.angle = 0;
+			pic3.angle = 180;
+			pic4.angle = 90;
+			pic5.angle = 270;
+			pic6.angle = 0;
+			pic7.angle = 270;
+			pic8.angle = 180;
+			pic9.angle = 0;
+			
+			
+			document.body.onclick = function (event)
+				{	
+				
+					if(event.target.tagName == "IMG" && ( event.target !=  currentObject))
+						{
+						currentObject.style.border = "0px solid black";
+						event.target.style.border = "3px solid ";
+						currentObject = event.target;						
+						;}
+						
+					else if(event.target.tagName == "IMG" && ( event.target ==  currentObject))
+						{
+							event.target.angle+=90;
+							if(event.target.angle == 360){event.target.angle = 0;}
+							event.target.style.transform = "rotate(" + event.target.angle + "deg)";
+							checkWin();
+						;}
+						
+					if(event.target.tagName == "TD" && currentObject.style.border)
+						{
+						event.target.appendChild(currentObject);
+						checkWin()
+						;}					
+				;}
+			
+			function checkWin()
+				{
+				let win = true;
+				for(let cell of CELLS)
+					{
+					if(cell.className != cell.lastChild.className || cell.lastChild.style.transform != "rotate(0deg)"){win = false;}					
+					;}
+				if(win){document.body.onclick = null; document.body.innerHTML = "<IMG src=win.jpg style='width:100%'>";}
+				;}
+		;}
+		</SCRIPT>
+	</HEAD>
+	<BODY>
+		<img src="pic1.png" style="transform:rotate(90deg)" id=pic1 class=pic6	>
+		<img src="pic2.png" style="transform:rotate(0deg)" id=pic2 class=pic2>
+		<img src="pic3.png" style="transform:rotate(180deg)" id=pic3 class=pic7>
+		<img src="pic4.png" style="transform:rotate(90deg)" id=pic4 class=pic1>
+		<img src="pic5.png" style="transform:rotate(270deg)" id=pic5 class=pic3>
+		<img src="pic6.png" style="transform:rotate(0deg)" id=pic6 class=pic8>
+		<img src="pic7.png" style="transform:rotate(270deg)" id=pic7 class=pic4>
+		<img src="pic8.png" style="transform:rotate(180deg)" id=pic8 class=pic9>
+		<img src="pic9.png" style="transform:rotate(0deg)" id=pic9 class=pic5>
+		<table border=1 id=gamefield cellspacing=0 cellpadding=0 align=center>
+			<tr><td class=pic1><div class="null"></div></td><td class=pic2><div class="null"></div></td><td class=pic3><div class="null"></div></td></tr>
+			<tr><td class=pic4><div class="null"></div></td><td class=pic5><div class="null"></div></td><td class=pic6><div class="null"></div></td></tr>		
+			<tr><td class=pic7><div class="null"></div></td><td class=pic8><div class="null"></div></td><td class=pic9><div class="null"></div></td></tr>				
+		</table>
+	</BODY>
+</HTML>
+		
+		
