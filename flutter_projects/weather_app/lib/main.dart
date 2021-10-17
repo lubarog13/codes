@@ -14,6 +14,7 @@ import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'favourite.dart';
 import 'weather.dart';
+import 'parser.dart';
 void main() {
   initializeDateFormatting('ru', null);
   runApp(const MyApp());
@@ -63,13 +64,15 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState(){
+    parser.initValues();
       _getSelected().then((value) => callWeather());
       super.initState();
   }
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   Weather currentWeather = new Weather(name: 'Saint Petersburg', main_: 'Sunny', temp: 10, wind: 9, pressure: 761, humidity: 87, dt_txt: '');
   City city = new City(name: 'Saint Petersburg', local_names: 'Санкт Петербург', lat: 59.8944, lon: 30.2642, country: 'RU', state: null);
-  List<Weather>? weather = [];
+  List<Weather>? weather;
+  Parser parser = Parser(t: 0, s: 0, p: 0);
 
   Weather parseWeather(String responseBody) {
     final parsed = jsonDecode(responseBody);
@@ -115,6 +118,7 @@ void callWeather() async {
         fetcWeather().then((value) => currentWeather = value)
       ]);
       setState(() {
+        
       });
   }
   @override
@@ -184,7 +188,7 @@ void callWeather() async {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    currentWeather.temp.toInt().toString() + '\u00B0C',
+                    parser.parseTemp(currentWeather.temp.toInt()),
                     style: TextStyle(
                         fontSize: 72.0,
                         fontFamily: 'Roboto',
@@ -350,7 +354,7 @@ void callWeather() async {
                                                       height: 40,)
                                                 ),
                                                 Text(
-                                                  weather![1].temp.toInt().toString() + '\u00B0C',
+                                                  parser.parseTemp(weather![1].temp.toInt()),
                                                   style: TextStyle(
                                                       fontSize: 20.0,
                                                       fontFamily: 'Roboto',
@@ -401,7 +405,7 @@ void callWeather() async {
                                                       height: 40,)
                                                 ),
                                                 Text(
-                                                  weather![3].temp.toInt().toString() + '\u00B0C',
+                                                  parser.parseTemp(weather![3].temp.toInt()),
                                                   style: TextStyle(
                                                       fontSize: 20.0,
                                                       fontFamily: 'Roboto',
@@ -452,7 +456,7 @@ void callWeather() async {
                                                       height: 40,)
                                                 ),
                                                 Text(
-                                                  weather![5].temp.toInt().toString() + '\u00B0C',
+                                                  parser.parseTemp(weather![5].temp.toInt()),
                                                   style: TextStyle(
                                                       fontSize: 20.0,
                                                       fontFamily: 'Roboto',
@@ -503,7 +507,7 @@ void callWeather() async {
                                                       height: 40,)
                                                 ),
                                                 Text(
-                                                  weather![7].temp.toInt().toString() + '\u00B0C',
+                                                  parser.parseTemp(weather![7].temp.toInt()),
                                                   style: TextStyle(
                                                       fontSize: 20.0,
                                                       fontFamily: 'Roboto',
@@ -561,17 +565,11 @@ void callWeather() async {
                                                           color: Color.fromRGBO(90, 90, 90, 100),
                                                         ),
                                                         Text(
-                                                          '    '+ currentWeather.temp.toInt().toString() + '\u00B0',
+                                                          '    '+ parser.parseTemp(currentWeather.temp.toInt()),
                                                           style:  GoogleFonts.manrope(
                                                               fontWeight: FontWeight.bold,
                                                               fontSize: 18),
                                                         ),
-                                                        Text(
-                                                          'C',
-                                                          style:  GoogleFonts.manrope(
-                                                              fontWeight: FontWeight.bold,
-                                                              fontSize: 14, color: Colors.grey),
-                                                        )
                                                       ],
                                                     ),
                                                   )
@@ -662,13 +660,13 @@ void callWeather() async {
                                                           color: Color.fromRGBO(90, 90, 90, 100),
                                                         ),
                                                         Text(
-                                                          '    ' + currentWeather.wind.toString(),
+                                                          '    ' + parser.parseSpeed(currentWeather.wind),
                                                           style:  GoogleFonts.manrope(
                                                               fontWeight: FontWeight.bold,
                                                               fontSize: 18),
                                                         ),
                                                         Text(
-                                                          'м/с',
+                                                          parser.parseSpeedName(),
                                                           style:  GoogleFonts.manrope(
                                                               fontWeight: FontWeight.bold,
                                                               fontSize: 14, color: Colors.grey),
@@ -712,13 +710,13 @@ void callWeather() async {
                                                           color: Color.fromRGBO(90, 90, 90, 100),
                                                         ),
                                                         Text(
-                                                          currentWeather.pressure.toString(),
+                                                          parser.parsePressure(currentWeather.pressure),
                                                           style:  GoogleFonts.manrope(
                                                               fontWeight: FontWeight.bold,
                                                               fontSize: 18),
                                                         ),
                                                         Text(
-                                                          'мм.рт.ст',
+                                                          parser.parsePressureName(),
                                                           style:  GoogleFonts.manrope(
                                                               fontWeight: FontWeight.bold,
                                                               fontSize: 14, color: Colors.grey),

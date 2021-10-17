@@ -1,8 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import './main.dart';
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
+  @override
+  SettingsState createState() => SettingsState();
+
+}
+
+class SettingsState extends State {
+  int temp = 0;
+  int speed = 0;
+  int pressure = 0;
+  @override
+  void initState(){
+    initValues().then((value) => null);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,13 +94,7 @@ class SettingsScreen extends StatelessWidget {
                       ),
                     ),
                     ),
-                    Expanded(
-                      flex: 2,
-                      child: Text('')
-                    ),
-                    Expanded(
-                      flex: 6,
-                      child: Container(
+                    Container(
                         decoration: BoxDecoration(
               borderRadius: const BorderRadius.only(
                           topRight: Radius.circular(20.0),
@@ -100,20 +110,21 @@ class SettingsScreen extends StatelessWidget {
               ]),
               child: ToggleSwitch(
                         minWidth: 79.5,
+                          initialLabelIndex: temp,
                           cornerRadius: 20.0,
                           activeBgColors: [[Color.fromRGBO(75, 95, 136, 1)], [Color.fromRGBO(75, 95, 136, 1)]],
                           activeFgColor: Colors.white,
                           inactiveBgColor: Color.fromRGBO(226, 235, 255, 1),
                           inactiveFgColor: Colors.black,
-                          initialLabelIndex: 0,
                           totalSwitches: 2,
                           labels: ['\u00B0C', '\u00B0F'],
                           radiusStyle: true,
                           onToggle: (index) {
+                            temp=index;
+                            setTemp();
                           },
                         ),
                       )
-                    )
                   ]
                 ),
                 Divider(
@@ -134,13 +145,7 @@ class SettingsScreen extends StatelessWidget {
                       ),
                     ),
                     ),
-                    Expanded(
-                      flex: 2,
-                      child: Text('')
-                    ),
-                    Expanded(
-                      flex: 6,
-                      child: Container(
+                     Container(
                         decoration: BoxDecoration(
               borderRadius: const BorderRadius.only(
                           topRight: Radius.circular(20.0),
@@ -161,14 +166,16 @@ class SettingsScreen extends StatelessWidget {
                           activeFgColor: Colors.white,
                           inactiveBgColor: Color.fromRGBO(226, 235, 255, 1),
                           inactiveFgColor: Colors.black,
-                          initialLabelIndex: 0,
+                          initialLabelIndex: speed,
                           totalSwitches: 2,
                           labels: ['м/с', 'км/ч'],
                           radiusStyle: true,
                           onToggle: (index) {
+                            speed=index;
+                            setSpeed();
                           },
                         ),
-                    ))
+                    )
                   ]
                 ),
                 Divider(
@@ -189,13 +196,7 @@ class SettingsScreen extends StatelessWidget {
                       ),
                     ),
                     ),
-                    Expanded(
-                      flex: 2,
-                      child: Text('')
-                    ),
-                    Expanded(
-                      flex: 6,
-                      child: Container(
+                      Container(
                         decoration: BoxDecoration(
               borderRadius: const BorderRadius.only(
                           topRight: Radius.circular(20.0),
@@ -217,14 +218,16 @@ class SettingsScreen extends StatelessWidget {
                           activeFgColor: Colors.white,
                           inactiveBgColor: Color.fromRGBO(226, 235, 255, 1),
                           inactiveFgColor: Colors.black,
-                          initialLabelIndex: 0,
+                          initialLabelIndex: pressure,
                           totalSwitches: 2,
                           labels: ['мм.рт.ст.', 'гПа'],
                           radiusStyle: true,
                           onToggle: (index) {
+                            pressure = index;
+                            setPressure();
                           },
                         ),
-                    ))
+                    )
                   ]
                 ),
               ],
@@ -237,5 +240,29 @@ class SettingsScreen extends StatelessWidget {
   }
   void _navigateToPreviousScreen(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => MyHomePage(title: "Погода")));
+  }
+
+  void setTemp() async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+      preferences.setInt('temp', temp);
+  }
+
+  void setSpeed() async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+      preferences.setInt('speed', speed);
+  }
+
+  void setPressure() async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+      preferences.setInt('pressure', pressure);
+  }
+
+  Future<void> initValues() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      temp = preferences.getInt('temp')?? 0;
+    pressure = preferences.getInt('pressure')?? 0;
+    speed = preferences.getInt('speed')?? 0;
+    });
   }
 }
