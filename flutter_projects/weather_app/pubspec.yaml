@@ -29,6 +29,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  intl: 0.17.0-nullsafety.2
   shared_preferences: 2.0.8
   http: 0.13.4
   toggle_switch: ^1.2.0

@@ -103,13 +103,16 @@ class _Search extends State<NewScreen>{
                           Expanded(
                             flex: 5,
                             child:
-                            Text(
+                            GestureDetector(
+                              onTap: () => {_selectCity(_city[index]).then((value) => _navigateToPreviousScreen(context))},
+                              child: Text(
                                _city[index].local_names.toString() + ' ' + _city[index].country ,
                               style: GoogleFonts.manrope(
                                   fontSize: 13,
                                   fontWeight: FontWeight.bold
                               ),
                             ),
+                            )
                           ),
                           Container(
                             margin: EdgeInsets.only(right: 20),
@@ -141,5 +144,10 @@ class _Search extends State<NewScreen>{
     _cities.add(jsonEncode(city.toJson()));
     print("Count: " + _cities.length.toString());
     await preferences.setStringList('favourite', _cities);
+  }
+  Future<void> _selectCity(City city) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var encode = jsonEncode(city.toJson());
+    await preferences.setString('selected', encode);
   }
 }

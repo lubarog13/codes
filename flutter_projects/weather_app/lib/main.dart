@@ -1,12 +1,21 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:weather_app/City.dart';
 import './search.dart';
 import './week.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:weather_icons/weather_icons.dart';
 import './settings.dart';
+import 'package:http/http.dart' as http;
 import './about.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'favourite.dart';
+import 'weather.dart';
 void main() {
+  initializeDateFormatting('ru', null);
   runApp(const MyApp());
 }
 enum WhyFarther { harder, smarter, selfStarter, tradingCharter }
@@ -52,8 +61,62 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  @override
+  void initState(){
+      _getSelected().then((value) => callWeather());
+      super.initState();
+  }
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
+  Weather currentWeather = new Weather(name: 'Saint Petersburg', main_: 'Sunny', temp: 10, wind: 9, pressure: 761, humidity: 87, dt_txt: '');
+  City city = new City(name: 'Saint Petersburg', local_names: 'Санкт Петербург', lat: 59.8944, lon: 30.2642, country: 'RU', state: null);
+  List<Weather>? weather = [];
 
+  Weather parseWeather(String responseBody) {
+    final parsed = jsonDecode(responseBody);
+    print(parsed['main']['temp']);
+    return Weather.fromJson(parsed);
+  }
+  List<Weather> parseWeatherByHours(String responseBody) {
+    final parsed = jsonDecode(responseBody);
+    List<Weather>? weather_ = [];
+    for(int i=0; i<8; i++){
+      weather_.add(Weather.fromSpecificJson(parsed, i));
+      print(weather_[i].temp);
+    }
+    return weather_;
+  }
+  Future<Weather> fetcWeather() async {
+    print('ok1');
+    final response = await http
+        .get(Uri.parse('http://api.openweathermap.org/data/2.5/weather?lat=${city.lat}&lon=${city.lon}&appid=728abff1d97171ab28a008e3e5800944'));
+    print('ok2');
+    if (response.statusCode == 200) {
+      print('ok3');
+      return parseWeather(response.body);
+    } else {
+      throw Exception('Failed to load album');
+    }
+  }
+  Future<List<Weather>> fetcWeatherByHours() async {
+    print('ok1');
+    final response = await http
+        .get(Uri.parse('http://api.openweathermap.org/data/2.5/forecast?lat=${city.lat}&lon=${city.lon}&appid=728abff1d97171ab28a008e3e5800944'));
+    print('ok2');
+    if (response.statusCode == 200) {
+      print('ok3');
+      return parseWeatherByHours(response.body);
+    } else {
+      throw Exception('Failed to load album');
+    }
+  }
+void callWeather() async {
+      await Future.wait([
+        fetcWeatherByHours().then((value) => weather = value),
+        fetcWeather().then((value) => currentWeather = value)
+      ]);
+      setState(() {
+      });
+  }
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -119,9 +182,9 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const <Widget>[
+                children: <Widget>[
                   Text(
-                    '10 \u00B0C',
+                    currentWeather.temp.toInt().toString() + '\u00B0C',
                     style: TextStyle(
                         fontSize: 72.0,
                         fontFamily: 'Roboto',
@@ -136,9 +199,9 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const <Widget>[
+                children:  <Widget>[
                   Text(
-                    '23 сент. 2021',
+                    DateFormat.yMMMd('ru').format(DateTime.now()),
                     style: TextStyle(
                         fontSize: 22.0,
                         fontFamily: 'Roboto',
@@ -172,8 +235,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       child:
                       GestureDetector(
                         child: Container(
-                          child: const Text(
-                            'Санкт-Петербург',
+                          child: Text(
+                            city.local_names,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.white,
@@ -269,9 +332,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                             ),
                                             margin: const EdgeInsets.only(top:20, left: 45, bottom: 20),
                                             child: Column (
-                                              children: const [
+                                              children:  [
                                                 Text(
-                                                  '06:00',
+                                                  DateFormat('hh:mm').format(DateTime.parse(weather![1].dt_txt)),
                                                   style: TextStyle(
                                                       fontSize: 18.0,
                                                       fontFamily: 'Roboto',
@@ -282,12 +345,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     height: 80,
                                                     width: 40,
                                                     child: Image(
-                                                      image: AssetImage("assets/images/light.png"),
+                                                      image: AssetImage(weather![1].pictureMain()),
                                                       width: 40,
                                                       height: 40,)
                                                 ),
                                                 Text(
-                                                  '10 \u00B0C',
+                                                  weather![1].temp.toInt().toString() + '\u00B0C',
                                                   style: TextStyle(
                                                       fontSize: 20.0,
                                                       fontFamily: 'Roboto',
@@ -320,9 +383,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                             ),
                                             margin: const EdgeInsets.only(top:20, left: 45, bottom: 20),
                                             child: Column (
-                                              children: const [
+                                              children: [
                                                 Text(
-                                                  '12:00',
+                                                  DateFormat('hh:mm').format(DateTime.parse(weather![3].dt_txt)),
                                                   style: TextStyle(
                                                       fontSize: 18.0,
                                                       fontFamily: 'Roboto',
@@ -333,12 +396,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     height: 80,
                                                     width: 40,
                                                     child: Image(
-                                                      image: AssetImage("assets/images/sun.png"),
+                                                      image: AssetImage(weather![3].pictureMain()),
                                                       width: 40,
                                                       height: 40,)
                                                 ),
                                                 Text(
-                                                  '10 \u00B0C',
+                                                  weather![3].temp.toInt().toString() + '\u00B0C',
                                                   style: TextStyle(
                                                       fontSize: 20.0,
                                                       fontFamily: 'Roboto',
@@ -371,7 +434,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                             ),
                                             margin: const EdgeInsets.only(top:20, left: 45, bottom: 20),
                                             child: Column (
-                                              children: const [
+                                              children: [
                                                 Text(
                                                   '18:00',
                                                   style: TextStyle(
@@ -384,12 +447,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     height: 80,
                                                     width: 40,
                                                     child: Image(
-                                                      image: AssetImage("assets/images/rain.png"),
+                                                      image: AssetImage(weather![5].pictureMain()),
                                                       width: 40,
                                                       height: 40,)
                                                 ),
                                                 Text(
-                                                  '10 \u00B0C',
+                                                  weather![5].temp.toInt().toString() + '\u00B0C',
                                                   style: TextStyle(
                                                       fontSize: 20.0,
                                                       fontFamily: 'Roboto',
@@ -422,7 +485,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                             ),
                                             margin: const EdgeInsets.only(top:20, left: 45, bottom: 20, right: 45),
                                             child: Column (
-                                              children: const [
+                                              children: [
                                                 Text(
                                                   '00:00',
                                                   style: TextStyle(
@@ -435,12 +498,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     height: 80,
                                                     width: 40,
                                                     child: Image(
-                                                      image: AssetImage("assets/images/much_rain.png"),
+                                                      image: AssetImage(weather![7].pictureMain()),
                                                       width: 40,
                                                       height: 40,)
                                                 ),
                                                 Text(
-                                                  '10 \u00B0C',
+                                                  weather![7].temp.toInt().toString() + '\u00B0C',
                                                   style: TextStyle(
                                                       fontSize: 20.0,
                                                       fontFamily: 'Roboto',
@@ -498,7 +561,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                           color: Color.fromRGBO(90, 90, 90, 100),
                                                         ),
                                                         Text(
-                                                          '  8\u00B0',
+                                                          '    '+ currentWeather.temp.toInt().toString() + '\u00B0',
                                                           style:  GoogleFonts.manrope(
                                                               fontWeight: FontWeight.bold,
                                                               fontSize: 18),
@@ -546,7 +609,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                           color: Color.fromRGBO(90, 90, 90, 100),
                                                         ),
                                                         Text(
-                                                          '  87',
+                                                          '    ' + currentWeather.humidity.toString(),
                                                           style:  GoogleFonts.manrope(
                                                               fontWeight: FontWeight.bold,
                                                               fontSize: 18),
@@ -599,7 +662,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                           color: Color.fromRGBO(90, 90, 90, 100),
                                                         ),
                                                         Text(
-                                                          '    9',
+                                                          '    ' + currentWeather.wind.toString(),
                                                           style:  GoogleFonts.manrope(
                                                               fontWeight: FontWeight.bold,
                                                               fontSize: 18),
@@ -649,7 +712,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                           color: Color.fromRGBO(90, 90, 90, 100),
                                                         ),
                                                         Text(
-                                                          '    761',
+                                                          currentWeather.pressure.toString(),
                                                           style:  GoogleFonts.manrope(
                                                               fontWeight: FontWeight.bold,
                                                               fontSize: 18),
@@ -696,5 +759,16 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   void _navigateToFavouriteScreen(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => FavouriteScreen()));
+  }
+
+  Future<void> _getSelected() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var coded = preferences.getString('selected');
+    setState(() {
+      if(coded!=null){
+      var decoded = jsonDecode(coded);
+      city = new City(name: decoded['name'], local_names: decoded['local_names'], lat: decoded['lat'], lon: decoded['lon'], country: decoded['country'], state: decoded['state']);
+    }
+    });
   }
 }
