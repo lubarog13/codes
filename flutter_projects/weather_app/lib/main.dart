@@ -62,16 +62,17 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
   @override
   void initState(){
-    parser.initValues();
-      _getSelected().then((value) => callWeather());
+    hasLoading = false;
       super.initState();
   }
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   Weather currentWeather = new Weather(name: 'Saint Petersburg', main_: 'Sunny', temp: 10, wind: 9, pressure: 761, humidity: 87, dt_txt: '');
   City city = new City(name: 'Saint Petersburg', local_names: 'Санкт Петербург', lat: 59.8944, lon: 30.2642, country: 'RU', state: null);
   List<Weather>? weather;
+  bool hasLoading = false;
   Parser parser = Parser(t: 0, s: 0, p: 0);
 
   Weather parseWeather(String responseBody) {
@@ -87,6 +88,10 @@ class _MyHomePageState extends State<MyHomePage> {
       print(weather_[i].temp);
     }
     return weather_;
+  }
+  Future<int> printSomething() async {
+    print(hasLoading);
+    return 0;
   }
   Future<Weather> fetcWeather() async {
     print('ok1');
@@ -105,6 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final response = await http
         .get(Uri.parse('http://api.openweathermap.org/data/2.5/forecast?lat=${city.lat}&lon=${city.lon}&appid=728abff1d97171ab28a008e3e5800944'));
     print('ok2');
+    print("ok5");
     if (response.statusCode == 200) {
       print('ok3');
       return parseWeatherByHours(response.body);
@@ -112,14 +118,17 @@ class _MyHomePageState extends State<MyHomePage> {
       throw Exception('Failed to load album');
     }
   }
-void callWeather() async {
-      await Future.wait([
-        fetcWeatherByHours().then((value) => weather = value),
-        fetcWeather().then((value) => currentWeather = value)
-      ]);
-      setState(() {
-        
+Future<int> callWeather() async {
+  if(!hasLoading){
+        parser.initValues();
+        await _getSelected();
+        weather = await fetcWeatherByHours();
+        currentWeather = await fetcWeather();
+      setState (() {
       });
+      hasLoading = true;
+  }
+      return 0;
   }
   @override
   Widget build(BuildContext context) {
@@ -129,7 +138,12 @@ void callWeather() async {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    return Scaffold(
+    return FutureBuilder<int>(
+      future: callWeather(),
+      builder: (BuildContext context, AsyncSnapshot<int> snapshot){
+        Widget child;
+        if (snapshot.hasData) {
+            child = Scaffold(
         key: _scaffoldKey,
         backgroundColor: Colors.lightBlue,
         drawer: Drawer(
@@ -742,7 +756,20 @@ void callWeather() async {
         )
       // This trailing comma makes auto-formatting nicer for build methods.
     );
-  }
+      } else {
+          child = Scaffold(
+            body: Container(
+              alignment: Alignment.center,
+              child: CircularProgressIndicator(),
+            ),
+          );
+      }
+      return Container(
+        child: child,
+      );
+      }
+    );
+      }
   void _navigateToNextScreen(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => NewScreen()));
   }
