@@ -12,9 +12,9 @@ class Parser {
 
   String parseTemp(int temp) {
     if(t==0) {
-      return temp.toString() + '\u00B0C';
+      return temp.toString();
     } else{
-      return (temp * 9/5 + 32).toString() + '\u00B0F';
+      return (temp * 9/5 + 32).toString();
     }
   }
 
@@ -47,6 +47,14 @@ class Parser {
       return 'м/с';
     } else {
       return 'км/ч';
+    }
+  }
+
+  String parseTempName() {
+    if(t==0){
+      return '\u00B0C';
+    } else {
+      return '\u00B0F';
     }
   }
 

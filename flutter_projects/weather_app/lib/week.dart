@@ -19,12 +19,14 @@ class WeekScreen extends StatefulWidget{
 }
 
 class WeekState extends State<WeekScreen> {
+   Future<int> myfuture = Future(() => 1);
   @override
   void initState(){
-    callWeather();
+      myfuture = callWeather();
       super.initState();
   }
   List<Weather>? weather;
+   bool hasLoading = false;
   Parser parser = Parser(t: 0, s: 0, p: 0);
   City city = new City(name: 'Saint Petersburg', local_names: 'Санкт Петербург', lat: 59.8944, lon: 30.2642, country: 'RU', state: null);
   Future<void> _getSelected() async {
@@ -61,16 +63,24 @@ class WeekState extends State<WeekScreen> {
      return weather_;
   }
   Future<int> callWeather() async {
+     if(!hasLoading){
         parser.initValues();
         await _getSelected();
         weather = await fetcWeather();
+        hasLoading=true;
       setState (() {
       });
+     }
       return 0;
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return FutureBuilder<int>(
+      future: myfuture,
+      builder: (BuildContext context, AsyncSnapshot<int> snapshot){
+        Widget child;
+        if(snapshot.hasData){
+          child = Scaffold(
       body: Center(
         child: SizedBox(
           width: MediaQuery.of(context).size.width*0.8,
@@ -140,19 +150,19 @@ class WeekState extends State<WeekScreen> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children:  [
-                                    Icon(
+                                    const Icon(
                                       WeatherIcons.thermometer,
                                       size: 30,
                                       color: Color.fromRGBO(90, 90, 90, 100),
                                     ),
                                     Text(
-                                      '    ' + weather![index].temp.toInt().toString() + '\u00B0',
+                                      '    ' + parser.parseTemp(weather![index].temp.toInt()),
                                       style:  GoogleFonts.manrope(
                   fontWeight: FontWeight.bold, 
                   fontSize: 18),
                                     ),
                                     Text(
-                                        'C',
+                                        parser.parseTempName(),
                                         style:  GoogleFonts.manrope(
                   fontWeight: FontWeight.bold, 
                   fontSize: 14, color: Colors.grey),
@@ -173,13 +183,13 @@ class WeekState extends State<WeekScreen> {
                                       color: Color.fromRGBO(90, 90, 90, 100),
                                     ),
                                     Text(
-                                      '    ' + weather![index].wind.toString(),
+                                      '    ' + parser.parseSpeed(weather![index].wind),
                                       style:  GoogleFonts.manrope(
                   fontWeight: FontWeight.bold, 
                   fontSize: 18),
                                     ),
                                     Text(
-                                        'м/с',
+                                        parser.parseSpeedName(),
                                         style:  GoogleFonts.manrope(
                   fontWeight: FontWeight.bold, 
                   fontSize: 14, color: Colors.grey),
@@ -197,7 +207,7 @@ class WeekState extends State<WeekScreen> {
                                       color: Color.fromRGBO(90, 90, 90, 100),
                                     ),
                                     Text(
-                                      '    ' + weather![index].humidity.toString(),
+                                      '    ' +  weather![index].humidity.toString(),
                                       style:  GoogleFonts.manrope(
                   fontWeight: FontWeight.bold, 
                   fontSize: 18),
@@ -218,19 +228,19 @@ class WeekState extends State<WeekScreen> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children:  [
-                                    Icon(
+                                    const Icon(
                                       WeatherIcons.barometer,
                                       size: 30,
                                       color: Color.fromRGBO(90, 90, 90, 100),
                                     ),
                                     Text(
-                                      '    ' + weather![index].pressure.toString(),
+                                      '    ' + parser.parsePressure(weather![index].pressure),
                                      style:  GoogleFonts.manrope(
                   fontWeight: FontWeight.bold, 
                   fontSize: 18),
                                     ),
                                     Text(
-                                        'мм.рт.ст',
+                                        parser.parsePressureName(),
                                         style:  GoogleFonts.manrope(
                   fontWeight: FontWeight.bold, 
                   fontSize: 14, color: Colors.grey),
@@ -297,6 +307,38 @@ class WeekState extends State<WeekScreen> {
             )
       ),
     );
+        }
+        else {
+          child = Scaffold(
+            body: Center(
+              child: Stack(
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height / 4),
+                    child: Text(
+                      'Weather',
+                      style: GoogleFonts.manrope(
+                        fontSize: 35,
+                        fontWeight: FontWeight.w600
+                      ),
+                    )
+                  ),
+                  Center(
+                     child: CircularProgressIndicator(
+                color: Colors.black,
+                  ),
+                  )
+                ],
+              )
+            ),
+          );
+      }
+      return Container(
+        child: child,
+      );
+      }
+      );
   }
   void _navigateToPreviousScreen(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => MyHomePage(title: "Погода")));

@@ -62,10 +62,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
+  Future<int> myfuture = Future(() => 1);
   @override
   void initState(){
-    hasLoading = false;
+    myfuture = callWeather();
       super.initState();
   }
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -124,9 +124,9 @@ Future<int> callWeather() async {
         await _getSelected();
         weather = await fetcWeatherByHours();
         currentWeather = await fetcWeather();
+        hasLoading = true;
       setState (() {
       });
-      hasLoading = true;
   }
       return 0;
   }
@@ -139,7 +139,7 @@ Future<int> callWeather() async {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return FutureBuilder<int>(
-      future: callWeather(),
+      future: myfuture,
       builder: (BuildContext context, AsyncSnapshot<int> snapshot){
         Widget child;
         if (snapshot.hasData) {
@@ -202,7 +202,7 @@ Future<int> callWeather() async {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    parser.parseTemp(currentWeather.temp.toInt()),
+                    parser.parseTemp(currentWeather.temp.toInt()) + parser.parseTempName(),
                     style: TextStyle(
                         fontSize: 72.0,
                         fontFamily: 'Roboto',
@@ -368,7 +368,7 @@ Future<int> callWeather() async {
                                                       height: 40,)
                                                 ),
                                                 Text(
-                                                  parser.parseTemp(weather![1].temp.toInt()),
+                                                  parser.parseTemp(weather![1].temp.toInt()) + parser.parseTempName(),
                                                   style: TextStyle(
                                                       fontSize: 20.0,
                                                       fontFamily: 'Roboto',
@@ -419,7 +419,7 @@ Future<int> callWeather() async {
                                                       height: 40,)
                                                 ),
                                                 Text(
-                                                  parser.parseTemp(weather![3].temp.toInt()),
+                                                  parser.parseTemp(weather![3].temp.toInt()) + parser.parseTempName(),
                                                   style: TextStyle(
                                                       fontSize: 20.0,
                                                       fontFamily: 'Roboto',
@@ -470,7 +470,7 @@ Future<int> callWeather() async {
                                                       height: 40,)
                                                 ),
                                                 Text(
-                                                  parser.parseTemp(weather![5].temp.toInt()),
+                                                  parser.parseTemp(weather![5].temp.toInt()) + parser.parseTempName(),
                                                   style: TextStyle(
                                                       fontSize: 20.0,
                                                       fontFamily: 'Roboto',
@@ -521,7 +521,7 @@ Future<int> callWeather() async {
                                                       height: 40,)
                                                 ),
                                                 Text(
-                                                  parser.parseTemp(weather![7].temp.toInt()),
+                                                  parser.parseTemp(weather![7].temp.toInt()) + parser.parseTempName(),
                                                   style: TextStyle(
                                                       fontSize: 20.0,
                                                       fontFamily: 'Roboto',
@@ -583,6 +583,12 @@ Future<int> callWeather() async {
                                                           style:  GoogleFonts.manrope(
                                                               fontWeight: FontWeight.bold,
                                                               fontSize: 18),
+                                                        ),
+                                                         Text(
+                                                          parser.parseTempName(),
+                                                          style:  GoogleFonts.manrope(
+                                                              fontWeight: FontWeight.bold,
+                                                              fontSize: 14, color: Colors.grey),
                                                         ),
                                                       ],
                                                     ),
@@ -758,9 +764,27 @@ Future<int> callWeather() async {
     );
       } else {
           child = Scaffold(
-            body: Container(
-              alignment: Alignment.center,
-              child: CircularProgressIndicator(),
+            body: Center(
+              child: Stack(
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height / 4),
+                    child: Text(
+                      'Weather',
+                      style: GoogleFonts.manrope(
+                        fontSize: 35,
+                        fontWeight: FontWeight.w600
+                      ),
+                    )
+                  ),
+                  Center(
+                     child: CircularProgressIndicator(
+                color: Colors.black,
+                  ),
+                  )
+                ],
+              )
             ),
           );
       }
