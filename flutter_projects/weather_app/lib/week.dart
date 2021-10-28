@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import './themedata.dart';
 
 import 'City.dart';
 
@@ -22,10 +23,14 @@ class WeekState extends State<WeekScreen> {
    Future<int> myfuture = Future(() => 1);
   @override
   void initState(){
+    style = Styles(iDarkTheme);
       myfuture = callWeather();
+      style.initColors();
       super.initState();
   }
   List<Weather>? weather;
+   bool iDarkTheme = false;
+  late Styles style;
    bool hasLoading = false;
   Parser parser = Parser(t: 0, s: 0, p: 0);
   City city = new City(name: 'Saint Petersburg', local_names: 'Санкт Петербург', lat: 59.8944, lon: 30.2642, country: 'RU', state: null);
@@ -58,7 +63,7 @@ class WeekState extends State<WeekScreen> {
        weather_.add(new Weather(name: city.name, main_: parsed['daily'][i]['weather'][0]['main'], temp: parsed['daily'][i]['temp']['day'] - 273.15, 
     wind:  parsed['daily'][i]['wind_speed'], pressure: parsed['daily'][i]['pressure'],
      humidity: parsed['daily'][i]['humidity'], dt_txt: parsed['daily'][i]['dt'].toString()));
-     print(DateTime.fromMillisecondsSinceEpoch(int.parse(weather_[i].dt_txt) * 1000));
+     print(i);
      }
      return weather_;
   }
@@ -67,6 +72,7 @@ class WeekState extends State<WeekScreen> {
         parser.initValues();
         await _getSelected();
         weather = await fetcWeather();
+        print('ok4');
         hasLoading=true;
       setState (() {
       });
@@ -81,6 +87,7 @@ class WeekState extends State<WeekScreen> {
         Widget child;
         if(snapshot.hasData){
           child = Scaffold(
+            backgroundColor: style.backgroundColor,
       body: Center(
         child: SizedBox(
           width: MediaQuery.of(context).size.width*0.8,
@@ -96,6 +103,7 @@ class WeekState extends State<WeekScreen> {
               textAlign: TextAlign.center,
               style: GoogleFonts.manrope(
                   fontWeight: FontWeight.bold, 
+                  color: style.textColor,
                   fontSize: 24),
             ),
             ),
@@ -107,13 +115,13 @@ class WeekState extends State<WeekScreen> {
             child: new Swiper(
               itemBuilder: (BuildContext context, int index) {
                 return new Container (
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                Color.fromRGBO(205, 218, 245, 100),
-                Color.fromRGBO(156, 188, 255, 100),
+                style.gradientColor1,
+                style.gradientColor2
               ],
             ),
                       borderRadius: BorderRadius.only(
@@ -136,12 +144,13 @@ class WeekState extends State<WeekScreen> {
                                   DateFormat.yMMMd('ru').format(DateTime.fromMillisecondsSinceEpoch(int.parse(weather![index].dt_txt)*1000)),
                                   style: GoogleFonts.manrope(
                   fontWeight: FontWeight.bold, 
+                  color: style.textColor,
                   fontSize: 24),
                                 ),
                                 Container(
                                   margin: EdgeInsets.only(top: 20, bottom: 10),
                                   child: Image(
-                                  image: AssetImage(weather![index].pictureMain()),
+                                  image: AssetImage(weather![index].weekMainPicture()),
                                   width: 120,
                                   height: 120,
                                   ),
@@ -150,22 +159,23 @@ class WeekState extends State<WeekScreen> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children:  [
-                                    const Icon(
+                                     Icon(
                                       WeatherIcons.thermometer,
                                       size: 30,
-                                      color: Color.fromRGBO(90, 90, 90, 100),
+                                      color: style.iconColor1,
                                     ),
                                     Text(
                                       '    ' + parser.parseTemp(weather![index].temp.toInt()),
                                       style:  GoogleFonts.manrope(
                   fontWeight: FontWeight.bold, 
+                  color: style.textColor,
                   fontSize: 18),
                                     ),
                                     Text(
                                         parser.parseTempName(),
                                         style:  GoogleFonts.manrope(
                   fontWeight: FontWeight.bold, 
-                  fontSize: 14, color: Colors.grey),
+                  fontSize: 14, color: style.subTextColor),
                                     )
                                   ],
                                 ),
@@ -180,19 +190,20 @@ class WeekState extends State<WeekScreen> {
                                     Icon(
                                       WeatherIcons.strong_wind,
                                       size: 30,
-                                      color: Color.fromRGBO(90, 90, 90, 100),
+                                      color: style.iconColor1,
                                     ),
                                     Text(
                                       '    ' + parser.parseSpeed(weather![index].wind),
                                       style:  GoogleFonts.manrope(
                   fontWeight: FontWeight.bold, 
+                  color: style.textColor,
                   fontSize: 18),
                                     ),
                                     Text(
                                         parser.parseSpeedName(),
                                         style:  GoogleFonts.manrope(
                   fontWeight: FontWeight.bold, 
-                  fontSize: 14, color: Colors.grey),
+                  fontSize: 14, color: style.subTextColor),
                                     )
                                   ],
                                 ),
@@ -204,19 +215,20 @@ class WeekState extends State<WeekScreen> {
                                     Icon(
                                       WeatherIcons.humidity,
                                       size: 30,
-                                      color: Color.fromRGBO(90, 90, 90, 100),
+                                      color: style.iconColor1,
                                     ),
                                     Text(
                                       '    ' +  weather![index].humidity.toString(),
                                       style:  GoogleFonts.manrope(
                   fontWeight: FontWeight.bold, 
+                  color: style.textColor,
                   fontSize: 18),
                                     ),
                                     Text(
                                         '%',
                                         style:  GoogleFonts.manrope(
                   fontWeight: FontWeight.bold, 
-                  fontSize: 14, color: Colors.grey),
+                  fontSize: 14, color: style.subTextColor),
                                     ),
                                   ],
 
@@ -228,22 +240,23 @@ class WeekState extends State<WeekScreen> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children:  [
-                                    const Icon(
+                                     Icon(
                                       WeatherIcons.barometer,
                                       size: 30,
-                                      color: Color.fromRGBO(90, 90, 90, 100),
+                                      color: style.iconColor1,
                                     ),
                                     Text(
                                       '    ' + parser.parsePressure(weather![index].pressure),
                                      style:  GoogleFonts.manrope(
                   fontWeight: FontWeight.bold, 
+                  color: style.textColor,
                   fontSize: 18),
                                     ),
                                     Text(
                                         parser.parsePressureName(),
                                         style:  GoogleFonts.manrope(
                   fontWeight: FontWeight.bold, 
-                  fontSize: 14, color: Colors.grey),
+                  fontSize: 14, color: style.subTextColor),
                                     )
                                   ],
                                 ),
@@ -283,22 +296,24 @@ class WeekState extends State<WeekScreen> {
             Container(
               margin: EdgeInsets.only(
                 top: 40),
-                child: OutlinedButton(
+                
+                child: TextButton(
                             
                             onPressed: () {_navigateToPreviousScreen(context); },
                             style: ButtonStyle(
                               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8.0),
-                                    side: const BorderSide(color: Colors.red,width : 2),
+                                    side:  BorderSide(color: style.textColor, width: 2),
                                   ),
                               
                             ),
                             ),
-                            child: const Text('Вернуться на главную',
-                          
+                            
+                            child:  Text('Вернуться на главную',
+
                             style: TextStyle(
-                              color: Colors.black,
+                              color: style.textColor,
                             ),),
                           ),
             )
@@ -310,6 +325,7 @@ class WeekState extends State<WeekScreen> {
         }
         else {
           child = Scaffold(
+            backgroundColor: style.backgroundColor,
             body: Center(
               child: Stack(
                 children: [
@@ -320,13 +336,14 @@ class WeekState extends State<WeekScreen> {
                       'Weather',
                       style: GoogleFonts.manrope(
                         fontSize: 35,
+                        color: style.textColor,
                         fontWeight: FontWeight.w600
                       ),
                     )
                   ),
                   Center(
                      child: CircularProgressIndicator(
-                color: Colors.black,
+                color: style.textColor,
                   ),
                   )
                 ],

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather_app/City.dart';
+import 'package:weather_app/themedata.dart';
 import './search.dart';
 import './week.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -65,14 +66,18 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<int> myfuture = Future(() => 1);
   @override
   void initState(){
+    styles = Styles(iDarkTheme);
+    styles.initColors();
     myfuture = callWeather();
       super.initState();
   }
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
+  bool iDarkTheme = false;
   Weather currentWeather = new Weather(name: 'Saint Petersburg', main_: 'Sunny', temp: 10, wind: 9, pressure: 761, humidity: 87, dt_txt: '');
   City city = new City(name: 'Saint Petersburg', local_names: 'Санкт Петербург', lat: 59.8944, lon: 30.2642, country: 'RU', state: null);
   List<Weather>? weather;
   bool hasLoading = false;
+  late Styles styles;
   Parser parser = Parser(t: 0, s: 0, p: 0);
 
   Weather parseWeather(String responseBody) {
@@ -148,15 +153,15 @@ Future<int> callWeather() async {
         backgroundColor: Colors.lightBlue,
         drawer: Drawer(
           child: Container(
-            color: Color.fromRGBO(226, 235, 255, 1),
+            color: this.styles.backgroundColor,
             child: ListView(
               padding: EdgeInsets.zero,
               children: <Widget>[
-                const Padding(padding: EdgeInsets.only(top: 30, left: 20, bottom: 20),
+                 Padding(padding: EdgeInsets.only(top: 30, left: 20, bottom: 20),
                   child: Text(
                     'Weather App',
                     style: TextStyle(
-                      color: Colors.black,
+                      color: this.styles.textColor,
                       fontWeight: FontWeight.bold,
                       fontSize: 24,
                     ),
@@ -165,17 +170,17 @@ Future<int> callWeather() async {
 
                 ListTile(
                   onTap: () => {_navigateToSettingsScreen(context)},
-                  leading: Icon(Icons.settings),
-                  title: Text('Настройки'),
+                  leading: Icon(Icons.settings, color: styles.textColor),
+                  title: Text('Настройки', style: TextStyle(color: styles.textColor),),
                 ),
                 ListTile(
-                  leading: Icon(Icons.favorite_outline),
-                  title: Text('Избранное'),
+                  leading: Icon(Icons.favorite_outline, color: styles.textColor),
+                  title: Text('Избранное', style: TextStyle(color: styles.textColor),),
                   onTap: () => _navigateToFavouriteScreen(context),
                 ),
                 ListTile(
-                  leading: Icon(Icons.person),
-                  title: Text('О приложении'),
+                  leading: Icon(Icons.person, color: styles.textColor),
+                  title: Text('О приложении', style: TextStyle(color: styles.textColor),),
                   onTap: () => {_navigateToAboutScreen(context)},
                 ),
               ],
@@ -187,9 +192,10 @@ Future<int> callWeather() async {
             Container(
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
-              decoration: const BoxDecoration(
+              decoration:  BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage(
+                  image: iDarkTheme? AssetImage(
+                      'assets/images/background3.png') : AssetImage(
                       'assets/images/background2.jpg'),
                   fit: BoxFit.fill,
                 ),
@@ -238,7 +244,7 @@ Future<int> callWeather() async {
                       child: Container(
                           child: MaterialButton(
                             onPressed: () => _scaffoldKey.currentState?.openDrawer(),
-                            color: Colors.blueAccent,
+                            color: this.styles.menuButtonColor1,
                             textColor: Colors.white,
                             child: const Icon(
                               Icons.menu,
@@ -272,7 +278,7 @@ Future<int> callWeather() async {
                       child: Container(
                           child: MaterialButton(
                             onPressed: () => {_navigateToNextScreen(context)},
-                            color: Colors.blueAccent,
+                            color: this.styles.menuButtonColor1,
                             textColor: Colors.white,
                             child: Icon(
                               Icons.add_circle_outline,
@@ -296,9 +302,9 @@ Future<int> callWeather() async {
                         return Container(
                             height: 440,
                             margin: EdgeInsets.only(top: 150),
-                            decoration: const BoxDecoration(
-                              color: Color(0xFFDAE5EA),
-                              borderRadius: BorderRadius.only(
+                            decoration: BoxDecoration(
+                              color: this.styles.backgroundColor,
+                              borderRadius: const BorderRadius.only(
                                   topRight: Radius.circular(20.0),
                                   bottomRight: Radius.circular(0.0),
                                   topLeft: Radius.circular(20.0),
@@ -316,7 +322,7 @@ Future<int> callWeather() async {
                                       child: RawMaterialButton(
                                         onPressed: () => {
                                         },
-                                        fillColor: Colors.blueAccent,
+                                        fillColor: this.styles.buttonTextColor,
                                       ),
                                     )
                                   ],
@@ -331,17 +337,17 @@ Future<int> callWeather() async {
                                         Container(
                                             height: 120,
                                             width: 70,
-                                            decoration: const BoxDecoration(
-                                              color: Color(0xFFDAE5EA),
-                                              borderRadius: BorderRadius.only(
+                                            decoration:  BoxDecoration(
+                                              color: this.styles.cardColor1,
+                                              borderRadius:const BorderRadius.only(
                                                   topRight: Radius.circular(10.0),
                                                   bottomRight: Radius.circular(10.0),
                                                   topLeft: Radius.circular(10.0),
                                                   bottomLeft: Radius.circular(10.0)
                                               ),
-                                              boxShadow: [
+                                              boxShadow:  [
                                                 BoxShadow(
-                                                  color: Colors.grey,
+                                                  color: styles.iconColor1,
                                                   spreadRadius: 1,
                                                   blurRadius: 3,
                                                   offset: Offset(0, 2), // changes position of shadow
@@ -356,7 +362,7 @@ Future<int> callWeather() async {
                                                   style: TextStyle(
                                                       fontSize: 18.0,
                                                       fontFamily: 'Roboto',
-                                                      color: Colors.black
+                                                      color: this.styles.textColor,
                                                   ),
                                                 ),
                                                 SizedBox(
@@ -372,7 +378,7 @@ Future<int> callWeather() async {
                                                   style: TextStyle(
                                                       fontSize: 20.0,
                                                       fontFamily: 'Roboto',
-                                                      color: Colors.black
+                                                      color: this.styles.textColor,
                                                   ),
                                                 ),
 
@@ -382,8 +388,8 @@ Future<int> callWeather() async {
                                         Container(
                                             height: 120,
                                             width: 70,
-                                            decoration: const BoxDecoration(
-                                              color: Color(0xFFDAE5EA),
+                                            decoration:  BoxDecoration(
+                                              color: this.styles.cardColor1,
                                               borderRadius: BorderRadius.only(
                                                   topRight: Radius.circular(10.0),
                                                   bottomRight: Radius.circular(10.0),
@@ -392,7 +398,7 @@ Future<int> callWeather() async {
                                               ),
                                               boxShadow: [
                                                 BoxShadow(
-                                                  color: Colors.grey,
+                                                  color: this.styles.iconColor1,
                                                   spreadRadius: 1,
                                                   blurRadius: 3,
                                                   offset: Offset(0, 2), // changes position of shadow
@@ -407,7 +413,7 @@ Future<int> callWeather() async {
                                                   style: TextStyle(
                                                       fontSize: 18.0,
                                                       fontFamily: 'Roboto',
-                                                      color: Colors.black
+                                                      color: this.styles.textColor,
                                                   ),
                                                 ),
                                                 SizedBox(
@@ -423,7 +429,7 @@ Future<int> callWeather() async {
                                                   style: TextStyle(
                                                       fontSize: 20.0,
                                                       fontFamily: 'Roboto',
-                                                      color: Colors.black
+                                                      color: this.styles.textColor,
                                                   ),
                                                 ),
 
@@ -433,8 +439,8 @@ Future<int> callWeather() async {
                                         Container(
                                             height: 120,
                                             width: 70,
-                                            decoration: const BoxDecoration(
-                                              color: Color(0xFFDAE5EA),
+                                            decoration:  BoxDecoration(
+                                              color: this.styles.cardColor1,
                                               borderRadius: BorderRadius.only(
                                                   topRight: Radius.circular(10.0),
                                                   bottomRight: Radius.circular(10.0),
@@ -443,7 +449,7 @@ Future<int> callWeather() async {
                                               ),
                                               boxShadow: [
                                                 BoxShadow(
-                                                  color: Colors.grey,
+                                                  color: this.styles.iconColor1,
                                                   spreadRadius: 1,
                                                   blurRadius: 3,
                                                   offset: Offset(0, 2), // changes position of shadow
@@ -458,7 +464,7 @@ Future<int> callWeather() async {
                                                   style: TextStyle(
                                                       fontSize: 18.0,
                                                       fontFamily: 'Roboto',
-                                                      color: Colors.black
+                                                      color: this.styles.textColor,
                                                   ),
                                                 ),
                                                 SizedBox(
@@ -474,7 +480,7 @@ Future<int> callWeather() async {
                                                   style: TextStyle(
                                                       fontSize: 20.0,
                                                       fontFamily: 'Roboto',
-                                                      color: Colors.black
+                                                      color: this.styles.textColor,
                                                   ),
                                                 ),
 
@@ -484,8 +490,8 @@ Future<int> callWeather() async {
                                         Container(
                                             height: 120,
                                             width: 70,
-                                            decoration: const BoxDecoration(
-                                              color: Color(0xFFDAE5EA),
+                                            decoration:  BoxDecoration(
+                                              color: this.styles.cardColor1,
                                               borderRadius: BorderRadius.only(
                                                   topRight: Radius.circular(10.0),
                                                   bottomRight: Radius.circular(10.0),
@@ -494,7 +500,7 @@ Future<int> callWeather() async {
                                               ),
                                               boxShadow: [
                                                 BoxShadow(
-                                                  color: Colors.grey,
+                                                  color: this.styles.iconColor1,
                                                   spreadRadius: 1,
                                                   blurRadius: 3,
                                                   offset: Offset(0, 2), // changes position of shadow
@@ -509,7 +515,7 @@ Future<int> callWeather() async {
                                                   style: TextStyle(
                                                       fontSize: 18.0,
                                                       fontFamily: 'Roboto',
-                                                      color: Colors.black
+                                                      color: this.styles.textColor,
                                                   ),
                                                 ),
                                                 SizedBox(
@@ -525,7 +531,7 @@ Future<int> callWeather() async {
                                                   style: TextStyle(
                                                       fontSize: 20.0,
                                                       fontFamily: 'Roboto',
-                                                      color: Colors.black
+                                                      color: this.styles.textColor,
                                                   ),
                                                 ),
 
@@ -535,9 +541,19 @@ Future<int> callWeather() async {
                                       ]
                                   ),
                                 ),
-                                OutlinedButton(
+                                
+                                 TextButton(
                                   onPressed: () { _navigateToWeatherScreen(context);},
-                                  child: const Text('Прогноз на неделю'),
+                                  style: ButtonStyle(
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    side:  BorderSide(color: styles.menuButtonColor,width : 2),
+                                  ),
+                              
+                            ),
+                                  ),
+                                  child:  Text( 'Прогноз на неделю', style: TextStyle(color: this.styles.buttonTextColor),),
                                 ),
                                 Container(
                                     margin: EdgeInsets.only(top: 20),
@@ -552,8 +568,8 @@ Future<int> callWeather() async {
                                                   child: Container(
                                                     height: 70,
                                                     margin: EdgeInsets.only(right: 10),
-                                                    decoration: const BoxDecoration(
-                                                      color: Color(0xFFDAE5EA),
+                                                    decoration:  BoxDecoration(
+                                                      color: this.styles.cardColor1,
                                                       borderRadius: BorderRadius.only(
                                                           topRight: Radius.circular(10.0),
                                                           bottomRight: Radius.circular(10.0),
@@ -562,7 +578,7 @@ Future<int> callWeather() async {
                                                       ),
                                                       boxShadow: [
                                                         BoxShadow(
-                                                          color: Colors.grey,
+                                                          color: this.styles.iconColor1,
                                                           spreadRadius: 1,
                                                           blurRadius: 3,
                                                           offset: Offset(0, 2), // changes position of shadow
@@ -576,19 +592,20 @@ Future<int> callWeather() async {
                                                         Icon(
                                                           WeatherIcons.thermometer,
                                                           size: 30,
-                                                          color: Color.fromRGBO(90, 90, 90, 100),
+                                                          color: this.styles.iconColor1,
                                                         ),
                                                         Text(
                                                           '    '+ parser.parseTemp(currentWeather.temp.toInt()),
                                                           style:  GoogleFonts.manrope(
                                                               fontWeight: FontWeight.bold,
+                                                              color: this.styles.textColor,
                                                               fontSize: 18),
                                                         ),
                                                          Text(
                                                           parser.parseTempName(),
                                                           style:  GoogleFonts.manrope(
                                                               fontWeight: FontWeight.bold,
-                                                              fontSize: 14, color: Colors.grey),
+                                                              fontSize: 14, color: this.styles.iconColor1),
                                                         ),
                                                       ],
                                                     ),
@@ -600,8 +617,8 @@ Future<int> callWeather() async {
                                                   child: Container(
                                                     height: 70,
                                                     margin: EdgeInsets.only(left: 10),
-                                                    decoration: const BoxDecoration(
-                                                      color: Color(0xFFDAE5EA),
+                                                    decoration:  BoxDecoration(
+                                                      color: this.styles.cardColor1,
                                                       borderRadius: BorderRadius.only(
                                                           topRight: Radius.circular(10.0),
                                                           bottomRight: Radius.circular(10.0),
@@ -610,7 +627,7 @@ Future<int> callWeather() async {
                                                       ),
                                                       boxShadow: [
                                                         BoxShadow(
-                                                          color: Colors.grey,
+                                                          color: this.styles.iconColor1,
                                                           spreadRadius: 1,
                                                           blurRadius: 3,
                                                           offset: Offset(0, 2), // changes position of shadow
@@ -624,19 +641,20 @@ Future<int> callWeather() async {
                                                         Icon(
                                                           WeatherIcons.humidity,
                                                           size: 30,
-                                                          color: Color.fromRGBO(90, 90, 90, 100),
+                                                          color: this.styles.iconColor1,
                                                         ),
                                                         Text(
                                                           '    ' + currentWeather.humidity.toString(),
                                                           style:  GoogleFonts.manrope(
                                                               fontWeight: FontWeight.bold,
+                                                              color: this.styles.textColor,
                                                               fontSize: 18),
                                                         ),
                                                         Text(
                                                           '%',
                                                           style:  GoogleFonts.manrope(
                                                               fontWeight: FontWeight.bold,
-                                                              fontSize: 14, color: Colors.grey),
+                                                              fontSize: 14, color: this.styles.iconColor1),
                                                         ),
                                                       ],
 
@@ -653,8 +671,8 @@ Future<int> callWeather() async {
                                                     height: 70,
 
                                                     margin: EdgeInsets.only(right: 10, top: 20),
-                                                    decoration: const BoxDecoration(
-                                                      color: Color(0xFFDAE5EA),
+                                                    decoration:  BoxDecoration(
+                                                      color: this.styles.cardColor1,
                                                       borderRadius: BorderRadius.only(
                                                           topRight: Radius.circular(10.0),
                                                           bottomRight: Radius.circular(10.0),
@@ -663,7 +681,7 @@ Future<int> callWeather() async {
                                                       ),
                                                       boxShadow: [
                                                         BoxShadow(
-                                                          color: Colors.grey,
+                                                          color: this.styles.iconColor1,
                                                           spreadRadius: 1,
                                                           blurRadius: 3,
                                                           offset: Offset(0, 2), // changes position of shadow
@@ -677,19 +695,20 @@ Future<int> callWeather() async {
                                                         Icon(
                                                           WeatherIcons.strong_wind,
                                                           size: 30,
-                                                          color: Color.fromRGBO(90, 90, 90, 100),
+                                                          color: this.styles.iconColor1,
                                                         ),
                                                         Text(
                                                           '    ' + parser.parseSpeed(currentWeather.wind),
                                                           style:  GoogleFonts.manrope(
                                                               fontWeight: FontWeight.bold,
+                                                              color: this.styles.textColor,
                                                               fontSize: 18),
                                                         ),
                                                         Text(
                                                           parser.parseSpeedName(),
                                                           style:  GoogleFonts.manrope(
                                                               fontWeight: FontWeight.bold,
-                                                              fontSize: 14, color: Colors.grey),
+                                                              fontSize: 14, color: this.styles.iconColor1),
                                                         )
                                                       ],
                                                     ),
@@ -702,8 +721,8 @@ Future<int> callWeather() async {
                                                     height: 70,
                                                     padding: EdgeInsets.only(bottom: 30),
                                                     margin: EdgeInsets.only(left: 10, top: 20),
-                                                    decoration: const BoxDecoration(
-                                                      color: Color(0xFFDAE5EA),
+                                                    decoration:  BoxDecoration(
+                                                      color: this.styles.cardColor1,
                                                       borderRadius: BorderRadius.only(
                                                           topRight: Radius.circular(10.0),
                                                           bottomRight: Radius.circular(10.0),
@@ -712,7 +731,7 @@ Future<int> callWeather() async {
                                                       ),
                                                       boxShadow: [
                                                         BoxShadow(
-                                                          color: Colors.grey,
+                                                          color: this.styles.iconColor1,
                                                           spreadRadius: 1,
                                                           blurRadius: 3,
                                                           offset: Offset(0, 2), // changes position of shadow
@@ -727,19 +746,20 @@ Future<int> callWeather() async {
                                                         Icon(
                                                           WeatherIcons.barometer,
                                                           size: 30,
-                                                          color: Color.fromRGBO(90, 90, 90, 100),
+                                                          color: this.styles.iconColor1,
                                                         ),
                                                         Text(
                                                           parser.parsePressure(currentWeather.pressure),
                                                           style:  GoogleFonts.manrope(
                                                               fontWeight: FontWeight.bold,
+                                                              color: this.styles.textColor,
                                                               fontSize: 18),
                                                         ),
                                                         Text(
                                                           parser.parsePressureName(),
                                                           style:  GoogleFonts.manrope(
                                                               fontWeight: FontWeight.bold,
-                                                              fontSize: 14, color: Colors.grey),
+                                                              fontSize: 14, color: this.styles.iconColor1),
                                                         )
                                                       ],
 
@@ -764,6 +784,7 @@ Future<int> callWeather() async {
     );
       } else {
           child = Scaffold(
+            backgroundColor: styles.backgroundColor,
             body: Center(
               child: Stack(
                 children: [
@@ -774,13 +795,14 @@ Future<int> callWeather() async {
                       'Weather',
                       style: GoogleFonts.manrope(
                         fontSize: 35,
-                        fontWeight: FontWeight.w600
+                        fontWeight: FontWeight.w600,
+                        color: styles.textColor
                       ),
                     )
                   ),
                   Center(
                      child: CircularProgressIndicator(
-                color: Colors.black,
+                color: this.styles.textColor,
                   ),
                   )
                 ],

@@ -32,8 +32,26 @@ class Weather {
         return "assets/images/rain.png";
       case 'Light':
         return "assets/images/light.png";
+      case 'Snow':
+        return "assets/images/snowy.png";  
       default:
         return "assets/images/sun.png"; 
+    }
+  }
+  String weekMainPicture(){
+    switch(this.main_){
+      case 'Clear': 
+        return "assets/images/slight_touch_happyday.png";
+      case 'Clouds':
+        return "assets/images/cloudy.png";
+      case 'Rain':
+        return "assets/images/rainy.png";
+      case 'Light':
+        return "assets/images/thnderstorm.png";
+      case 'Snow' :
+        return "assets/images/snowy.png";  
+      default:
+        return "assets/images/slight_touch_happyday.png"; 
     }
   }
 }
