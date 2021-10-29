@@ -1,32 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:weather_app/themedata.dart';
 import './main.dart';
-class AboutScreen extends StatelessWidget {
+class AboutScreen extends StatefulWidget {
+  @override
+  AboutState createState() => AboutState();
+}
+class AboutState extends State {
+  late bool isDarkTheme ;
+  late Styles styles;
   @override
   Widget build(BuildContext context) {
+    isDarkTheme = MediaQuery.of(context).platformBrightness == Brightness.dark;
+    styles = Styles(isDarkTheme);
+    styles.initColors();
     return Scaffold(
+      backgroundColor: styles.backgroundColor,
         body: Column(
           children: [
             Container(
               padding: EdgeInsets.only(top: 35),
               height: MediaQuery.of(context).size.height * 1/2 ,
               width: MediaQuery.of(context).size.width,
-              color: Color.fromRGBO(226, 235, 255, 1),
               child: Column(
                   children: <Widget>[
                     Row(
                       children: [
                         IconButton(
                           onPressed: () => _navigateToPreviousScreen(context),
-                          icon: const Icon(
+                          icon:  Icon(
                             Icons.arrow_back_ios,
+                            color: styles.textColor,
                             size: 20,
                           ),
                         ),
                         Center(
                           child: Text(
                             'О разработчике',
-                            style: GoogleFonts.manrope(fontSize: 20, fontWeight: FontWeight.bold),
+                            style: GoogleFonts.manrope(fontSize: 20, fontWeight: FontWeight.bold, color: styles.textColor),
                           ),
                         ),
                       ],
@@ -37,7 +48,7 @@ class AboutScreen extends StatelessWidget {
                       alignment: Alignment.center,
                       margin: EdgeInsets.only(top: MediaQuery.of(context).size.height / 4 - 30),
                       decoration: BoxDecoration(
-                        color: Color.fromRGBO(226, 235, 255, 1),
+                        color: styles.backgroundColor,
                         borderRadius: const BorderRadius.only(
                             topRight: Radius.circular(10.0),
                             bottomRight: Radius.circular(10.0),
@@ -55,7 +66,8 @@ class AboutScreen extends StatelessWidget {
                         'Weather app',
                         style: GoogleFonts.manrope(
                             fontSize: 25,
-                            fontWeight: FontWeight.bold
+                            fontWeight: FontWeight.bold,
+                            color: styles.textColor
                         ),
                       ),
                     ),
@@ -67,15 +79,15 @@ class AboutScreen extends StatelessWidget {
               children: [
                 Container(
                   height: MediaQuery.of(context).size.height * 0.5 ,
-                  decoration: const BoxDecoration(
-                      color: Color.fromRGBO(226, 235, 255, 1)
+                  decoration:  BoxDecoration(
+                      color: styles.backgroundColor,
                   ),
                 ),
                 Container(
                   height: MediaQuery.of(context).size.height * 0.5 ,
                   width: MediaQuery.of(context).size.width,
                   decoration:  BoxDecoration(
-                    color: Color.fromRGBO(226, 235, 255, 1),
+                    color: styles.backgroundColor,
                     borderRadius: BorderRadius.only(
                         topRight: Radius.circular(20.0),
                         bottomRight: Radius.circular(0.0),
@@ -98,6 +110,7 @@ class AboutScreen extends StatelessWidget {
                           'by ITMO University',
                           style: GoogleFonts.manrope(
                               fontSize: 15,
+                              color: styles.textColor,
                               fontWeight: FontWeight.bold
                           ),
                         ),
@@ -108,7 +121,7 @@ class AboutScreen extends StatelessWidget {
                         child: Text(
                           'Версия 1.0',
                           style: GoogleFonts.manrope(
-                              color: Color.fromRGBO(74, 74, 74, 1),
+                              color: styles.ffontColor,
                               fontSize: 10,
                               fontWeight: FontWeight.bold
                           ),
@@ -120,7 +133,7 @@ class AboutScreen extends StatelessWidget {
                         child: Text(
                           'от 30 сентября 2021',
                           style: GoogleFonts.manrope(
-                              color: Color.fromRGBO(74, 74, 74, 1),
+                              color: styles.ffontColor,
                               fontSize: 10,
                               fontWeight: FontWeight.bold
                           ),

@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:weather_app/themedata.dart';
+
 import 'debouncher.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +15,14 @@ class NewScreen extends StatefulWidget {
   _Search createState() => _Search();
 }
 class _Search extends State<NewScreen>{
+  @override
+  void initState(){
+  }
   var _controller = TextEditingController(
   );
   final _city  = <City>[];
+  late Styles styles;
+  late bool isDarkTheme;
   final _debouncer = Debouncer(milliseconds: 1000);
   void _navigateToPreviousScreen(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => MyHomePage(title: "Погода")));
@@ -52,7 +59,11 @@ class _Search extends State<NewScreen>{
 
   @override
   Widget build(BuildContext context) {
+    isDarkTheme = MediaQuery.of(context).platformBrightness == Brightness.dark;
+    styles = Styles(isDarkTheme);
+    styles.initColors();
     return Scaffold(
+      backgroundColor: styles.backgroundColor,
       body: Container(
         margin: EdgeInsets.only(top: 35),
         width: MediaQuery.of(context).size.width,
@@ -63,8 +74,9 @@ class _Search extends State<NewScreen>{
               children: [
                 IconButton(
                   onPressed: () => _navigateToPreviousScreen(context),
-                  icon: const Icon(
+                  icon:  Icon(
                     Icons.arrow_back_ios,
+                    color: styles.textColor,
                     size: 20,
                   ),
                 ),
@@ -76,11 +88,18 @@ class _Search extends State<NewScreen>{
                     onChanged: (string) {
                         _debouncer.run(callCity, string);
                     },
+                    style: GoogleFonts.manrope(
+                      fontWeight: FontWeight.w600,
+                      color: styles.textColor,
+                    ),
                     decoration: InputDecoration(
                       hintText: 'Введите название города...',
+                      focusColor: styles.backgroundColor,
+                      hintStyle: TextStyle(color: styles.textColor),
+                      
                       suffixIcon: IconButton(
                         onPressed: _controller.clear,
-                        icon: Icon(Icons.clear),
+                        icon: Icon(Icons.clear, color: styles.textColor),
                       ),
                     ),
                   ),
@@ -109,6 +128,7 @@ class _Search extends State<NewScreen>{
                                _city[index].local_names.toString() + ' ' + _city[index].country ,
                               style: GoogleFonts.manrope(
                                   fontSize: 13,
+                                  color: styles.textColor,
                                   fontWeight: FontWeight.bold
                               ),
                             ),
@@ -119,6 +139,7 @@ class _Search extends State<NewScreen>{
                             alignment: Alignment.centerRight,
                             child: StarButton(
                               iconSize: 30,
+                              iconColor: styles.textColor,
                               valueChanged: (is_Favorite) {
                                  _saveCity(_city[index]).then((value) => null);
                               },

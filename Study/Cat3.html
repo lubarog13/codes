@@ -1,0 +1,41 @@
+<HTML>
+	<HEAD>
+		<META charset=utf-8>
+			<STYLE>
+				body{cursor: none; background-color: wheat;}
+				#cat{width:200px;position:absolute;;}
+				.row{border:2px solid black;width:200px;margin:25px;padding:5px;;}
+				#data{position:absolute;bottom:10px;;}#slipper{position: absolute;width:100px;;}
+			</STYLE>
+<SCRIPT>
+window.onload=function()
+{	nagliyKote = function()
+	{x = Math.round(Math.random() * (screen.width - 200));
+		y = Math.round(Math.random() * (screen.height - 500));
+		cat.style.left = x + "px";
+		cat.style. top = y + "px";
+	}
+			idNagliyKote = setInterval(nagliyKote, 2000);
+			document.body.onmousemove = function(event)
+			{slipper.style.left = event.pageX - 50;
+				slipper.style.top = event.pageY - 50;
+				}
+				;
+				idInterval =  setInterval("time.innerHTML--; if(time.innerHTML <= 0 && points.innerHTML >= 10) {alert('А ты хорошь, парниша.'); clearInterval(idNagliyKote); clearInterval(idInterval);}else if(time.innerHTML<=0) {alert('Проиграл!'); clearInterval(idNagliyKote);clearInterval(idInterval);}" , 1000);
+				
+				document.body.onclick = function(event)
+				
+				{if ((event.pageX > parseInt(cat.style.left)) && (event.pageX < (parseInt(cat.style.left) + 200)) &&  (event.pageY > parseInt(cat.style.top)) && (event.pageY < (parseInt(cat.style.top) + 200)) && (time.innerHTML>0))	{points.innerHTML++;}; }	;}</SCRIPT>
+				</HEAD>
+				<BODY>
+					<IMG src="cat.png" id=cat><IMG src="slipper.png" id=slipper><div id=data><div class=row>Количество очков:<SPAN id="points">0
+					</SPAN></DIV>
+					<div class=row>
+						Оставшееся время:<SPAN id="time">10</SPAN>
+					</DIV>		
+		</div>
+		</TABLE>
+	</BODY>
+</HTML>
+		
+		

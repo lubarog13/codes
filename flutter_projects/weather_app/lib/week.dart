@@ -23,13 +23,11 @@ class WeekState extends State<WeekScreen> {
    Future<int> myfuture = Future(() => 1);
   @override
   void initState(){
-    style = Styles(iDarkTheme);
       myfuture = callWeather();
-      style.initColors();
       super.initState();
   }
   List<Weather>? weather;
-   bool iDarkTheme = false;
+   late bool isDarkTheme;
   late Styles style;
    bool hasLoading = false;
   Parser parser = Parser(t: 0, s: 0, p: 0);
@@ -81,6 +79,9 @@ class WeekState extends State<WeekScreen> {
   }
   @override
   Widget build(BuildContext context) {
+    isDarkTheme = MediaQuery.of(context).platformBrightness == Brightness.dark;
+    style = Styles(isDarkTheme);
+    style.initColors();
     return FutureBuilder<int>(
       future: myfuture,
       builder: (BuildContext context, AsyncSnapshot<int> snapshot){

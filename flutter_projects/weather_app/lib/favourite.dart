@@ -3,6 +3,7 @@ import 'package:favorite_button/favorite_button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:weather_app/themedata.dart';
 import './main.dart';
 import 'City.dart';
 
@@ -11,17 +12,21 @@ class FavouriteScreen extends StatefulWidget {
   FavouriteState createState() => FavouriteState();
 }
 class FavouriteState extends State {
+  late Styles styles;
+  late bool isDarkTheme;
   @override
   void initState(){
-    print("Hello" + city.length.toString());
     _getFavourite().then((value) => {});
     super.initState();
   }
    List<City> city = [];
   @override
   Widget build(BuildContext context) {
+    isDarkTheme = MediaQuery.of(context).platformBrightness == Brightness.dark;
+    styles = Styles(isDarkTheme);
+    styles.initColors();
     return Scaffold(
-      backgroundColor: Color.fromRGBO(226, 235, 255, 1),
+      backgroundColor:styles.backgroundColor,
         body: Column(
           children: [
             Container(
@@ -34,15 +39,16 @@ class FavouriteState extends State {
                       children: [
                         IconButton(
                           onPressed: () => _navigateToPreviousScreen(context),
-                          icon: const Icon(
+                          icon:  Icon(
                             Icons.arrow_back_ios,
+                            color: styles.textColor,
                             size: 20,
                           ),
                         ),
                         Center(
                           child: Text(
                             'Избранное',
-                            style: GoogleFonts.manrope(fontSize: 20, fontWeight: FontWeight.bold),
+                            style: GoogleFonts.manrope(fontSize: 20, fontWeight: FontWeight.bold, color: styles.textColor),
                           ),
                         ),
                       ],
@@ -57,7 +63,7 @@ class FavouriteState extends State {
                               height: 40,
                               padding: EdgeInsets.only(left: 20),
                               decoration: BoxDecoration(
-              color: Color.fromRGBO(226, 235, 255, 1),
+              color: styles.backgroundColor,
               borderRadius: const BorderRadius.only(
                           topRight: Radius.circular(10.0),
                           bottomRight: Radius.circular(10.0),
@@ -85,6 +91,7 @@ class FavouriteState extends State {
                                       city[index].local_names.toString() + ' ' + city[index].country ,
                                       style: GoogleFonts.manrope(
                                           fontSize: 13,
+                                          color: styles.textColor,
                                           fontWeight: FontWeight.bold
                                       ),
                                     ),
@@ -92,18 +99,19 @@ class FavouriteState extends State {
                                   ),
                                   Container(
                                     alignment: Alignment.centerRight,
-                                    decoration: BoxDecoration(
+                                    decoration:  BoxDecoration(
                                       borderRadius: const BorderRadius.only(
                           topRight: Radius.circular(10.0),
                           bottomRight: Radius.circular(10.0),
                                       ),
-                                      color: Colors.blueGrey
+                                      color: styles.closebuttonColor,
                                     ),
                                     child: IconButton(
                                       onPressed: () => { _deleteFavourite(city[index])},
-                                      icon: const Icon(
+                                      icon:  Icon(
                                         Icons.close,
                                         size: 30,
+                                        color: styles.textColor,
                                         )
                                     )
                                     ),

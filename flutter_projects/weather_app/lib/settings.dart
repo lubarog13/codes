@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toggle_switch/toggle_switch.dart';
+import './themedata.dart';
 import './main.dart';
 class SettingsScreen extends StatefulWidget {
   @override
@@ -13,6 +14,8 @@ class SettingsState extends State {
   int temp = 0;
   int speed = 0;
   int pressure = 0;
+  bool isDarkTheme = true;
+  late Styles styles;
   @override
   void initState(){
     initValues().then((value) => null);
@@ -21,27 +24,31 @@ class SettingsState extends State {
 
   @override
   Widget build(BuildContext context) {
+    isDarkTheme = MediaQuery.of(context).platformBrightness == Brightness.dark;
+    styles = Styles(isDarkTheme);
+    styles.initColors();
     return Scaffold(
+      backgroundColor: styles.backgroundColor,
       body: Container(
         padding: EdgeInsets.only(top: 35),
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Color.fromRGBO(226, 235, 255, 1),
         child: Column(
         children: <Widget>[ 
           Row(
           children: [
             IconButton(
               onPressed: () => _navigateToPreviousScreen(context),
-              icon: const Icon(
+              icon:  Icon(
                 Icons.arrow_back_ios,
+                color: styles.textColor,
                 size: 20,
               ),
             ),
             Center(
               child: Text(
                 'Настройки',
-                style: GoogleFonts.manrope(fontSize: 20, fontWeight: FontWeight.bold),
+                style: GoogleFonts.manrope(fontSize: 20, fontWeight: FontWeight.bold, color: styles.textColor),
               ),
             ),
           ],
@@ -54,7 +61,7 @@ class SettingsState extends State {
               'Единицы измерения',
               style: GoogleFonts.manrope(
                 fontSize: 10,
-                color: Colors.grey
+                color: styles.tfontColor,
               ),
             ),
           ),
@@ -63,14 +70,14 @@ class SettingsState extends State {
             width: MediaQuery.of(context).size.width,
             padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 20),
             decoration: BoxDecoration(
-              color: Color.fromRGBO(226, 235, 255, 1),
+              color: styles.backgroundColor,
               borderRadius: const BorderRadius.only(
                           topRight: Radius.circular(30.0),
                           bottomRight: Radius.circular(30.0),
                           topLeft: Radius.circular(30.0),
                           bottomLeft: Radius.circular(30.0)),
               boxShadow: [BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
+                color: styles.shadowColor,
                 blurRadius: 4,
                 spreadRadius: 5,
                 offset: const Offset(4, 8),
@@ -90,7 +97,7 @@ class SettingsState extends State {
                       style: GoogleFonts.manrope(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
-                        color: Colors.black,
+                        color: styles.textColor,
                       ),
                     ),
                     ),
@@ -102,7 +109,7 @@ class SettingsState extends State {
                           topLeft: Radius.circular(20.0),
                           bottomLeft: Radius.circular(20.0)),
               boxShadow: [BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
+                color: styles.shadowColor,
                 blurRadius: 5,
                 spreadRadius: 1,
                 offset: const Offset(2, 5),
@@ -112,9 +119,9 @@ class SettingsState extends State {
                         minWidth: 79.5,
                           initialLabelIndex: temp,
                           cornerRadius: 20.0,
-                          activeBgColors: [[Color.fromRGBO(75, 95, 136, 1)], [Color.fromRGBO(75, 95, 136, 1)]],
+                          activeBgColors: [[styles.toggleColor], [styles.toggleColor]],
                           activeFgColor: Colors.white,
-                          inactiveBgColor: Color.fromRGBO(226, 235, 255, 1),
+                          inactiveBgColor: styles.inactiveToggleColor,
                           inactiveFgColor: Colors.black,
                           totalSwitches: 2,
                           labels: ['\u00B0C', '\u00B0F'],
@@ -128,7 +135,7 @@ class SettingsState extends State {
                   ]
                 ),
                 Divider(
-                  color: Color(0x26000000),
+                  color: styles.tfontColor,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -141,7 +148,7 @@ class SettingsState extends State {
                       style: GoogleFonts.manrope(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
-                        color: Colors.black,
+                        color: styles.textColor
                       ),
                     ),
                     ),
@@ -153,7 +160,7 @@ class SettingsState extends State {
                           topLeft: Radius.circular(20.0),
                           bottomLeft: Radius.circular(20.0)),
               boxShadow: [BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
+                color: styles.shadowColor,
                 blurRadius: 5,
                 spreadRadius: 1,
                 offset: const Offset(2, 5),
@@ -162,9 +169,9 @@ class SettingsState extends State {
                         child: ToggleSwitch(
                         minWidth: 79.5,
                           cornerRadius: 20.0,
-                          activeBgColors: [[Color.fromRGBO(75, 95, 136, 1)], [Color.fromRGBO(75, 95, 136, 1)]],
+                          activeBgColors: [[styles.toggleColor], [styles.toggleColor]],
                           activeFgColor: Colors.white,
-                          inactiveBgColor: Color.fromRGBO(226, 235, 255, 1),
+                          inactiveBgColor: styles.inactiveToggleColor,
                           inactiveFgColor: Colors.black,
                           initialLabelIndex: speed,
                           totalSwitches: 2,
@@ -179,7 +186,7 @@ class SettingsState extends State {
                   ]
                 ),
                 Divider(
-                  color: Color(0x26000000),
+                  color: styles.tfontColor,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -192,7 +199,7 @@ class SettingsState extends State {
                       style: GoogleFonts.manrope(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
-                        color: Colors.black,
+                        color: styles.textColor
                       ),
                     ),
                     ),
@@ -204,7 +211,7 @@ class SettingsState extends State {
                           topLeft: Radius.circular(20.0),
                           bottomLeft: Radius.circular(20.0)),
               boxShadow: [BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
+                color: styles.shadowColor,
                 blurRadius: 5,
                 spreadRadius: 1,
                 offset: const Offset(2, 5),
@@ -214,9 +221,9 @@ class SettingsState extends State {
                         minWidth: 79.5,
                         fontSize: 12,
                           cornerRadius: 30.0,
-                          activeBgColors: [[Color.fromRGBO(75, 95, 136, 1)], [Color.fromRGBO(75, 95, 136, 1)]],
+                          activeBgColors: [[styles.toggleColor], [styles.toggleColor]],
                           activeFgColor: Colors.white,
-                          inactiveBgColor: Color.fromRGBO(226, 235, 255, 1),
+                          inactiveBgColor: styles.inactiveToggleColor,
                           inactiveFgColor: Colors.black,
                           initialLabelIndex: pressure,
                           totalSwitches: 2,

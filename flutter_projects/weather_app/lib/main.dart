@@ -66,13 +66,12 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<int> myfuture = Future(() => 1);
   @override
   void initState(){
-    styles = Styles(iDarkTheme);
-    styles.initColors();
     myfuture = callWeather();
       super.initState();
   }
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
-  bool iDarkTheme = false;
+  late Brightness brightnessValue;
+  late bool iDarkTheme;
   Weather currentWeather = new Weather(name: 'Saint Petersburg', main_: 'Sunny', temp: 10, wind: 9, pressure: 761, humidity: 87, dt_txt: '');
   City city = new City(name: 'Saint Petersburg', local_names: 'Санкт Петербург', lat: 59.8944, lon: 30.2642, country: 'RU', state: null);
   List<Weather>? weather;
@@ -137,6 +136,10 @@ Future<int> callWeather() async {
   }
   @override
   Widget build(BuildContext context) {
+    brightnessValue = MediaQuery.of(context).platformBrightness;
+    iDarkTheme = brightnessValue == Brightness.dark;
+    styles = Styles(iDarkTheme);
+    styles.initColors();
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -153,7 +156,9 @@ Future<int> callWeather() async {
         backgroundColor: Colors.lightBlue,
         drawer: Drawer(
           child: Container(
-            color: this.styles.backgroundColor,
+            decoration: BoxDecoration(
+                color: styles.backgroundColor,
+            ),
             child: ListView(
               padding: EdgeInsets.zero,
               children: <Widget>[
