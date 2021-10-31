@@ -13,17 +13,46 @@ import { MatButtonModule } from '@angular/material/button';
 import 'hammerjs';
 import { MenuComponent } from './menu/menu.component';
 import { MatListModule } from '@angular/material/list';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { FormsModule } from '@angular/forms'
+import { MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { DishdetailComponent } from './dishdetail/dishdetail.component';
 import { DishService } from './services/dish.service';
 import { PromotionService } from './services/promotion.service';
 import { LeaderService } from './services/leader.service';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { ReactiveFormsModule } from '@angular/forms';
 import { AboutComponent } from './about/about.component';
 import { HomeComponent } from './home/home.component';
 import { ContactComponent } from './contact/contact.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatToolbarModule,
+    MatGridListModule,
+    MatCardModule,
+    MatSelectModule,
+    MatSlideToggleModule,
+    MatFormFieldModule,
+    MatDialogModule, 
+    MatInputModule,
+    MatCheckboxModule,
+    MatButtonModule,
+    MatListModule,
+    FlexLayoutModule,
+    FormsModule,
+    ReactiveFormsModule
+  ],
+  providers: [DishService, LeaderService, PromotionService],
   declarations: [
     AppComponent,
     MenuComponent,
@@ -32,20 +61,10 @@ import { FooterComponent } from './footer/footer.component';
     HomeComponent,
     ContactComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    LoginComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MatToolbarModule,
-    MatGridListModule,
-    MatCardModule,
-    MatButtonModule,
-    MatListModule,
-    FlexLayoutModule
-  ],
-  providers: [DishService, LeaderService, PromotionService],
-  bootstrap: [AppComponent]
+  entryComponents: [LoginComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

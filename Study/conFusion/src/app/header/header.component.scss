@@ -19,3 +19,11 @@ $background-moredark: #4527A0;
 .active {
     background: $background-moredark;
 }
+
+.my-centered-dialog {
+    padding: 0;
+    .mat-dialog-container {
+        padding: 0 !important;
+      max-width: none;
+    }
+  }
