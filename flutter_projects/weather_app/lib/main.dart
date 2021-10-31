@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:weather_app/City.dart';
 import 'package:weather_app/themedata.dart';
 import './search.dart';
@@ -63,6 +64,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final PanelController _pc1 =  PanelController();
+  final PanelController _pc2 =  PanelController();
   Future<int> myfuture = Future(() => 1);
   @override
   void initState(){
@@ -76,6 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
   City city = new City(name: 'Saint Petersburg', local_names: 'Санкт Петербург', lat: 59.8944, lon: 30.2642, country: 'RU', state: null);
   List<Weather>? weather;
   bool hasLoading = false;
+    bool _visible = true;
   late Styles styles;
   Parser parser = Parser(t: 0, s: 0, p: 0);
 
@@ -295,18 +299,34 @@ Future<int> callWeather() async {
                     )
                   ],
                 )
-            ),
-            Positioned(
-                bottom: 00,
-                width: MediaQuery.of(context).size.width,
-                child: ConstrainedBox(
-                    constraints: BoxConstraints(minHeight: 100, maxHeight: 450),
-                    child:  ListView.builder(
-                      shrinkWrap: true,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Container(
-                            height: 440,
-                            margin: EdgeInsets.only(top: 150),
+            ), 
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+             children: <Widget>[
+               Visibility(
+            maintainState: true,
+            maintainAnimation: true,
+            visible: _visible,
+               child: SlidingUpPanel(
+                 defaultPanelState: PanelState.CLOSED,
+                  minHeight: 260,
+                  controller: _pc1,
+                  onPanelOpened: (){
+                    _visible=false;
+                    setState(() {
+                      
+                    });
+                    
+                    _pc1.close();
+                  },
+                  borderRadius: const BorderRadius.only(
+                                  topRight: Radius.circular(20.0),
+                                  bottomRight: Radius.circular(0.0),
+                                  topLeft: Radius.circular(20.0),
+                                  bottomLeft: Radius.circular(0.0)),
+                  padding: EdgeInsets.all(0),
+                    panel: Container(
+                          height: 440,
                             decoration: BoxDecoration(
                               color: this.styles.backgroundColor,
                               borderRadius: const BorderRadius.only(
@@ -321,8 +341,8 @@ Future<int> callWeather() async {
                                   children: [
                                     Container(
                                       key: Key('_pB'),
-                                      width: 80,
-                                      height: 3.3,
+                                      width: 60,
+                                      height: 3,
                                       margin: EdgeInsets.only(top: 10),
                                       child: RawMaterialButton(
                                         onPressed: () => {
@@ -560,6 +580,286 @@ Future<int> callWeather() async {
                                   ),
                                   child:  Text( 'Прогноз на неделю', style: TextStyle(color: this.styles.buttonTextColor),),
                                 ),
+                                
+                              ],
+                            ))
+                      
+
+                )
+               ),
+               Visibility(
+            maintainState: true,
+            maintainAnimation: true,
+            visible: !_visible,
+               child: SlidingUpPanel(
+                  minHeight: 260,
+                  defaultPanelState: PanelState.OPEN,
+                  controller: _pc2,
+                  borderRadius: const BorderRadius.only(
+                                  topRight: Radius.circular(20.0),
+                                  bottomRight: Radius.circular(0.0),
+                                  topLeft: Radius.circular(20.0),
+                                  bottomLeft: Radius.circular(0.0)),
+                  padding: EdgeInsets.all(0),
+                  onPanelClosed: (){
+                    _visible=true;
+                    setState(() {
+                      
+                    });
+                    _pc2.open();
+                  },
+                  panel: Container(
+                          height: 440,
+                            decoration: BoxDecoration(
+                              color: this.styles.backgroundColor,
+                              borderRadius: const BorderRadius.only(
+                                  topRight: Radius.circular(20.0),
+                                  bottomRight: Radius.circular(0.0),
+                                  topLeft: Radius.circular(20.0),
+                                  bottomLeft: Radius.circular(0.0)),
+                            ),
+                            child: Column(
+                              children: [
+                                Column(
+                                  children: [
+                                    Container(
+                                      width: 60,
+                                      height: 3,
+                                      margin: EdgeInsets.only(top: 10),
+                                      child: RawMaterialButton(
+                                        onPressed: () => {
+                                        },
+                                        fillColor: this.styles.buttonTextColor,
+                                      ),
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.only(top: 10),
+                                      child: Text(DateFormat.MMMMd('ru').format(DateTime.now()),
+                                      style: GoogleFonts.manrope(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w600,
+                                        color: styles.textColor
+                                      )),
+                                      ),
+                                    
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 180.0,
+                                  width: MediaQuery.of(context).size.width,
+                                  child: ListView (
+                                      scrollDirection: Axis.horizontal,
+                                      semanticChildCount: 4,
+                                      children: [
+                                        Container(
+                                            height: 120,
+                                            width: 70,
+                                            decoration:  BoxDecoration(
+                                              color: this.styles.cardColor1,
+                                              borderRadius:const BorderRadius.only(
+                                                  topRight: Radius.circular(10.0),
+                                                  bottomRight: Radius.circular(10.0),
+                                                  topLeft: Radius.circular(10.0),
+                                                  bottomLeft: Radius.circular(10.0)
+                                              ),
+                                              boxShadow:  [
+                                                BoxShadow(
+                                                  color: styles.iconColor1,
+                                                  spreadRadius: 1,
+                                                  blurRadius: 3,
+                                                  offset: Offset(0, 2), // changes position of shadow
+                                                ),
+                                              ],
+                                            ),
+                                            margin: const EdgeInsets.only(top:20, left: 45, bottom: 20),
+                                            child: Column (
+                                              children:  [
+                                                Text(
+                                                  DateFormat('hh:mm').format(DateTime.parse(weather![1].dt_txt)),
+                                                  style: TextStyle(
+                                                      fontSize: 18.0,
+                                                      fontFamily: 'Roboto',
+                                                      color: this.styles.textColor,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                    height: 80,
+                                                    width: 40,
+                                                    child: Image(
+                                                      image: AssetImage(weather![1].pictureMain()),
+                                                      width: 40,
+                                                      height: 40,)
+                                                ),
+                                                Text(
+                                                  parser.parseTemp(weather![1].temp.toInt()) + parser.parseTempName(),
+                                                  style: TextStyle(
+                                                      fontSize: 20.0,
+                                                      fontFamily: 'Roboto',
+                                                      color: this.styles.textColor,
+                                                  ),
+                                                ),
+
+                                              ],
+                                            )
+                                        ),
+                                        Container(
+                                            height: 120,
+                                            width: 70,
+                                            decoration:  BoxDecoration(
+                                              color: this.styles.cardColor1,
+                                              borderRadius: BorderRadius.only(
+                                                  topRight: Radius.circular(10.0),
+                                                  bottomRight: Radius.circular(10.0),
+                                                  topLeft: Radius.circular(10.0),
+                                                  bottomLeft: Radius.circular(10.0)
+                                              ),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: this.styles.iconColor1,
+                                                  spreadRadius: 1,
+                                                  blurRadius: 3,
+                                                  offset: Offset(0, 2), // changes position of shadow
+                                                ),
+                                              ],
+                                            ),
+                                            margin: const EdgeInsets.only(top:20, left: 45, bottom: 20),
+                                            child: Column (
+                                              children: [
+                                                Text(
+                                                  DateFormat('hh:mm').format(DateTime.parse(weather![3].dt_txt)),
+                                                  style: TextStyle(
+                                                      fontSize: 18.0,
+                                                      fontFamily: 'Roboto',
+                                                      color: this.styles.textColor,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                    height: 80,
+                                                    width: 40,
+                                                    child: Image(
+                                                      image: AssetImage(weather![3].pictureMain()),
+                                                      width: 40,
+                                                      height: 40,)
+                                                ),
+                                                Text(
+                                                  parser.parseTemp(weather![3].temp.toInt()) + parser.parseTempName(),
+                                                  style: TextStyle(
+                                                      fontSize: 20.0,
+                                                      fontFamily: 'Roboto',
+                                                      color: this.styles.textColor,
+                                                  ),
+                                                ),
+
+                                              ],
+                                            )
+                                        ),
+                                        Container(
+                                            height: 120,
+                                            width: 70,
+                                            decoration:  BoxDecoration(
+                                              color: this.styles.cardColor1,
+                                              borderRadius: BorderRadius.only(
+                                                  topRight: Radius.circular(10.0),
+                                                  bottomRight: Radius.circular(10.0),
+                                                  topLeft: Radius.circular(10.0),
+                                                  bottomLeft: Radius.circular(10.0)
+                                              ),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: this.styles.iconColor1,
+                                                  spreadRadius: 1,
+                                                  blurRadius: 3,
+                                                  offset: Offset(0, 2), // changes position of shadow
+                                                ),
+                                              ],
+                                            ),
+                                            margin: const EdgeInsets.only(top:20, left: 45, bottom: 20),
+                                            child: Column (
+                                              children: [
+                                                Text(
+                                                  '18:00',
+                                                  style: TextStyle(
+                                                      fontSize: 18.0,
+                                                      fontFamily: 'Roboto',
+                                                      color: this.styles.textColor,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                    height: 80,
+                                                    width: 40,
+                                                    child: Image(
+                                                      image: AssetImage(weather![5].pictureMain()),
+                                                      width: 40,
+                                                      height: 40,)
+                                                ),
+                                                Text(
+                                                  parser.parseTemp(weather![5].temp.toInt()) + parser.parseTempName(),
+                                                  style: TextStyle(
+                                                      fontSize: 20.0,
+                                                      fontFamily: 'Roboto',
+                                                      color: this.styles.textColor,
+                                                  ),
+                                                ),
+
+                                              ],
+                                            )
+                                        ),
+                                        Container(
+                                            height: 120,
+                                            width: 70,
+                                            decoration:  BoxDecoration(
+                                              color: this.styles.cardColor1,
+                                              borderRadius: BorderRadius.only(
+                                                  topRight: Radius.circular(10.0),
+                                                  bottomRight: Radius.circular(10.0),
+                                                  topLeft: Radius.circular(10.0),
+                                                  bottomLeft: Radius.circular(10.0)
+                                              ),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: this.styles.iconColor1,
+                                                  spreadRadius: 1,
+                                                  blurRadius: 3,
+                                                  offset: Offset(0, 2), // changes position of shadow
+                                                ),
+                                              ],
+                                            ),
+                                            margin: const EdgeInsets.only(top:20, left: 45, bottom: 20, right: 45),
+                                            child: Column (
+                                              children: [
+                                                Text(
+                                                  '00:00',
+                                                  style: TextStyle(
+                                                      fontSize: 18.0,
+                                                      fontFamily: 'Roboto',
+                                                      color: this.styles.textColor,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                    height: 80,
+                                                    width: 40,
+                                                    child: Image(
+                                                      image: AssetImage(weather![7].pictureMain()),
+                                                      width: 40,
+                                                      height: 40,)
+                                                ),
+                                                Text(
+                                                  parser.parseTemp(weather![7].temp.toInt()) + parser.parseTempName(),
+                                                  style: TextStyle(
+                                                      fontSize: 20.0,
+                                                      fontFamily: 'Roboto',
+                                                      color: this.styles.textColor,
+                                                  ),
+                                                ),
+
+                                              ],
+                                            )
+                                        ),
+                                      ]
+                                  ),
+                                ),
+                                
+                                 
                                 Container(
                                     margin: EdgeInsets.only(top: 20),
                                     padding: EdgeInsets.only(left: 30, right: 30),
@@ -776,12 +1076,10 @@ Future<int> callWeather() async {
                                     )
                                 )
                               ],
-                            ));
-                      },
-                      itemCount: 1,
-                    )
-
-                )
+                            ))
+               )
+               )
+             ],
             )
           ],
         )
