@@ -6,15 +6,17 @@ import { LEADERS } from '../shared/leaders';
   providedIn: 'root'
 })
 export class LeaderService {
-  getLeaders(): Leader[] {
-    return LEADERS;
+  getLeaders(): Promise<Leader[]> {
+    return new Promise(resolve => {
+      setTimeout(() => resolve(LEADERS), 2000);
+    })
   }
-  getLeader(id: String): Leader {
-    return LEADERS.filter((leader) => leader.id===id)[0];
+  getLeader(id: String): Promise<Leader> {
+    return new Promise<Leader>(resolve=>{setTimeout(() => resolve(LEADERS.filter((leader) => leader.id===id)[0]), 2000)});
   }
 
-  getFeaturedLeader(): Leader {
-    return LEADERS.filter((leader) => leader.featured)[0];
+  getFeaturedLeader(): Promise<Leader> {
+    return new Promise<Leader>(resolve=>{setTimeout(() => resolve(LEADERS.filter((leader) => leader.featured)[0]), 2000)});
   }
   constructor() { }
 }

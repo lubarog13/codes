@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">TrainingLog</string>
+    <string name="anonimus"><u>Продолжить как гость</u></string>
+    <string name="setpassword"><u>Восстановить пароль</u></string>
+    <string name="reg"><u>Регистрация</u></string>
+    <string name="title_activity_home">MainActivity</string>
+</resources>
