@@ -1,6 +1,8 @@
 package com.example.traininglog.common;
 
-public interface BaseView {
+import com.arellomobile.mvp.MvpView;
+
+public interface BaseView extends MvpView {
     void showRefresh();
 
     void hideRefresh();
