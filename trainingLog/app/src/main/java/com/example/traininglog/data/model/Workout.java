@@ -23,6 +23,27 @@ public class Workout {
     private Hall hall;
     @SerializedName("club")
     private Club club;
+    @SerializedName("on_train")
+    private int on_train;
+    @SerializedName("dont_know")
+    private int dont_know;
+    @SerializedName("not_on_train")
+    private int not_on_train;
+
+    public Workout(int id, Date start_time, Date end_time, String type, String other_type, boolean is_carried_out, Coach coach, Hall hall, Club club, int on_train, int dont_know, int not_on_train) {
+        this.id = id;
+        this.start_time = start_time;
+        this.end_time = end_time;
+        this.type = type;
+        this.other_type = other_type;
+        this.is_carried_out = is_carried_out;
+        this.coach = coach;
+        this.hall = hall;
+        this.club = club;
+        this.on_train = on_train;
+        this.dont_know = dont_know;
+        this.not_on_train = not_on_train;
+    }
 
     public Workout(int id, Date start_time, Date end_time, String type, String other_type, boolean is_carried_out, Coach coach, Hall hall, Club club) {
         this.id = id;
@@ -113,5 +134,29 @@ public class Workout {
 
     public void setClub(Club club) {
         this.club = club;
+    }
+
+    public int getOn_train() {
+        return on_train;
+    }
+
+    public void setOn_train(int on_train) {
+        this.on_train = on_train;
+    }
+
+    public int getDont_know() {
+        return dont_know;
+    }
+
+    public void setDont_know(int dont_know) {
+        this.dont_know = dont_know;
+    }
+
+    public int getNot_on_train() {
+        return not_on_train;
+    }
+
+    public void setNot_on_train(int not_on_train) {
+        this.not_on_train = not_on_train;
     }
 }
