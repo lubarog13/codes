@@ -32,7 +32,7 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
         mTime = itemView.findViewById(R.id.train_time);
     }
 
-    public void bind(Workout item, WorkoutAdapter.OnItemClickListener onItemClickListener, boolean newDay){
+    public void bind(Workout item, boolean newDay){
         mType.setBackgroundColor(bindColor(item.getType()));
         if(item.getClub().getName().length()>15) {
             mName.setText(String.format("%s...", item.getClub().getName().substring(0, 15)));
@@ -41,12 +41,14 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
         }
         mCountNotOn.setText(String.format("-%s", item.getNot_on_train()));
         mCountOn.setText(String.format("+%s", item.getOn_train()));
-        mCountDN.setText(item.getDont_know());
+        mCountDN.setText(String.format("%s", item.getDont_know()));
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm", Locale.getDefault());
         mTime.setText(simpleDateFormat.format(item.getStart_time()));
         if(newDay) {
-            SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("dd.MM EEEE", Locale.getDefault());
-            mWeekDay.setText(simpleDateFormat.format(item.getStart_time()));
+            SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("EEEE", Locale.getDefault());
+            SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("dd.MM", Locale.getDefault());
+            String week_day = simpleDateFormat1.format(item.getStart_time());
+            mWeekDay.setText(String.format("%s  %s%s", simpleDateFormat2.format(item.getStart_time()), week_day.substring(0, 1).toUpperCase(), week_day.substring(1)));
             mWeekDay.setVisibility(View.VISIBLE);
         }
     }

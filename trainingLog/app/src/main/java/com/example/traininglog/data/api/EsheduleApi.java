@@ -21,6 +21,6 @@ public interface EsheduleApi {
     @GET("auth/users/me/")
     Single<User> me();
 
-    @GET("user/{user_id}/week_workouts")
+    @GET("user/{user_id}/week_workouts/")
     Single<WorkoutResponse> getWeekWorkouts(@Path("user_id") int user_id);
 }

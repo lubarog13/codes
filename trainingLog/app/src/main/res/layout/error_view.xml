@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/errorView"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:paddingTop="200dp"
+    android:gravity="center">
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@mipmap/ic_error_foreground"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="30dp"
+        android:text="Упс, ошибочка вышла."
+        android:textSize="26sp"
+        android:fontFamily="@font/roboto_bold"
+        android:textColor="@color/colorRed"
+        />
+
+
+</LinearLayout>
