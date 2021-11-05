@@ -13,6 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
 import 'hammerjs';
 import { MenuComponent } from './menu/menu.component';
 import { MatListModule } from '@angular/material/list';
+import { MatSliderModule } from '@angular/material/slider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatInputModule } from '@angular/material/input';
@@ -45,6 +46,7 @@ import { LoginComponent } from './login/login.component';
     MatSlideToggleModule,
     MatFormFieldModule,
     MatDialogModule, 
+    MatSliderModule,
     MatInputModule,
     MatProgressSpinnerModule,
     MatCheckboxModule,
