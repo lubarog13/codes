@@ -76,4 +76,61 @@
         android:fontFamily="@font/roboto_bold"
         android:textSize="24sp"/>
     </LinearLayout>
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:rowCount="1"
+        android:visibility="visible"
+        android:id="@+id/go_buttons"
+        android:columnCount="3">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_gravity="fill"
+            android:layout_height="match_parent"
+            android:background="@color/colorGreen"
+            android:id="@+id/i_am_go"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:text="Я иду"
+            android:fontFamily="@font/roboto_bold"
+            android:textColor="@android:color/white"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:drawableStart="@drawable/ic_openmoji_person_raising_hand_light_skin_tone"
+        />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_gravity="fill"
+            android:id="@+id/i_am_not"
+            android:layout_height="match_parent"
+            android:background="@color/colorRed"
+            android:text="Я не иду"
+            android:paddingRight="-10dp"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:fontFamily="@font/roboto_bold"
+            android:textColor="@android:color/white"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:drawableStart="@drawable/ic_openmoji_person_gesturing_no_light_skin_tone"
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_height="match_parent"
+            android:id="@+id/who_go"
+            android:background="@color/colorPrimary"
+            android:paddingLeft="10dp"
+            android:text="Кто \nидет?"
+            android:layout_row="0"
+            android:layout_column="2"
+            android:fontFamily="@font/roboto_bold"
+            android:textColor="@android:color/white"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:drawableStart="@drawable/ic_group_16"
+            />
+</GridLayout>
 </LinearLayout>
