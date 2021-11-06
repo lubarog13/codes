@@ -1,6 +1,9 @@
 package com.example.traininglog.ui.base.home;
 
+import android.content.res.Resources;
+import android.text.Html;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,6 +23,17 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
     private TextView mCountNotOn;
     private TextView mWeekDay;
     private TextView mTime;
+    private View mInfoView;
+    private TextView mGroupName;
+    private TextView mCoachName;
+    private TextView mHallName;
+    private TextView mTypeName;
+    private View mButtonView;
+    private Button mOkButton;
+    private Button mNoButton;
+    private Button mWhoButton;
+    private Resources mHallString;
+    private boolean is_opened = false;
 
     public WorkoutHolder(View itemView) {
         super(itemView);
@@ -30,6 +44,22 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
         mCountNotOn = itemView.findViewById(R.id.workout_week_not_on_train);
         mWeekDay = itemView.findViewById(R.id.week_day);
         mTime = itemView.findViewById(R.id.train_time);
+        mInfoView = itemView.findViewById(R.id.workout_info);
+        mGroupName = itemView.findViewById(R.id.group_name);
+        mCoachName = itemView.findViewById(R.id.coach_name);
+        mHallName = itemView.findViewById(R.id.hall_name);
+        mTypeName  = itemView.findViewById(R.id.type_name);
+        mButtonView = itemView.findViewById(R.id.go_buttons);
+        mOkButton = itemView.findViewById(R.id.i_am_go);
+        mNoButton = itemView.findViewById(R.id.i_am_not);
+        mWhoButton = itemView.findViewById(R.id.who_go);
+        mHallString = itemView.getResources();
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OnItemClick();
+            }
+        });
     }
 
     public void bind(Workout item, boolean newDay){
@@ -51,9 +81,22 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
             mWeekDay.setText(String.format("%s  %s%s", simpleDateFormat2.format(item.getStart_time()), week_day.substring(0, 1).toUpperCase(), week_day.substring(1)));
             mWeekDay.setVisibility(View.VISIBLE);
         }
+        mGroupName.setText(item.getClub().getGroup());
+        String c_n = "", g_n="";
+        if(item.getCoach()!=null) c_n = item.getCoach().getUser().getLast_name() + " "
+                + item.getCoach().getUser().getFirst_name().substring(0,1) + "."
+                + item.getCoach().getUser().getSecond_name().substring(0,1) + ".";
+        else c_n = item.getClub().getCoach().getUser().getLast_name() + " "
+                + item.getClub().getCoach().getUser().getFirst_name().substring(0,1) + "."
+                + item.getClub().getCoach().getUser().getSecond_name().substring(0,1) + ".";
+        mCoachName.setText(c_n);
+        if(item.getHall().getNumber()!=0)  g_n = item.getHall().getName() + ", " + item.getHall().getNumber();
+        else g_n = item.getHall().getName();
+        mHallName.setText(Html.fromHtml(mHallString.getString(R.string.hall_name, g_n), Html.FROM_HTML_MODE_LEGACY));
+        mTypeName.setText(item.getType());
     }
 
-    public int bindColor(String type) {
+    private int bindColor(String type) {
         switch (type){
             case "общая": return R.color.colorRed;
             case "кардио": return R.color.colorOrange;
@@ -63,4 +106,16 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
         }
         return R.color.colorRed;
     }
+
+    private void OnItemClick() {
+        if(!is_opened) {
+            mInfoView.setVisibility(View.VISIBLE);
+            mButtonView.setVisibility(View.VISIBLE);
+        } else {
+            mInfoView.setVisibility(View.GONE);
+            mButtonView.setVisibility(View.GONE);
+        }
+        is_opened = !is_opened;
+    }
+
 }
