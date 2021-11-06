@@ -15,5 +15,4 @@ import io.reactivex.Observable;
 public interface AuthView extends BaseView {
     void showSuccess( AuthUser user);
     void navigateHome();
-    void saveUser(User user);
 }

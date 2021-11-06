@@ -7,5 +7,5 @@ public interface BaseView extends MvpView {
 
     void hideRefresh();
 
-    void showError(String why);
+    void showError(Throwable throwable);
 }

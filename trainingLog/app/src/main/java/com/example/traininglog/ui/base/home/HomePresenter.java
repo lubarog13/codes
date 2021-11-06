@@ -20,7 +20,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
                         .doFinally(getViewState()::hideRefresh)
                         .subscribe(
                                 workoutResponse -> getViewState().saveWorkouts(workoutResponse.getWorkouts()),
-                                throwable -> getViewState().showError(throwable.getMessage())
+                                throwable -> getViewState().showError(throwable)
                         )
         );
     }

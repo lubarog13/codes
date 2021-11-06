@@ -26,6 +26,7 @@ public class ApiUtils {
             UnknownHostException.class,
             SocketTimeoutException.class,
             ConnectException.class
+
     );
     private static OkHttpClient sClient;
     private static Retrofit sRetrofit;

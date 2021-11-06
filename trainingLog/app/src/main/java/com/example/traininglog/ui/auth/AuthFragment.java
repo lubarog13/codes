@@ -1,15 +1,18 @@
 package com.example.traininglog.ui.auth;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,16 +33,19 @@ import com.jakewharton.rxbinding3.widget.RxTextView;
 
 import org.reactivestreams.Subscription;
 
+import java.util.Objects;
+
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 
-public class AuthFragment extends PresenterFragment implements AuthView, Refreshable  {
+public class AuthFragment extends PresenterFragment implements AuthView, Refreshable {
 
     private RefreshOwner mRefreshOwner;
     private SharedPreferences sp;
-    EditText password;
-    Button enter;
-    EditText login;
+    private EditText password;
+    private Button enter;
+    private EditText login;
+    private TextView mErrorText;
     @InjectPresenter
     AuthPresenter mPresenter;
 
@@ -60,6 +66,7 @@ public class AuthFragment extends PresenterFragment implements AuthView, Refresh
             mRefreshOwner = ((RefreshOwner) context);
         }
     }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -73,8 +80,10 @@ public class AuthFragment extends PresenterFragment implements AuthView, Refresh
         login = getActivity().findViewById(R.id.login_enter);
         password = getActivity().findViewById(R.id.password_enter);
         sp = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
+        mPresenter.setSharedPreferences(sp);
         mPresenter.login = RxTextView.textChanges(login).map(CharSequence::toString);
-        mPresenter.password=RxTextView.textChanges(password).map(CharSequence::toString);
+        mPresenter.password = RxTextView.textChanges(password).map(CharSequence::toString);
+        mErrorText = getActivity().findViewById(R.id.error_text);
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,16 +103,26 @@ public class AuthFragment extends PresenterFragment implements AuthView, Refresh
 
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public void showSuccess(AuthUser user) {
         ApiUtils.token = user.getAuth_token();
-        Toast.makeText(getActivity(), user.getAuth_token(), Toast.LENGTH_LONG).show();
+        this.mErrorText.setText("Отлично! Вы вошли!");
+        this.mErrorText.setTextColor(R.color.colorGreen);
+        mPresenter.getUser();
     }
 
     @Override
-    public void showError(String why) {
-        Toast.makeText(getActivity(), why, Toast.LENGTH_LONG).show();
-        Log.e("http", why);
+    public void showError(Throwable throwable) {
+        if (Objects.requireNonNull(throwable.getMessage()).contains("400"))
+            this.mErrorText.setText(Html.fromHtml(getActivity().getResources()
+                    .getString(R.string.hall_name, "Неверный логин или пароль"), Html.FROM_HTML_MODE_LEGACY));
+        else if (ApiUtils.NETWORK_EXCEPTIONS.contains(throwable.getClass())) {
+            this.mErrorText.setText(Html.fromHtml(getActivity().getResources()
+                    .getString(R.string.hall_name, "Ошибка сервера или интернет-соединения"), Html.FROM_HTML_MODE_LEGACY));
+        } else this.mErrorText.setText(Html.fromHtml(getActivity().getResources()
+                .getString(R.string.hall_name, "Произошла ошибка"), Html.FROM_HTML_MODE_LEGACY));
+        Log.e("http", throwable.getMessage());
     }
 
 
@@ -121,23 +140,5 @@ public class AuthFragment extends PresenterFragment implements AuthView, Refresh
     @Override
     public void hideRefresh() {
         mRefreshOwner.setRefreshState(false);
-    }
-    @Override
-    public void saveUser(User user) {
-        Log.e("user", user.getEmail());
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putInt("id", user.getId());
-        editor.putString("first_name", user.getFirst_name());
-        editor.putString("last_name", user.getLast_name());
-        editor.putString("second_name", user.getSecond_name());
-        editor.putString("email", user.getEmail());
-        editor.putString("sex", user.getSex());
-        editor.putString("date_birth", user.getDate_birth().toString());
-        editor.putString("username", user.getUsername());
-        editor.putBoolean("is_coach", user.Is_coach());
-        editor.putString("token", ApiUtils.token);
-        ApiUtils.user_id = user.getId();
-        editor.apply();
-        this.navigateHome();
     }
 }

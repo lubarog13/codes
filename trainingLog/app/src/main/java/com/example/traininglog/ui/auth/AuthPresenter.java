@@ -21,6 +21,7 @@ import io.reactivex.schedulers.Schedulers;
 public class AuthPresenter extends BasePresenter<AuthView> {
     Observable<String> login;
     Observable<String> password;
+    private SharedPreferences sp;
 
     public AuthPresenter() {
     }
@@ -31,15 +32,15 @@ public class AuthPresenter extends BasePresenter<AuthView> {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                     .doOnSubscribe(disposable -> getViewState().showRefresh())
-                    .doFinally(this::getUser)
+                    .doFinally(getViewState()::hideRefresh)
                 .subscribe(
                         getViewState()::showSuccess,
-                        throwable -> getViewState().showError(throwable.getMessage())
+                        throwable -> getViewState().showError(throwable)
                 )
         );
     }
 
-    private void getUser() {
+    public void getUser() {
         mCompositeDisposable.add(
                 ApiUtils.getApiService().me()
                         .subscribeOn(Schedulers.io())
@@ -47,12 +48,31 @@ public class AuthPresenter extends BasePresenter<AuthView> {
                         .doOnSubscribe(disposable -> getViewState().showRefresh())
                         .doFinally(getViewState()::hideRefresh)
                         .subscribe(
-                                responce ->  getViewState().saveUser(responce),
-                                throwable -> getViewState().showError(throwable.getMessage())
+                                this::saveUser,
+                                throwable -> getViewState().showError(throwable)
                         )
         );
     }
 
+    private void saveUser(User user) {
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt("id", user.getId());
+        editor.putString("first_name", user.getFirst_name());
+        editor.putString("last_name", user.getLast_name());
+        editor.putString("second_name", user.getSecond_name());
+        editor.putString("email", user.getEmail());
+        editor.putString("sex", user.getSex());
+        editor.putString("date_birth", user.getDate_birth().toString());
+        editor.putString("username", user.getUsername());
+        editor.putBoolean("is_coach", user.Is_coach());
+        editor.putString("token", ApiUtils.token);
+        ApiUtils.user_id = user.getId();
+        editor.apply();
+        getViewState().navigateHome();
+    }
+    public void setSharedPreferences(SharedPreferences sp){
+        this.sp = sp;
+    }
 
 
 }

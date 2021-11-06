@@ -202,7 +202,7 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:rowCount="1"
-        android:visibility="visible"
+        android:visibility="gone"
         android:id="@+id/go_buttons"
         android:columnCount="3">
         <Button

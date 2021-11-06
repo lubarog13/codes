@@ -84,7 +84,7 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
     }
 
     @Override
-    public void showError(String why) {
+    public void showError(Throwable throwable) {
         mErrorView.setVisibility(View.VISIBLE);
         mHomeView.setVisibility(View.GONE);
     }
