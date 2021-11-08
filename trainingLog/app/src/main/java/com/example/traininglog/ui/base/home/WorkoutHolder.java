@@ -36,6 +36,7 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
     private View mOkView;
     private View mNoView;
     private boolean is_opened = false;
+    private Boolean is_attend;
 
     public WorkoutHolder(View itemView) {
         super(itemView);
@@ -87,6 +88,7 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
             mWeekDay.setText(String.format("%s  %s%s", simpleDateFormat2.format(item.getStart_time()), week_day.substring(0, 1).toUpperCase(), week_day.substring(1)));
             mWeekDay.setVisibility(View.VISIBLE);
         }
+        is_attend = item.Is_on();
         mGroupName.setText(item.getClub().getGroup());
         String c_n = "", g_n="";
         if(item.getCoach()!=null) c_n = item.getCoach().getUser().getLast_name() + " "
@@ -105,12 +107,14 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
             mOkButton.setOnClickListener(view -> {
                 onItemClickListener.onItemClick(item.getId(), true);
                 mOkView.setVisibility(View.VISIBLE);
-                mCountOn.setText("+" + String.valueOf(Integer.parseInt(mCountOn.getText().toString()) + 1) );
+                mNoView.setVisibility(View.GONE);
+                setPresence();
             });
             mNoButton.setOnClickListener(view -> {
                 onItemClickListener.onItemClick(item.getId(), false);
                 mNoView.setVisibility(View.VISIBLE);
-                mCountNotOn.setText("-" + String.valueOf(Integer.parseInt(mCountNotOn.getText().toString()) + 1) );
+                mOkView.setVisibility(View.GONE);
+                resetPresence();
             });
         }
     }
@@ -126,6 +130,24 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
         return R.color.colorRed;
     }
 
+    private void setPresence() {
+        if(is_attend==null ){
+            mCountOn.setText("+" + String.valueOf(Integer.parseInt(mCountOn.getText().toString()) + 1) );
+        } else if(!is_attend){
+            mCountOn.setText("+" + String.valueOf(Integer.parseInt(mCountOn.getText().toString()) + 1) );
+            mCountNotOn.setText("-" + String.valueOf(Integer.parseInt(mCountNotOn.getText().toString()) - 1) );
+        }
+    }
+
+    private void resetPresence() {
+        if(is_attend==null ){
+            mCountOn.setText("-" + String.valueOf(Integer.parseInt(mCountOn.getText().toString()) + 1) );
+        } else if(is_attend){
+            mCountOn.setText("-" + String.valueOf(Integer.parseInt(mCountOn.getText().toString()) + 1) );
+            mCountNotOn.setText("+" + String.valueOf(Integer.parseInt(mCountNotOn.getText().toString()) - 1) );
+        }
+    }
+
     private void OnItemClick() {
         if(!is_opened) {
             mInfoView.setVisibility(View.VISIBLE);
@@ -134,6 +156,9 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
             mInfoView.setVisibility(View.GONE);
             mButtonView.setVisibility(View.GONE);
         }
+        if(is_attend) mOkView.setVisibility(View.VISIBLE);
+        if(is_attend==false) mNoView.setVisibility(View.VISIBLE);
         is_opened = !is_opened;
     }
+
 }

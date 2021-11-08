@@ -15,6 +15,7 @@
         android:layout_height="match_parent"
         android:text="Вы идете на тренировку"
         android:gravity="center_vertical"
+        android:textColor="@android:color/black"
         android:fontFamily="@font/roboto_bold"
         android:textSize="16sp"
         />

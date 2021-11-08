@@ -29,8 +29,10 @@ public class Workout {
     private int dont_know;
     @SerializedName("not_on_train")
     private int not_on_train;
+    @SerializedName("is_on")
+    private Boolean is_on;
 
-    public Workout(int id, Date start_time, Date end_time, String type, String other_type, boolean is_carried_out, Coach coach, Hall hall, Club club, int on_train, int dont_know, int not_on_train) {
+    public Workout(int id, Date start_time, Date end_time, String type, String other_type, boolean is_carried_out, Coach coach, Hall hall, Club club, int on_train, int dont_know, int not_on_train, Boolean is_on) {
         this.id = id;
         this.start_time = start_time;
         this.end_time = end_time;
@@ -43,6 +45,7 @@ public class Workout {
         this.on_train = on_train;
         this.dont_know = dont_know;
         this.not_on_train = not_on_train;
+        this.is_on = is_on;
     }
 
     public Workout(int id, Date start_time, Date end_time, String type, String other_type, boolean is_carried_out, Coach coach, Hall hall, Club club) {
@@ -158,5 +161,13 @@ public class Workout {
 
     public void setNot_on_train(int not_on_train) {
         this.not_on_train = not_on_train;
+    }
+
+    public boolean Is_on() {
+        return is_on;
+    }
+
+    public void setIs_on(boolean is_on) {
+        this.is_on = is_on;
     }
 }
