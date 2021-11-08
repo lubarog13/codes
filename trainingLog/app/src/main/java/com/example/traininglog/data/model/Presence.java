@@ -35,6 +35,8 @@ public class Presence {
     public Presence() {
     }
 
+    public Presence(Boolean is_attend) {this.is_attend = is_attend;}
+
     public int getId() {
         return id;
     }

@@ -33,6 +33,8 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
     private Button mNoButton;
     private Button mWhoButton;
     private Resources mHallString;
+    private View mOkView;
+    private View mNoView;
     private boolean is_opened = false;
 
     public WorkoutHolder(View itemView) {
@@ -54,6 +56,10 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
         mNoButton = itemView.findViewById(R.id.i_am_not);
         mWhoButton = itemView.findViewById(R.id.who_go);
         mHallString = itemView.getResources();
+        mOkView = itemView.findViewById(R.id.is_attend_ok);
+        mNoView = itemView.findViewById(R.id.is_attend_not);
+        mOkView.setVisibility(View.GONE);
+        mNoView.setVisibility(View.GONE);
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,7 +68,7 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
         });
     }
 
-    public void bind(Workout item, boolean newDay){
+    public void bind(Workout item, boolean newDay, WorkoutAdapter.OnItemClickListener onItemClickListener){
         mType.setBackgroundColor(bindColor(item.getType()));
         if(item.getClub().getName().length()>15) {
             mName.setText(String.format("%s...", item.getClub().getName().substring(0, 15)));
@@ -94,6 +100,19 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
         else g_n = item.getHall().getName();
         mHallName.setText(Html.fromHtml(mHallString.getString(R.string.hall_name, g_n), Html.FROM_HTML_MODE_LEGACY));
         mTypeName.setText(item.getType());
+
+        if (onItemClickListener != null) {
+            mOkButton.setOnClickListener(view -> {
+                onItemClickListener.onItemClick(item.getId(), true);
+                mOkView.setVisibility(View.VISIBLE);
+                mCountOn.setText("+" + String.valueOf(Integer.parseInt(mCountOn.getText().toString()) + 1) );
+            });
+            mNoButton.setOnClickListener(view -> {
+                onItemClickListener.onItemClick(item.getId(), false);
+                mNoView.setVisibility(View.VISIBLE);
+                mCountNotOn.setText("-" + String.valueOf(Integer.parseInt(mCountNotOn.getText().toString()) + 1) );
+            });
+        }
     }
 
     private int bindColor(String type) {
@@ -117,5 +136,4 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
         }
         is_opened = !is_opened;
     }
-
 }

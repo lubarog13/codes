@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,22 +20,15 @@ import androidx.annotation.Nullable;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.example.traininglog.R;
-import com.example.traininglog.common.BasePresenter;
 import com.example.traininglog.common.PresenterFragment;
 import com.example.traininglog.common.RefreshOwner;
 import com.example.traininglog.common.Refreshable;
 import com.example.traininglog.data.model.AuthUser;
-import com.example.traininglog.data.model.User;
 import com.example.traininglog.ui.HomeActivity;
 import com.example.traininglog.utils.ApiUtils;
 import com.jakewharton.rxbinding3.widget.RxTextView;
 
-import org.reactivestreams.Subscription;
-
 import java.util.Objects;
-
-import io.reactivex.Observable;
-import io.reactivex.subjects.PublishSubject;
 
 public class AuthFragment extends PresenterFragment implements AuthView, Refreshable {
 

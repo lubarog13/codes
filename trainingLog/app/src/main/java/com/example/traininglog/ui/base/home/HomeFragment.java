@@ -1,14 +1,13 @@
 package com.example.traininglog.ui.base.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,7 +16,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.example.traininglog.R;
-import com.example.traininglog.common.BasePresenter;
 import com.example.traininglog.common.PresenterFragment;
 import com.example.traininglog.common.RefreshOwner;
 import com.example.traininglog.common.Refreshable;
@@ -26,7 +24,7 @@ import com.example.traininglog.data.model.Workout;
 import java.util.List;
 
 
-public class HomeFragment extends PresenterFragment implements HomeView, Refreshable, RefreshOwner, SwipeRefreshLayout.OnRefreshListener {
+public class HomeFragment extends PresenterFragment implements HomeView, Refreshable, RefreshOwner, SwipeRefreshLayout.OnRefreshListener, WorkoutAdapter.OnItemClickListener {
     @InjectPresenter
     HomePresenter mPresenter;
 
@@ -61,7 +59,7 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mWorkoutAdapter = new WorkoutAdapter();
+        mWorkoutAdapter = new WorkoutAdapter(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
         mRecyclerView.setAdapter(mWorkoutAdapter);
@@ -87,6 +85,7 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
     public void showError(Throwable throwable) {
         mErrorView.setVisibility(View.VISIBLE);
         mHomeView.setVisibility(View.GONE);
+        Log.e("err", throwable.getMessage());
     }
 
     @Override
@@ -109,5 +108,19 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
         mErrorView.setVisibility(View.GONE);
         mHomeView.setVisibility(View.VISIBLE);
         mWorkoutAdapter.addData(workouts, true);
+    }
+
+    @Override
+    public void updatePresence(boolean is_attend) {
+
+    }
+
+    @Override
+    public void onItemClick(int workout_id, boolean is_attend) {
+        if (is_attend) {
+            mPresenter.setPresence(workout_id);
+        } else {
+            mPresenter.resetPresence(workout_id);
+        }
     }
 }

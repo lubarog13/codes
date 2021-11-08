@@ -254,4 +254,13 @@
             android:drawableStart="@drawable/ic_group_16"
             />
 </GridLayout>
+    <include
+        layout="@layout/is_attend_layout"
+        android:visibility="gone"
+        android:id="@+id/is_attend_ok"/>
+    <include
+        layout="@layout/is_not_attend_layout"
+        android:visibility="gone"
+        android:id="@+id/is_attend_not"/>
+
 </LinearLayout>

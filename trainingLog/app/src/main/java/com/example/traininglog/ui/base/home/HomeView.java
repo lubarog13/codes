@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface HomeView extends BaseView {
     void saveWorkouts(List<Workout> workouts);
+    void updatePresence(boolean is_attend);
 }

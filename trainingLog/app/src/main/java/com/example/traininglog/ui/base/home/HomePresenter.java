@@ -3,6 +3,7 @@ package com.example.traininglog.ui.base.home;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.example.traininglog.common.BasePresenter;
+import com.example.traininglog.data.model.Presence;
 import com.example.traininglog.utils.ApiUtils;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -24,5 +25,34 @@ public class HomePresenter extends BasePresenter<HomeView> {
                         )
         );
     }
+
+    public void setPresence(int workout_id) {
+        mCompositeDisposable.add(
+                ApiUtils.getApiService().updatePresenceForWorkout(ApiUtils.user_id, workout_id, new Presence(true))
+                .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnSubscribe(disposable -> getViewState().showRefresh())
+                        .doFinally(getViewState()::hideRefresh)
+                .subscribe(
+                        () -> {},
+                        throwable -> getViewState().showError(throwable)
+                )
+        );
+    }
+
+    public void resetPresence(int workout_id) {
+        mCompositeDisposable.add(
+                ApiUtils.getApiService().updatePresenceForWorkout(ApiUtils.user_id, workout_id, new Presence(false))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnSubscribe(disposable -> getViewState().showRefresh())
+                        .doFinally(getViewState()::hideRefresh)
+                        .subscribe(
+                                () -> {},
+                                throwable -> getViewState().showError(throwable)
+                        )
+        );
+    }
+
 
 }

@@ -3,6 +3,7 @@ package com.example.traininglog.ui.base.home;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,6 +20,11 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutHolder> {
 
     @NonNull
     private final List<Workout> mWorkouts = new ArrayList<>();
+    private final OnItemClickListener onClick;
+
+    public WorkoutAdapter(OnItemClickListener onClick) {
+        this.onClick = onClick;
+    }
 
     @NonNull
     @Override
@@ -33,8 +39,8 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutHolder> {
         Workout workout = mWorkouts.get(position);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
         if(position!=0 && simpleDateFormat.format(workout.getStart_time()).equals(simpleDateFormat.format(mWorkouts.get(position-1).getStart_time())))
-            holder.bind(workout, false);
-        else holder.bind(workout, true);
+            holder.bind(workout, false, onClick);
+        else holder.bind(workout, true, onClick);
     }
 
     @Override
@@ -45,6 +51,11 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutHolder> {
         if(isRefreshed) mWorkouts.clear();
         mWorkouts.addAll(data);
         notifyDataSetChanged();
-
     }
+
+    public interface OnItemClickListener {
+
+        void onItemClick(int workout_id, boolean is_attend);
+    }
+
 }
