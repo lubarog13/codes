@@ -21,6 +21,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="63dp"
+        android:id="@+id/home_main_view"
         android:orientation="horizontal">
     <TextView
         android:layout_width="5dp"
@@ -262,5 +263,9 @@
         layout="@layout/is_not_attend_layout"
         android:visibility="gone"
         android:id="@+id/is_attend_not"/>
+    <include
+        layout="@layout/who_attend_layout"
+        android:id="@+id/who_go_view"
+        android:visibility="gone"/>
 
 </LinearLayout>

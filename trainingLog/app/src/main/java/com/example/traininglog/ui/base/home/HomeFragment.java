@@ -19,6 +19,8 @@ import com.example.traininglog.R;
 import com.example.traininglog.common.PresenterFragment;
 import com.example.traininglog.common.RefreshOwner;
 import com.example.traininglog.common.Refreshable;
+import com.example.traininglog.data.model.Presence;
+import com.example.traininglog.data.model.Presence_W_N;
 import com.example.traininglog.data.model.Workout;
 
 import java.util.List;
@@ -116,11 +118,21 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
     }
 
     @Override
+    public void showPresences(List<Presence_W_N> presences) {
+        mWorkoutAdapter.addPresences(presences);
+    }
+
+    @Override
     public void onItemClick(int workout_id, boolean is_attend) {
         if (is_attend) {
             mPresenter.setPresence(workout_id);
         } else {
             mPresenter.resetPresence(workout_id);
         }
+    }
+
+    @Override
+    public void onPresencesClick(int workout_id) {
+        mPresenter.getPresences(workout_id);
     }
 }

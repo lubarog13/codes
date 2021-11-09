@@ -9,18 +9,22 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.traininglog.R;
+import com.example.traininglog.data.model.Presence_W_N;
 import com.example.traininglog.data.model.Workout;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutHolder> {
 
     @NonNull
     private final List<Workout> mWorkouts = new ArrayList<>();
     private final OnItemClickListener onClick;
+    private final Map<Integer, List<Presence_W_N>> mPresences = new HashMap<>();
 
     public WorkoutAdapter(OnItemClickListener onClick) {
         this.onClick = onClick;
@@ -38,15 +42,22 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutHolder> {
     public void onBindViewHolder(@NonNull WorkoutHolder holder, int position) {
         Workout workout = mWorkouts.get(position);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
-        if(position!=0 && simpleDateFormat.format(workout.getStart_time()).equals(simpleDateFormat.format(mWorkouts.get(position-1).getStart_time())))
-            holder.bind(workout, false, onClick);
-        else holder.bind(workout, true, onClick);
+        if(mPresences.containsKey(workout.getId())) {
+            if (position != 0 && simpleDateFormat.format(workout.getStart_time()).equals(simpleDateFormat.format(mWorkouts.get(position - 1).getStart_time())))
+                holder.bind(workout, false, onClick, mPresences.get(workout.getId()));
+            else holder.bind(workout, true, onClick, mPresences.get(workout.getId()));
+        } else {
+            if (position != 0 && simpleDateFormat.format(workout.getStart_time()).equals(simpleDateFormat.format(mWorkouts.get(position - 1).getStart_time())))
+                holder.bind(workout, false, onClick, null);
+            else holder.bind(workout, true, onClick, null);
+        }
     }
 
     @Override
     public int getItemCount() {
         return mWorkouts.size();
     }
+
     public void addData(List<Workout> data, boolean isRefreshed) {
         if(isRefreshed) mWorkouts.clear();
         mWorkouts.addAll(data);
@@ -56,6 +67,14 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutHolder> {
     public interface OnItemClickListener {
 
         void onItemClick(int workout_id, boolean is_attend);
+        void onPresencesClick(int workout_id);
+    }
+
+    public void addPresences(List<Presence_W_N> presences) {
+        if(presences!=null)  {
+            mPresences.put(presences.get(0).getWorkout(), presences);
+            notifyDataSetChanged();
+        }
     }
 
 }

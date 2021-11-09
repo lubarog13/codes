@@ -2,6 +2,7 @@ package com.example.traininglog.data.api;
 
 import com.example.traininglog.data.model.AuthUser;
 import com.example.traininglog.data.model.Presence;
+import com.example.traininglog.data.model.PresenceResponse;
 import com.example.traininglog.data.model.User;
 import com.example.traininglog.data.model.WorkoutResponse;
 
@@ -29,4 +30,7 @@ public interface EsheduleApi {
 
     @PATCH("presence/update/user/{user_id}/workout/{workout_id}/")
     Completable updatePresenceForWorkout(@Path("user_id") int user_id, @Path("workout_id") int workout_id, @Body Presence presence);
+
+    @GET("workout/{workout_id}/presences/")
+    Single<PresenceResponse> getPresencesForWorkout(@Path("workout_id") int workout_id);
 }

@@ -55,4 +55,18 @@ public class HomePresenter extends BasePresenter<HomeView> {
     }
 
 
+    public void getPresences(int workout_id) {
+        mCompositeDisposable.add(
+                ApiUtils.getApiService().getPresencesForWorkout(workout_id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> getViewState().showRefresh())
+                .doFinally(getViewState()::hideRefresh)
+                .subscribe(
+                        presenceResponse -> getViewState().showPresences(presenceResponse.getPresences()),
+                        throwable -> getViewState().showError(throwable)
+                )
+        );
+    }
+
 }
