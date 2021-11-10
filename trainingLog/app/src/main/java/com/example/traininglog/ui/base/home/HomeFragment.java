@@ -1,10 +1,14 @@
 package com.example.traininglog.ui.base.home;
 
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +27,8 @@ import com.example.traininglog.data.model.Presence;
 import com.example.traininglog.data.model.Presence_W_N;
 import com.example.traininglog.data.model.Workout;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 
@@ -56,15 +62,40 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
         mHomeView = view.findViewById(R.id.home_view);
         mSwipeRefreshLayout = view.findViewById(R.id.home_refresher);
         mSwipeRefreshLayout.setOnRefreshListener(this);
+
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mWorkoutAdapter = new WorkoutAdapter(this);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity()) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
+        mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
         mRecyclerView.setAdapter(mWorkoutAdapter);
+        TextView textView = getActivity().findViewById(R.id.week_workouts);
+        Typeface typeFace=Typeface.createFromAsset(getActivity().getAssets(),"fonts/BalsamiqSans-Bold.ttf");
+        textView.setTypeface(typeFace);
+        ImageView imageView = getActivity().findViewById(R.id.image_main);
+        try
+        {
+            // get input stream
+            InputStream ims = getActivity().getAssets().open("image 2.png");
+            // load image as Drawable
+            Drawable d = Drawable.createFromStream(ims, null);
+            // set image to ImageView
+            imageView.setImageDrawable(d);
+            ims .close();
+        }
+        catch(IOException ex)
+        {
+            return;
+        }
         onRefreshData();
     }
 

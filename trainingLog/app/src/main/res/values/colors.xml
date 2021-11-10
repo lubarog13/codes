@@ -11,4 +11,5 @@
     <color name="colorYellow">#9EA000</color>
     <color name="ok_green">#D1F5D7</color>
     <color name="not_pink">#FFDBDB</color>
+    <color name="colorDivider">#DFDFDF</color>
 </resources>

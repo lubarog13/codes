@@ -4,7 +4,9 @@ import android.content.res.Resources;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,6 +20,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import retrofit2.http.GET;
 
 public class WorkoutHolder extends RecyclerView.ViewHolder {
     private TextView mType;
@@ -43,12 +47,16 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
     private View mWhoGoView;
     private TextView mIsAttend;
     private TextView mNotAttend;
+    private TextView mDatetime;
+    private String clubName;
+    private View mTypeView;
     private boolean is_opened = false;
     private Boolean is_attend;
     private boolean isWhoOpened = false;
 
     public WorkoutHolder(View itemView) {
         super(itemView);
+        long startTime = System.currentTimeMillis();
         mType = itemView.findViewById(R.id.workout_week_type);
         mName = itemView.findViewById(R.id.workout_week_name);
         mCountOn = itemView.findViewById(R.id.workout_week_on_train);
@@ -73,23 +81,27 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
         mNoView.setVisibility(View.GONE);
         mWhoGoView = itemView.findViewById(R.id.who_go_view);
         mIsAttend = itemView.findViewById(R.id.is_attend_names);
+        mDatetime = itemView.findViewById(R.id.train_datetime);
         mNotAttend = itemView.findViewById(R.id.is_not_attend_names);
-
+        mTypeView = itemView.findViewById(R.id.workout_info_type);
         mMainView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 OnItemClick();
             }
         });
+        Log.e("time1", String.valueOf(System.currentTimeMillis() - startTime));
     }
 
     public void bind(Workout item, boolean newDay, WorkoutAdapter.OnItemClickListener onItemClickListener, List<Presence_W_N> presences){
-        mType.setBackgroundColor(bindColor(item.getType()));
+        long startTime =  System.currentTimeMillis();
+        mType.setBackgroundColor(mHallString.getColor(bindColor(item.getType())));
         if(item.getClub().getName().length()>15) {
             mName.setText(String.format("%s...", item.getClub().getName().substring(0, 15)));
         } else {
             mName.setText(item.getClub().getName());
         }
+        clubName = item.getClub().getName();
         mCountNotOn.setText(String.format("-%s", item.getNot_on_train()));
         mCountOn.setText(String.format("+%s", item.getOn_train()));
         mCountDN.setText(String.format("%s", item.getDont_know()));
@@ -134,6 +146,9 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
             mWhoGoView.setVisibility(View.VISIBLE);
             isWhoOpened = true;
         }
+        SimpleDateFormat simpleDateFormat1  = new SimpleDateFormat("dd.MM.yy hh:mm");
+        mDatetime.setText(simpleDateFormat1.format(item.getStart_time()));
+        mTypeView.setBackgroundColor(mHallString.getColor(bindColor(item.getType())));
         if (onItemClickListener != null) {
             mOkButton.setOnClickListener(view -> {
                 onItemClickListener.onItemClick(item.getId(), true);
@@ -158,6 +173,7 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
                 }
             });
         }
+        Log.e("time2", String.valueOf(System.currentTimeMillis() - startTime));
     }
 
     private int bindColor(String type) {
@@ -193,14 +209,29 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
         if(!is_opened) {
             mInfoView.setVisibility(View.VISIBLE);
             mButtonView.setVisibility(View.VISIBLE);
-            if(is_attend) mOkView.setVisibility(View.VISIBLE);
-            if(is_attend==false) mNoView.setVisibility(View.VISIBLE);
+            if(is_attend!=null && is_attend==true) mOkView.setVisibility(View.VISIBLE);
+            if(is_attend!=null && is_attend==false) mNoView.setVisibility(View.VISIBLE);
+            mDatetime.setVisibility(View.VISIBLE);
+            mCountOn.setVisibility(View.GONE);
+            mCountNotOn.setVisibility(View.GONE);
+            mCountDN.setVisibility(View.GONE);
+            mTime.setVisibility(View.GONE);
+            mType.setVisibility(View.GONE);
+            mTypeView.setVisibility(View.VISIBLE);
+            mName.setText(clubName);
         } else {
             mInfoView.setVisibility(View.GONE);
             mButtonView.setVisibility(View.GONE);
             mNoView.setVisibility(View.GONE);
             mOkView.setVisibility(View.GONE);
             mWhoGoView.setVisibility(View.GONE);
+            mDatetime.setVisibility(View.GONE);
+            mCountOn.setVisibility(View.VISIBLE);
+            mCountNotOn.setVisibility(View.VISIBLE);
+            mCountDN.setVisibility(View.VISIBLE);
+            mTime.setVisibility(View.VISIBLE);
+            mType.setVisibility(View.VISIBLE);
+            mTypeView.setVisibility(View.GONE);
             isWhoOpened = false;
         }
         is_opened = !is_opened;

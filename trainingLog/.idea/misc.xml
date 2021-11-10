@@ -4,6 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable/ic_auth.xml" value="0.2046875" />
+        <entry key="app/src/main/res/drawable/rect.xml" value="0.20052083333333334" />
+        <entry key="app/src/main/res/drawable/rect_lay.xml" value="0.20052083333333334" />
+        <entry key="app/src/main/res/font/caveat.xml" value="0.21458333333333332" />
+        <entry key="app/src/main/res/font/caveat_my.xml" value="0.21458333333333332" />
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.18958333333333333" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.19427083333333334" />
         <entry key="app/src/main/res/layout/content_home.xml" value="0.19947916666666668" />

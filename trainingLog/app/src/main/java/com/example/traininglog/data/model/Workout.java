@@ -163,11 +163,11 @@ public class Workout {
         this.not_on_train = not_on_train;
     }
 
-    public boolean Is_on() {
+    public Boolean Is_on() {
         return is_on;
     }
 
-    public void setIs_on(boolean is_on) {
+    public void setIs_on(Boolean is_on) {
         this.is_on = is_on;
     }
 }

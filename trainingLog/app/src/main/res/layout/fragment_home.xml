@@ -19,29 +19,64 @@
     <include
         layout="@layout/error_view"
         android:visibility="gone"/>
-<LinearLayout
+<RelativeLayout
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:id="@+id/home_view"
     android:visibility="visible"
     android:layout_height="match_parent">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="225dp"
+        android:id="@+id/image_main"
+        android:scaleType="centerCrop"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:text="Главная"
+        android:id="@+id/main_title"
         android:textSize="36sp"
+        android:fontFamily="@font/stalinist_one"
+        android:textColor="@android:color/white"
         android:layout_gravity="center"
         android:gravity="center"
+        android:paddingTop="100dp"
         >
-
     </TextView>
-    <androidx.recyclerview.widget.RecyclerView
+    <ImageView
         android:layout_width="match_parent"
-        android:id="@+id/week_rec"
         android:layout_height="500dp"
-        android:visibility="visible">
-    </androidx.recyclerview.widget.RecyclerView>
-</LinearLayout>
+        android:layout_below="@+id/main_title"
+        android:src="@drawable/rect_lay"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/main_title"
+        android:paddingTop="10dp"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="Тренировки на этой неделе"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:id="@+id/week_workouts"
+            android:textColor="@android:color/black"
+            android:textSize="20dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="@color/colorDivider"
+            android:layout_marginBottom="10dp"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/week_rec"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:visibility="visible" />
+    </LinearLayout>
+</RelativeLayout>
     </LinearLayout>
     </ScrollView>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

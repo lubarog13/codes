@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -28,6 +31,8 @@ import com.example.traininglog.ui.HomeActivity;
 import com.example.traininglog.utils.ApiUtils;
 import com.jakewharton.rxbinding3.widget.RxTextView;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Objects;
 
 public class AuthFragment extends PresenterFragment implements AuthView, Refreshable {
@@ -38,6 +43,7 @@ public class AuthFragment extends PresenterFragment implements AuthView, Refresh
     private Button enter;
     private EditText login;
     private TextView mErrorText;
+    private TextView mSystem;
     @InjectPresenter
     AuthPresenter mPresenter;
 
@@ -76,6 +82,24 @@ public class AuthFragment extends PresenterFragment implements AuthView, Refresh
         mPresenter.login = RxTextView.textChanges(login).map(CharSequence::toString);
         mPresenter.password = RxTextView.textChanges(password).map(CharSequence::toString);
         mErrorText = getActivity().findViewById(R.id.error_text);
+        mSystem = getActivity().findViewById(R.id.system);
+        Typeface typeFace=Typeface.createFromAsset(getActivity().getAssets(),"fonts/Caveat-VariableFont_wght.ttf");
+        mSystem.setTypeface(typeFace);
+        ImageView imageView = getActivity().findViewById(R.id.auth_image);
+        try
+        {
+            // get input stream
+            InputStream ims = getActivity().getAssets().open("iPhone SE - 1.png");
+            // load image as Drawable
+            Drawable d = Drawable.createFromStream(ims, null);
+            // set image to ImageView
+            imageView.setImageDrawable(d);
+            ims .close();
+        }
+        catch(IOException ex)
+        {
+
+        }
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
