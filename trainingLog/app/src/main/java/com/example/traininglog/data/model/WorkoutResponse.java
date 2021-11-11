@@ -15,4 +15,8 @@ public class WorkoutResponse {
     public void setWorkouts(List<Workout> workouts) {
         this.workouts = workouts;
     }
+
+    public WorkoutResponse(List<Workout> workouts) {
+        this.workouts = workouts;
+    }
 }

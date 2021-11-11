@@ -1,20 +1,36 @@
 package com.example.traininglog.data.model;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 
+@Entity
 public class Club {
+    @ColumnInfo(name = "id")
+    @PrimaryKey
     @SerializedName("id")
     private int id;
     @SerializedName("identifier")
+    @ColumnInfo(name = "identifier")
     private String identifier;
     @SerializedName("name")
+    @ColumnInfo(name = "name")
     private String name;
     @SerializedName("group")
+    @ColumnInfo(name = "group")
     private String group;
     @SerializedName("coach")
+    @Ignore
     private Coach coach;
     @SerializedName("building")
+    @Ignore
     private Building building;
+
+
 
     public Club(int id) {
         this.id = id;
@@ -87,4 +103,5 @@ public class Club {
     public void setBuilding(Building building) {
         this.building = building;
     }
+
 }

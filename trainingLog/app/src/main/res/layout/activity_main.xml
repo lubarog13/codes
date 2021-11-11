@@ -91,14 +91,16 @@
         android:rowCount="3">
         <Button
             android:layout_width="100dp"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
             android:text="Вход"
             android:layout_column="0"
             android:layout_rowSpan="2"
             android:layout_marginTop="10dp"
             android:id="@+id/login"
+            android:fontFamily="@font/roboto_bold"
+            android:textAllCaps="false"
             android:textColor="@android:color/white"
-            android:background="@color/colorPrimaryDark"
+            android:background="@drawable/button_rect"
             android:layout_row="0"
             >
         </Button>

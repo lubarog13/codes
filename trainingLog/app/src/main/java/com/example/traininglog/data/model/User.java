@@ -1,27 +1,43 @@
 package com.example.traininglog.data.model;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
+@Entity
 public class User {
+    @ColumnInfo(name = "id")
+    @PrimaryKey
     @SerializedName("id")
     private int id;
     @SerializedName("first_name")
+    @ColumnInfo(name = "first_name")
     private String first_name;
     @SerializedName("last_name")
+    @ColumnInfo(name = "last_name")
     private String last_name;
     @SerializedName("second_name")
+    @ColumnInfo(name = "second_name")
     private String second_name;
     @SerializedName("email")
+    @ColumnInfo(name = "email")
     private String email;
     @SerializedName("date_birth")
+    @Ignore
     private Date date_birth;
     @SerializedName("sex")
+    @ColumnInfo(name = "sex")
     private String sex;
     @SerializedName("is_coach")
+    @ColumnInfo(name = "is_coach")
     private boolean is_coach;
     @SerializedName("username")
+    @ColumnInfo(name = "username")
     private String username;
 
     public User(int id, String first_name, String last_name, String second_name, String email, Date date_birth, String sex, boolean is_coach, String username) {
@@ -99,7 +115,7 @@ public class User {
         this.sex = sex;
     }
 
-    public boolean Is_coach() {
+    public boolean getIs_coach() {
         return is_coach;
     }
 

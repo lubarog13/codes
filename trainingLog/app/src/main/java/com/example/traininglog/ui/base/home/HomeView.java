@@ -13,4 +13,5 @@ public interface HomeView extends BaseView {
     void saveWorkouts(List<Workout> workouts);
     void updatePresence(boolean is_attend);
     void showPresences(List<Presence_W_N> presences);
+    void showNetworkError();
 }

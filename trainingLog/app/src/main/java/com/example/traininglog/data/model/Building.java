@@ -1,17 +1,28 @@
 package com.example.traininglog.data.model;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 
+@Entity
 public class Building {
+    @ColumnInfo(name = "id")
+    @PrimaryKey
     @SerializedName("id")
     private int id;
     @SerializedName("city")
+    @ColumnInfo(name = "city")
     private String city;
     @SerializedName("address")
+    @ColumnInfo(name = "address")
     private String address;
     @SerializedName("number")
+    @ColumnInfo(name = "number")
     private int number;
     @SerializedName("liter")
+    @ColumnInfo(name = "liter")
     private String liter;
 
     public Building(int id) {

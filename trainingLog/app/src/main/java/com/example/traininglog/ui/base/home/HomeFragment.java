@@ -1,5 +1,6 @@
 package com.example.traininglog.ui.base.home;
 
+import android.content.Context;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +25,7 @@ import com.example.traininglog.R;
 import com.example.traininglog.common.PresenterFragment;
 import com.example.traininglog.common.RefreshOwner;
 import com.example.traininglog.common.Refreshable;
+import com.example.traininglog.data.Storage;
 import com.example.traininglog.data.model.Presence;
 import com.example.traininglog.data.model.Presence_W_N;
 import com.example.traininglog.data.model.Workout;
@@ -40,11 +43,21 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
     private RecyclerView mRecyclerView;
     private View mErrorView;
     private View mHomeView;
+    private Storage mStorage;
     private WorkoutAdapter mWorkoutAdapter;
 
     @ProvidePresenter
     HomePresenter providePresenter() {
-        return new HomePresenter();
+        return new HomePresenter(mStorage);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Storage.StorageOwner) {
+            Log.e("m", "mStorage");
+            mStorage = ((Storage.StorageOwner) context).obtainStorage();
+        }
     }
 
     @Nullable
@@ -154,6 +167,11 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
     }
 
     @Override
+    public void showNetworkError() {
+        Toast.makeText(getActivity(), "Ошибка интернет-соединения", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void onItemClick(int workout_id, boolean is_attend) {
         if (is_attend) {
             mPresenter.setPresence(workout_id);
@@ -166,4 +184,11 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
     public void onPresencesClick(int workout_id) {
         mPresenter.getPresences(workout_id);
     }
+
+    @Override
+    public void onDetach() {
+        mStorage = null;
+        super.onDetach();
+    }
+
 }

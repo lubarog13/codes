@@ -27,6 +27,12 @@ public class AuthPresenter extends BasePresenter<AuthView> {
     }
 
     public void logIn() {
+        if(sp.contains("id")){
+            ApiUtils.user_id = sp.getInt("id", 0);
+            ApiUtils.token = sp.getString("token", "");
+            getViewState().showSuccess(new AuthUser(ApiUtils.token));
+            return;
+        }
          mCompositeDisposable.add(
             ApiUtils.getApiService().auth(new AuthUser(login.blockingFirst(), password.blockingFirst()))
                 .subscribeOn(Schedulers.io())
@@ -41,6 +47,9 @@ public class AuthPresenter extends BasePresenter<AuthView> {
     }
 
     public void getUser() {
+        if(!ApiUtils.token.equals("")){
+            getViewState().navigateHome();
+        }
         mCompositeDisposable.add(
                 ApiUtils.getApiService().me()
                         .subscribeOn(Schedulers.io())
@@ -64,7 +73,7 @@ public class AuthPresenter extends BasePresenter<AuthView> {
         editor.putString("sex", user.getSex());
         editor.putString("date_birth", user.getDate_birth().toString());
         editor.putString("username", user.getUsername());
-        editor.putBoolean("is_coach", user.Is_coach());
+        editor.putBoolean("is_coach", user.getIs_coach());
         editor.putString("token", ApiUtils.token);
         ApiUtils.user_id = user.getId();
         editor.apply();

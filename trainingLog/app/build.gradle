@@ -13,7 +13,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField "String", "API_URL", '"https://4771-178-66-158-242.ngrok.io/"'
+        buildConfigField "String", "API_URL", '"https://7cb6-77-234-203-154.ngrok.io/"'
     }
 
     buildTypes {
@@ -57,5 +57,8 @@ dependencies {
     annotationProcessor 'com.arello-mobile:moxy-compiler:1.5.3'
     implementation 'com.arello-mobile:moxy-app-compat:1.5.3'
     implementation 'com.jakewharton.rxbinding3:rxbinding:3.0.0-alpha2'
+
+    implementation "android.arch.persistence.room:runtime:1.0.0"
+    annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
 
 }
