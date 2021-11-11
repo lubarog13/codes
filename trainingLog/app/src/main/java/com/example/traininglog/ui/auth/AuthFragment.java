@@ -19,6 +19,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
@@ -28,6 +30,8 @@ import com.example.traininglog.common.RefreshOwner;
 import com.example.traininglog.common.Refreshable;
 import com.example.traininglog.data.model.AuthUser;
 import com.example.traininglog.ui.HomeActivity;
+import com.example.traininglog.ui.registration.RegistrationFragment;
+import com.example.traininglog.ui.reset_password.ResetPasswordFragment;
 import com.example.traininglog.utils.ApiUtils;
 import com.jakewharton.rxbinding3.widget.RxTextView;
 
@@ -44,6 +48,9 @@ public class AuthFragment extends PresenterFragment implements AuthView, Refresh
     private EditText login;
     private TextView mErrorText;
     private TextView mSystem;
+    private TextView mRegistration;
+    private TextView mResetPassword;
+    private TextView mAsGuest;
     @InjectPresenter
     AuthPresenter mPresenter;
 
@@ -79,15 +86,25 @@ public class AuthFragment extends PresenterFragment implements AuthView, Refresh
         password = getActivity().findViewById(R.id.password_enter);
         sp = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
         mPresenter.setSharedPreferences(sp);
-        if(sp.contains("id")){
-            mPresenter.logIn();
-        }
+//        if(sp.contains("id")){
+//            mPresenter.logIn();
+//        }
         mPresenter.login = RxTextView.textChanges(login).map(CharSequence::toString);
         mPresenter.password = RxTextView.textChanges(password).map(CharSequence::toString);
         mErrorText = getActivity().findViewById(R.id.error_text);
         mSystem = getActivity().findViewById(R.id.system);
         Typeface typeFace=Typeface.createFromAsset(getActivity().getAssets(),"fonts/Caveat-VariableFont_wght.ttf");
         mSystem.setTypeface(typeFace);
+        mRegistration = getActivity().findViewById(R.id.reg);
+        mRegistration.setOnClickListener(view -> this.changeFragment(RegistrationFragment.class));
+        mResetPassword = getActivity().findViewById(R.id.set_pass);
+        mResetPassword.setOnClickListener(view -> this.changeFragment(ResetPasswordFragment.class));
+        mAsGuest = getActivity().findViewById(R.id.incognito);
+        mAsGuest.setOnClickListener(view -> {
+            login.setText("default");
+            password.setText("guest_0_0");
+            mPresenter.logIn();
+        });
         ImageView imageView = getActivity().findViewById(R.id.auth_image);
         try
         {
@@ -127,7 +144,7 @@ public class AuthFragment extends PresenterFragment implements AuthView, Refresh
     public void showSuccess(AuthUser user) {
         ApiUtils.token = user.getAuth_token();
         this.mErrorText.setText("Отлично! Вы вошли!");
-        this.mErrorText.setTextColor(R.color.colorGreen);
+        this.mErrorText.setTextColor(R.color.colorDivider);
         mPresenter.getUser();
     }
 
@@ -159,5 +176,15 @@ public class AuthFragment extends PresenterFragment implements AuthView, Refresh
     @Override
     public void hideRefresh() {
         mRefreshOwner.setRefreshState(false);
+    }
+
+    private void changeFragment(Class fragmentClass){
+        Fragment fragment = null;
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ((MainActivity) getActivity()).changeFragment(fragment);
     }
 }
