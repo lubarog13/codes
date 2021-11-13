@@ -28,7 +28,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AboutComponent } from './about/about.component';
+import { HttpClientModule } from '@angular/common/http'
 import { HomeComponent } from './home/home.component';
+import { baseURL } from './shared/baseurl';
 import { ContactComponent } from './contact/contact.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
@@ -52,11 +54,16 @@ import { LoginComponent } from './login/login.component';
     MatCheckboxModule,
     MatButtonModule,
     MatListModule,
+    HttpClientModule,
     FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [DishService, LeaderService, PromotionService],
+  providers: [DishService, 
+    LeaderService, 
+    PromotionService,  
+    {provide: 'BaseURL', useValue: baseURL},
+  ],
   declarations: [
     AppComponent,
     MenuComponent,

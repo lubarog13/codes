@@ -86,9 +86,9 @@ public class AuthFragment extends PresenterFragment implements AuthView, Refresh
         password = getActivity().findViewById(R.id.password_enter);
         sp = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
         mPresenter.setSharedPreferences(sp);
-//        if(sp.contains("id")){
-//            mPresenter.logIn();
-//        }
+        if(sp.contains("id")){
+            mPresenter.logIn();
+        }
         mPresenter.login = RxTextView.textChanges(login).map(CharSequence::toString);
         mPresenter.password = RxTextView.textChanges(password).map(CharSequence::toString);
         mErrorText = getActivity().findViewById(R.id.error_text);

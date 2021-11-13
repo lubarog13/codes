@@ -28,16 +28,11 @@ public class HomeActivity extends AppCompatActivity implements Storage.StorageOw
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         BottomNavigationView navView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        Log.e("NotErr", "NotErr");
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Log.e("NotErr", "NotErr");
-        ActionBar actionBar= this.getSupportActionBar();
-        Log.e("NotErr", "NotErr");
-        assert actionBar != null;
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        this.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        this.getSupportActionBar().setDisplayShowCustomEnabled(true);
+        this.getSupportActionBar().setCustomView(R.layout.custom_action_bar_layout);
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_week, R.id.navigation_shedule, R.id.navigation_log, R.id.navigation_analysis, R.id.navigation_profile)
                 .build();

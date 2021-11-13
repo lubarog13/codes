@@ -12,4 +12,5 @@
     <color name="ok_green">#D1F5D7</color>
     <color name="not_pink">#FFDBDB</color>
     <color name="colorDivider">#DFDFDF</color>
+    <color name="blueDivider">#520066FF</color>
 </resources>

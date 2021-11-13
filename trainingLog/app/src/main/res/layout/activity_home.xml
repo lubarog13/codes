@@ -8,19 +8,11 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        style="@style/Toolbar"
         android:layout_width="match_parent"
         android:background="@color/colorPrimaryDark"
-        android:layout_height="40dp"
+        android:layout_height="20dp"
+        android:gravity="center_vertical"
         app:layout_constraintTop_toTopOf="parent">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_vectormessage"
-            android:id="@+id/menu_message"
-            android:contentDescription="TODO">
-        </ImageView>
-
     </androidx.appcompat.widget.Toolbar>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -41,6 +33,7 @@
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="18dp"
         app:defaultNavHost="true"
         app:layout_constraintBottom_toTopOf="@id/nav_view"
         app:layout_constraintLeft_toLeftOf="parent"

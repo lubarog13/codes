@@ -33,4 +33,7 @@ public interface EsheduleApi {
 
     @GET("workout/{workout_id}/presences/")
     Single<PresenceResponse> getPresencesForWorkout(@Path("workout_id") int workout_id);
+
+    @POST("auth/token/logout/")
+    Completable logout();
 }

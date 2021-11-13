@@ -5,6 +5,11 @@
       <map>
         <entry key="app/src/main/res/drawable/button_rect.xml" value="0.19479166666666667" />
         <entry key="app/src/main/res/drawable/ic_auth.xml" value="0.2046875" />
+        <entry key="app/src/main/res/drawable/ic_groupfball.xml" value="0.36923076923076925" />
+        <entry key="app/src/main/res/drawable/ic_profile.xml" value="0.36923076923076925" />
+        <entry key="app/src/main/res/drawable/ic_vectorbball.xml" value="0.36923076923076925" />
+        <entry key="app/src/main/res/drawable/profile_alpha_rect.xml" value="0.36923076923076925" />
+        <entry key="app/src/main/res/drawable/profile_rect.xml" value="0.36923076923076925" />
         <entry key="app/src/main/res/drawable/rect.xml" value="0.20052083333333334" />
         <entry key="app/src/main/res/drawable/rect_lay.xml" value="0.20052083333333334" />
         <entry key="app/src/main/res/font/caveat.xml" value="0.21458333333333332" />
@@ -12,12 +17,17 @@
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.18958333333333333" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.19427083333333334" />
         <entry key="app/src/main/res/layout/content_home.xml" value="0.19947916666666668" />
+        <entry key="app/src/main/res/layout/custom_action_bar_layout.xml" value="0.30434782608695654" />
         <entry key="app/src/main/res/layout/error_view.xml" value="0.19427083333333334" />
+        <entry key="app/src/main/res/layout/fragment_container.xml" value="0.20416666666666666" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.18854166666666666" />
+        <entry key="app/src/main/res/layout/fragment_notifications.xml" value="0.20923913043478262" />
+        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.20923913043478262" />
         <entry key="app/src/main/res/layout/home_workout.xml" value="0.19427083333333334" />
         <entry key="app/src/main/res/layout/is_attend_layout.xml" value="0.19427083333333334" />
         <entry key="app/src/main/res/layout/is_not_attend_layout.xml" value="0.19427083333333334" />
         <entry key="app/src/main/res/layout/who_attend_layout.xml" value="0.18854166666666666" />
+        <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.35885416666666664" />
         <entry key="app/src/main/res/menu/main_menu.xml" value="0.18958333333333333" />
       </map>
     </option>
