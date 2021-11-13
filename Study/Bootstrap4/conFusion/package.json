@@ -1,0 +1,34 @@
+{
+  "name": "confusion",
+  "version": "1.0.0",
+  "description": "This is a website for Ristorante Con Fusion",
+  "main": "index.html",
+  "scripts": {
+    "start": "npm run lite",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lite": "lite-server",
+    "scss": "node-sass -w scss/ -o css/"
+  },
+  "author": "lubarog13",
+  "license": "ISC",
+  "devDependencies": {
+    "lite-server": "^2.6.1",
+    "node-sass": "^6.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lubarog13/bootstap4.git"
+  },
+  "keywords": [
+    "hello"
+  ],
+  "bugs": {
+    "url": "https://github.com/lubarog13/bootstap4/issues"
+  },
+  "homepage": "https://github.com/lubarog13/bootstap4#readme",
+  "dependencies": {
+    "bootstrap": "^4.6.0",
+    "bootstrap-social": "^5.1.1",
+    "font-awesome": "^4.7.0"
+  }
+}

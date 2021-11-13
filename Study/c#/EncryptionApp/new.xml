@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<customers xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <customer>
+    <name>
+      Bob Smith
+    </name>
+    <creditcard>8KgUo2bPUOXlOlbNNP1DQcnXJWhLIuIgPFGc9phUppbBM0OjJOM8K9nKfKzQBtC5mQwSD9q+RSsx4PRlIY/sAQ==</creditcard>
+    <password>UwUwMV1DTFaD8cXUgB6Qsv/Z3/q/XMHKJuVkJ2QOYGg=</password>
+  </customer>
+  <customer>
+    <name>
+      Alice Franclin
+    </name>
+    <creditcard>8MCNeuyFUqln1vY/zOb+Jh8hEL+n2gkB8bieGwWw1I9TTxCV8Z8Xza5uRFFziCIVVAbGK1jefQVvNYBV5Y8flQ==</creditcard>
+    <password>ouXeW2zKxghnasW0pCjAgNqvLVozniidFjZzZ+zwBzs=</password>
+  </customer>
+</customers>

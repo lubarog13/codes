@@ -1,0 +1,1 @@
+C:\Users\DNS\Desktop\VS_code\Study\NETApp\NETApp.csproj;x64

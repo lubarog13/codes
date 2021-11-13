@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="preloaded_fonts" translatable="false">
+        <item>@font/bad_script</item>
+        <item>@font/caveat</item>
+        <item>@font/caveat_bold</item>
+        <item>@font/caveat_brush</item>
+        <item>@font/marck_script</item>
+        <item>@font/neucha</item>
+        <item>@font/roboto_bold</item>
+        <item>@font/roboto_mono_medium</item>
+        <item>@font/stalinist_one</item>
+    </array>
+</resources>

@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">MyFirstApplication</string>
+    <string name="email_hint">Логин</string>
+    <string name="password">Пароль</string>
+    <string name="password_enter">Введите пароль</string>
+    <string name="password_enter_again">Введите пароль ещё раз</string>
+    <string name="enter">Войти</string>
+    <string name="registration">Зарегистрироваться</string>
+    <string name="input_error">Ошибка ввода данных!</string>
+    <string name="email">Email</string>
+    <string name="request_error">Ошибка выполнения запроса!</string>
+    <string name="registration_error">Ошибка регистрации!</string>
+    <string name="registration_success">Успешно!</string>
+    <string name="logout">Логаут</string>
+    <string name="auth_error">Ошибка авторизации. Неверный логин или пароль.</string>
+    <string name="name">Имя</string>
+    <string name="albums">Альбомы</string>
+
+    <string name="response_code_204">Успешная регистрация</string>
+    <string name="response_code_400">Ошибка валидации</string>
+    <string name="response_code_404">Альбома не существует</string>
+
+</resources>

@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ResyclerView</string>
+    <string name="image_item">Элемент с картинкой</string>
+    <string name="description_item">Элемент с текстом</string>
+</resources>

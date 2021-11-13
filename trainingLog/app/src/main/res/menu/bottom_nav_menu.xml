@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_week"
+        android:icon="@drawable/ic_vectorhouse"
+
+        android:title="Неделя" />
+
+    <item
+        android:id="@+id/navigation_log"
+        android:icon="@drawable/ic_bi_calendar_week"
+        android:title="Расписание" />
+
+    <item
+        android:id="@+id/navigation_shedule"
+        android:icon="@drawable/ic_frame_4"
+        android:title="Журнал" />
+    <item
+        android:id="@+id/navigation_analysis"
+        android:icon="@drawable/ic_vector"
+        android:title="Анализ" />
+
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/ic_groupprofile"
+        android:title="Профиль"/>
+</menu>

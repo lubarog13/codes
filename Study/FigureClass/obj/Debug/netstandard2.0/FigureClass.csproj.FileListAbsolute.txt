@@ -1,0 +1,8 @@
+C:\Users\DNS\Desktop\VS_code\Study\FigureClass\obj\Debug\netstandard2.0\FigureClass.csprojAssemblyReference.cache
+C:\Users\DNS\Desktop\VS_code\Study\FigureClass\obj\Debug\netstandard2.0\FigureClass.AssemblyInfoInputs.cache
+C:\Users\DNS\Desktop\VS_code\Study\FigureClass\obj\Debug\netstandard2.0\FigureClass.AssemblyInfo.cs
+C:\Users\DNS\Desktop\VS_code\Study\FigureClass\bin\Debug\netstandard2.0\FigureClass.deps.json
+C:\Users\DNS\Desktop\VS_code\Study\FigureClass\bin\Debug\netstandard2.0\FigureClass.dll
+C:\Users\DNS\Desktop\VS_code\Study\FigureClass\bin\Debug\netstandard2.0\FigureClass.pdb
+C:\Users\DNS\Desktop\VS_code\Study\FigureClass\obj\Debug\netstandard2.0\FigureClass.dll
+C:\Users\DNS\Desktop\VS_code\Study\FigureClass\obj\Debug\netstandard2.0\FigureClass.pdb

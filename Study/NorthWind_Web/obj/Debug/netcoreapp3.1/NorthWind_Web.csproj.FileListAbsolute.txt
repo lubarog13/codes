@@ -1,0 +1,17 @@
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\bin\Debug\netcoreapp3.1\appsettings.Development.json
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\bin\Debug\netcoreapp3.1\appsettings.json
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\bin\Debug\netcoreapp3.1\NorthWind_Web.exe
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\bin\Debug\netcoreapp3.1\NorthWind_Web.deps.json
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\bin\Debug\netcoreapp3.1\NorthWind_Web.runtimeconfig.json
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\bin\Debug\netcoreapp3.1\NorthWind_Web.runtimeconfig.dev.json
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\bin\Debug\netcoreapp3.1\NorthWind_Web.dll
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\bin\Debug\netcoreapp3.1\NorthWind_Web.pdb
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\obj\Debug\netcoreapp3.1\staticwebassets\NorthWind_Web.StaticWebAssets.Manifest.cache
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\obj\Debug\netcoreapp3.1\staticwebassets\NorthWind_Web.StaticWebAssets.xml
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\obj\Debug\netcoreapp3.1\NorthWind_Web.AssemblyInfoInputs.cache
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\obj\Debug\netcoreapp3.1\NorthWind_Web.AssemblyInfo.cs
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\obj\Debug\netcoreapp3.1\NorthWind_Web.RazorTargetAssemblyInfo.cache
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\obj\Debug\netcoreapp3.1\NorthWind_Web.dll
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\obj\Debug\netcoreapp3.1\NorthWind_Web.pdb
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\bin\Debug\netcoreapp3.1\libman.json

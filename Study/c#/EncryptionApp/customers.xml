@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<customers>
+  <customer  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <name>
+      Bob Smith
+    </name>
+    <creditcard>
+      1234-5678-9012-3456
+    </creditcard>
+  <password>
+    Pa$$W0RD
+  </password>
+  </customer>
+<customer>
+    <name>
+      Alice Franclin
+    </name>
+    <creditcard>
+      9876-5432-1098-7654
+    </creditcard>
+  <password>
+    SomeW0rd
+  </password>
+  </customer>
+</customers>

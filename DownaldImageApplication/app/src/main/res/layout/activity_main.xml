@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:id="@+id/image"
+        android:src="@mipmap/ic_launcher"
+        android:layout_marginBottom="10dp"/>
+
+    <EditText
+        android:layout_height="50dp"
+        android:layout_width="300dp"
+        android:hint="Введите ссылку на изображение"
+        android:id="@+id/edit_text"
+        android:layout_marginBottom="50dp"
+        android:text="https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="Скачать"
+            android:layout_marginEnd="30dp"
+            android:id="@+id/button1"/>
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="Установить"
+            android:id="@+id/button2"
+            android:enabled="false"
+            />
+
+    </LinearLayout>
+
+
+</LinearLayout>

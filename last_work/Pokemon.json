@@ -1,0 +1,28 @@
+{
+"pokemons" : [ 
+{
+ "Name":"Pikachu",
+ "HP":20,
+ "Attack":100,
+"Defense":30,
+ "Speed":200
+},
+{
+ "Name":"Genius",
+ "HP":45,
+ "Attack":0,
+"Defense":0,
+ "Speed":80, 
+ "Special Attack":150, 
+ "Special Defense":0
+},
+{
+ "Name":"Chamander",
+ "HP":200,
+ "Attack":50,
+"Defense":500,
+ "Speed":45
+}
+]
+
+}

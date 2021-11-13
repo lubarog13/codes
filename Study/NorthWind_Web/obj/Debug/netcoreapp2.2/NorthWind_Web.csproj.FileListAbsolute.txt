@@ -1,0 +1,17 @@
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\obj\Debug\netcoreapp2.2\NorthWind_Web.csprojAssemblyReference.cache
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\obj\Debug\netcoreapp2.2\NorthWind_Web.RazorAssemblyInfo.cache
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\obj\Debug\netcoreapp2.2\NorthWind_Web.RazorAssemblyInfo.cs
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\obj\Debug\netcoreapp2.2\NorthWind_Web.AssemblyInfoInputs.cache
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\obj\Debug\netcoreapp2.2\NorthWind_Web.AssemblyInfo.cs
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\bin\Debug\netcoreapp2.2\appsettings.Development.json
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\bin\Debug\netcoreapp2.2\appsettings.json
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\bin\Debug\netcoreapp2.2\libman.json
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\bin\Debug\netcoreapp2.2\Properties\launchSettings.json
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\bin\Debug\netcoreapp2.2\NorthWind_Web.deps.json
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\bin\Debug\netcoreapp2.2\NorthWind_Web.runtimeconfig.json
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\bin\Debug\netcoreapp2.2\NorthWind_Web.runtimeconfig.dev.json
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\bin\Debug\netcoreapp2.2\NorthWind_Web.dll
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\bin\Debug\netcoreapp2.2\NorthWind_Web.pdb
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\obj\Debug\netcoreapp2.2\NorthWind_Web.RazorTargetAssemblyInfo.cache
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\obj\Debug\netcoreapp2.2\NorthWind_Web.dll
+C:\Users\DNS\Desktop\VS_code\Study\NorthWind_Web\obj\Debug\netcoreapp2.2\NorthWind_Web.pdb

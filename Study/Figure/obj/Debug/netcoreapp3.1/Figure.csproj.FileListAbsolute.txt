@@ -1,0 +1,14 @@
+C:\Users\DNS\Desktop\VS_code\Study\Figure\bin\Debug\netcoreapp3.1\Figure.exe
+C:\Users\DNS\Desktop\VS_code\Study\Figure\bin\Debug\netcoreapp3.1\Figure.deps.json
+C:\Users\DNS\Desktop\VS_code\Study\Figure\bin\Debug\netcoreapp3.1\Figure.runtimeconfig.json
+C:\Users\DNS\Desktop\VS_code\Study\Figure\bin\Debug\netcoreapp3.1\Figure.runtimeconfig.dev.json
+C:\Users\DNS\Desktop\VS_code\Study\Figure\bin\Debug\netcoreapp3.1\Figure.dll
+C:\Users\DNS\Desktop\VS_code\Study\Figure\bin\Debug\netcoreapp3.1\Figure.pdb
+C:\Users\DNS\Desktop\VS_code\Study\Figure\bin\Debug\netcoreapp3.1\FigureClass.dll
+C:\Users\DNS\Desktop\VS_code\Study\Figure\bin\Debug\netcoreapp3.1\FigureClass.pdb
+C:\Users\DNS\Desktop\VS_code\Study\Figure\obj\Debug\netcoreapp3.1\Figure.csprojAssemblyReference.cache
+C:\Users\DNS\Desktop\VS_code\Study\Figure\obj\Debug\netcoreapp3.1\Figure.AssemblyInfoInputs.cache
+C:\Users\DNS\Desktop\VS_code\Study\Figure\obj\Debug\netcoreapp3.1\Figure.AssemblyInfo.cs
+C:\Users\DNS\Desktop\VS_code\Study\Figure\obj\Debug\netcoreapp3.1\Figure.csproj.CopyComplete
+C:\Users\DNS\Desktop\VS_code\Study\Figure\obj\Debug\netcoreapp3.1\Figure.dll
+C:\Users\DNS\Desktop\VS_code\Study\Figure\obj\Debug\netcoreapp3.1\Figure.pdb

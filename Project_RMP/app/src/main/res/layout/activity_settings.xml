@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#DCDCDC">
+    <Switch
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Push-уведомления"
+        android:paddingLeft="20dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:background="#FFFFFF"
+        android:textSize="14sp"
+        />
+    <Switch
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#FFFFFF"
+        android:text="Определять город автоматически"
+        android:paddingLeft="20dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:textSize="14sp"
+        />
+    <Switch
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#FFFFFF"
+        android:text="Вход по отпечатку пальца"
+        android:paddingLeft="20dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:textSize="14sp"
+        />
+    <Button
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:text="Сбросить авторизацию"
+        android:textAllCaps="false"
+        android:background="@android:color/holo_green_dark"
+        android:textColor="#FFFFFF"
+
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Версия приложения 4.41.2"
+        android:layout_gravity="center"
+        android:textColor="@android:color/background_dark"
+        android:layout_marginTop="350dp"
+
+        />
+
+</LinearLayout>
