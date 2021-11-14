@@ -165,6 +165,7 @@ public class AuthFragment extends PresenterFragment implements AuthView, Refresh
     @Override
     public void navigateHome() {
         Intent intent = new Intent(getActivity(), HomeActivity.class);
+        intent.putExtra("openhome", true);
         startActivity(intent);
     }
 

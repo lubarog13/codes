@@ -3,7 +3,9 @@ package com.example.traininglog.data.api;
 import com.example.traininglog.data.model.AuthUser;
 import com.example.traininglog.data.model.Presence;
 import com.example.traininglog.data.model.PresenceResponse;
+import com.example.traininglog.data.model.SignUpResponse;
 import com.example.traininglog.data.model.User;
+import com.example.traininglog.data.model.UserResponse;
 import com.example.traininglog.data.model.WorkoutResponse;
 
 import io.reactivex.Completable;
@@ -36,4 +38,10 @@ public interface EsheduleApi {
 
     @POST("auth/token/logout/")
     Completable logout();
+
+    @GET("user/{user_id}/sign_ups/")
+    Single<SignUpResponse> getSignUpsForUser(@Path("user_id") int user_id);
+
+    @GET("club/{club_id}/users/")
+    Single<UserResponse> getUsersForClub(@Path("club_id") int club_id);
 }

@@ -13,7 +13,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField "String", "API_URL", '"https://6380-178-66-131-98.ngrok.io/"'
+        buildConfigField "String", "API_URL", '"https://3f8c-178-66-131-98.ngrok.io/"'
     }
 
     buildTypes {
@@ -61,5 +61,6 @@ dependencies {
 
     implementation "android.arch.persistence.room:runtime:1.0.0"
     annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
+    implementation 'com.google.android.material:material:1.4.0'
 
 }

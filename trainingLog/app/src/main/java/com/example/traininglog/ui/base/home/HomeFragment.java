@@ -35,7 +35,7 @@ import java.io.InputStream;
 import java.util.List;
 
 
-public class HomeFragment extends PresenterFragment implements HomeView, Refreshable, RefreshOwner, SwipeRefreshLayout.OnRefreshListener, WorkoutAdapter.OnItemClickListener {
+public class HomeFragment extends PresenterFragment implements HomeView, Refreshable, WorkoutAdapter.OnItemClickListener {
     @InjectPresenter
     HomePresenter mPresenter;
 
@@ -45,6 +45,9 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
     private View mHomeView;
     private Storage mStorage;
     private WorkoutAdapter mWorkoutAdapter;
+    private RefreshOwner mRefreshOwner;
+
+    public static HomeFragment newInstance() {return new HomeFragment();}
 
     @ProvidePresenter
     HomePresenter providePresenter() {
@@ -57,6 +60,10 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
         if (context instanceof Storage.StorageOwner) {
             Log.e("m", "mStorage");
             mStorage = ((Storage.StorageOwner) context).obtainStorage();
+        }
+        if (context instanceof RefreshOwner) {
+            Log.e("m", "mRefreshOwner");
+            mRefreshOwner = ((RefreshOwner) context);
         }
     }
 
@@ -73,8 +80,6 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
         mRecyclerView = view.findViewById(R.id.week_rec);
         mErrorView = view.findViewById(R.id.errorView);
         mHomeView = view.findViewById(R.id.home_view);
-        mSwipeRefreshLayout = view.findViewById(R.id.home_refresher);
-        mSwipeRefreshLayout.setOnRefreshListener(this);
 
     }
 
@@ -82,15 +87,11 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mWorkoutAdapter = new WorkoutAdapter(this);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity()) {
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        };
-        mRecyclerView.setLayoutManager(linearLayoutManager);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
         mRecyclerView.setAdapter(mWorkoutAdapter);
+        mRecyclerView.setNestedScrollingEnabled(false);
+        mRecyclerView.setHasFixedSize(false);
         TextView textView = getActivity().findViewById(R.id.week_workouts);
         Typeface typeFace=Typeface.createFromAsset(getActivity().getAssets(),"fonts/BalsamiqSans-Bold.ttf");
         textView.setTypeface(typeFace);
@@ -119,12 +120,12 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
 
     @Override
     public void showRefresh() {
-        this.setRefreshState(true);
+        mRefreshOwner.setRefreshState(true);
     }
 
     @Override
     public void hideRefresh() {
-        this.setRefreshState(false);
+        mRefreshOwner.setRefreshState(false);
     }
 
     @Override
@@ -134,15 +135,7 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
         Log.e("err", throwable.getMessage());
     }
 
-    @Override
-    public void onRefresh() {
-        onRefreshData();
-    }
 
-    @Override
-    public void setRefreshState(boolean refreshing) {
-        mSwipeRefreshLayout.post(() -> mSwipeRefreshLayout.setRefreshing(refreshing));
-    }
 
     @Override
     public void onRefreshData() {
@@ -183,6 +176,11 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
     @Override
     public void onPresencesClick(int workout_id) {
         mPresenter.getPresences(workout_id);
+    }
+
+    @Override
+    public void removePresences(int workout_id) {
+        mWorkoutAdapter.removePresence(workout_id);
     }
 
     @Override

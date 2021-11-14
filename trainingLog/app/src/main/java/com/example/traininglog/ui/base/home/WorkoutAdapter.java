@@ -67,6 +67,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutHolder> {
 
         void onItemClick(int workout_id, boolean is_attend);
         void onPresencesClick(int workout_id);
+        void removePresences(int workout_id);
     }
 
     public void addPresences(List<Presence_W_N> presences) {
@@ -74,6 +75,11 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutHolder> {
             mPresences.put(presences.get(0).getWorkout(), presences);
             notifyDataSetChanged();
         }
+    }
+
+    public void removePresence(int workout_id) {
+        mPresences.remove(workout_id);
+        notifyDataSetChanged();
     }
 
 }

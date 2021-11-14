@@ -13,4 +13,6 @@
     <color name="not_pink">#FFDBDB</color>
     <color name="colorDivider">#DFDFDF</color>
     <color name="blueDivider">#520066FF</color>
+    <color name="colorDark">#3F51B5</color>
+    <color name="colorRedDark">#F8000D</color>
 </resources>

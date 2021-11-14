@@ -25,6 +25,7 @@ import com.example.traininglog.common.PresenterFragment;
 import com.example.traininglog.ui.HomeActivity;
 import com.example.traininglog.ui.auth.MainActivity;
 import com.example.traininglog.ui.base.home.HomePresenter;
+import com.example.traininglog.ui.base.profile.clubs.ClubsFragment;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -57,7 +58,6 @@ public class ProfileFragment extends PresenterFragment implements ProfileView {
     }
 
     public ProfileFragment() {
-        // Required empty public constructor
     }
 
     /**
@@ -69,7 +69,7 @@ public class ProfileFragment extends PresenterFragment implements ProfileView {
      * @return A new instance of fragment ProfileFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance(String param1, String param2) {
+    public static ProfileFragment newInstance() {
         return new ProfileFragment();
     }
 
@@ -93,6 +93,7 @@ public class ProfileFragment extends PresenterFragment implements ProfileView {
         mHalls = view.findViewById(R.id.halls);
         mCoaches = view.findViewById(R.id.coaches);
         mLogout = view.findViewById(R.id.logout);
+        mClubs.setOnClickListener(view1 -> changeFragment(ClubsFragment.class));
         mProfileImage = view.findViewById(R.id.profile_image);
         try
         {
@@ -140,6 +141,16 @@ public class ProfileFragment extends PresenterFragment implements ProfileView {
     public void goToAuth() {
         Intent intent = new Intent(getActivity(), MainActivity.class);
         startActivity(intent);
+    }
+
+    private void changeFragment(Class fragmentClass){
+        Fragment fragment = null;
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ((HomeActivity) getActivity()).changeFragment(fragment);
     }
 
 }

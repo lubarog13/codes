@@ -164,6 +164,7 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
                     onItemClickListener.onPresencesClick(item.getId());
                 } else {
                     mWhoGoView.setVisibility(View.GONE);
+                    onItemClickListener.removePresences(item.getId());
                     isWhoOpened=false;
                 }
             });

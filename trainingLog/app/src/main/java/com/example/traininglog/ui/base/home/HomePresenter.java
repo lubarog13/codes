@@ -5,6 +5,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.example.traininglog.common.BasePresenter;
 import com.example.traininglog.data.Storage;
 import com.example.traininglog.data.model.Presence;
+import com.example.traininglog.ui.HomeActivity;
 import com.example.traininglog.utils.ApiUtils;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -20,6 +21,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
     }
 
     public void getWorkouts() {
+        HomeActivity.is_firstOpened = false;
         mCompositeDisposable.add(
                 ApiUtils.getApiService().getWeekWorkouts(ApiUtils.user_id)
                 .subscribeOn(Schedulers.io())
