@@ -121,5 +121,12 @@
             android:id="@+id/coaches_category"
             android:layout_gravity="center_horizontal"
             android:visibility="gone"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="50dp"
+            android:id="@+id/buildings_category"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone"/>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

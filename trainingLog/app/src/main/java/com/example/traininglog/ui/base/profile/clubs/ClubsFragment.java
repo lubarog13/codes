@@ -12,11 +12,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
@@ -122,6 +127,23 @@ public class ClubsFragment extends PresenterFragment implements  Refreshable,  C
         mMyCategory.setTypeface(typeFace);
         mAllCategory.setTypeface(typeFace);
         mAllCategory.setOnClickListener(view -> changeFragment(AllClubsFragment.class));
+        mIdentifier.setOnEditorActionListener(
+                new EditText.OnEditorActionListener() {
+                    @Override
+                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                        boolean handled = false;
+                        if (actionId == EditorInfo.IME_ACTION_SEND) {
+                            mPresenter.createSignup(mIdentifier.getText().toString());
+                            mIdentifier.setText("");
+                            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(mIdentifier.getWindowToken(), 0);
+                            mIdentifier.clearFocus();
+                            handled = true;
+                        }
+                        return handled;
+                    }
+                }
+        );
         onRefreshData();
     }
 
@@ -162,6 +184,16 @@ public class ClubsFragment extends PresenterFragment implements  Refreshable,  C
     @Override
     public void setUsers(List<User> users, int signup_id) {
         mAdapter.addUsers(signup_id, users);
+    }
+
+    @Override
+    public void showCreatingError(Throwable throwable) {
+        Toast.makeText(getActivity(), "Ошибка создания записи, возможно идентификатор неверен", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void updateSignUps(SignUp signUp) {
+        mAdapter.updateData(signUp);
     }
 
     @Override

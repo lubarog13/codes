@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.telecom.TelecomManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,26 +17,23 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.example.traininglog.R;
-import com.example.traininglog.common.BasePresenter;
 import com.example.traininglog.common.PresenterFragment;
 import com.example.traininglog.common.RefreshOwner;
 import com.example.traininglog.common.Refreshable;
+import com.example.traininglog.data.model.Building;
 import com.example.traininglog.data.model.Club;
 import com.example.traininglog.data.model.Coach;
 import com.example.traininglog.ui.HomeActivity;
 import com.example.traininglog.ui.base.profile.clubs.ClubsFragment;
-import com.example.traininglog.ui.base.profile.clubs.ClubsPresenter;
+import com.example.traininglog.ui.base.profile.clubs.all_clubs.buildings.BuildingAdapter;
+import com.example.traininglog.ui.base.profile.clubs.all_clubs.coaches.CoachesAdapter;
 
-import java.io.IOException;
-import java.nio.CharBuffer;
 import java.util.List;
 
 /**
@@ -45,7 +41,7 @@ import java.util.List;
  * Use the {@link AllClubsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AllClubsFragment extends PresenterFragment implements Refreshable, AllClubsView, CoachesAdapter.OnItemClickListener {
+public class AllClubsFragment extends PresenterFragment implements Refreshable, AllClubsView, CoachesAdapter.OnItemClickListener, BuildingAdapter.OnItemClickListener {
     private RecyclerView mRecyclerView;
     private View mErrorView;
     private Button mMyCategory;
@@ -59,8 +55,11 @@ public class AllClubsFragment extends PresenterFragment implements Refreshable, 
     private int mCoachId;
     private View mCoachInfo;
     private TextView mCoachName;
+    private RecyclerView mBuildingsRecycler;
+    private BuildingAdapter mBuildingAdapter;
     private Button mSendMessageButton;
     private AllClubsAdapter mAdapter;
+    private int mBuildingId;
     @InjectPresenter
     AllClubsPresenter mPresenter;
 
@@ -116,6 +115,7 @@ public class AllClubsFragment extends PresenterFragment implements Refreshable, 
         mCoachInfo = view.findViewById(R.id.coach_info);
         mCoachName = view.findViewById(R.id.coach_selected_name);
         mSendMessageButton = view.findViewById(R.id.message_coach_create);
+        mBuildingsRecycler = view.findViewById(R.id.buildings_category);
     }
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -141,6 +141,10 @@ public class AllClubsFragment extends PresenterFragment implements Refreshable, 
                                 onRefreshData();
                                 break;
                             case "По зданиям":
+                                category = "buildings";
+                                mRecyclerView.setVisibility(View.GONE);
+                                mCoachRecycler.setVisibility(View.GONE);
+                                onRefreshData();
                                 break;
                         }
                     }
@@ -160,9 +164,15 @@ public class AllClubsFragment extends PresenterFragment implements Refreshable, 
         mCoachRecycler.setNestedScrollingEnabled(false);
         mCoachRecycler.setAdapter(mCoachAdapter);
         mCoachRecycler.setHasFixedSize(false);
+        mBuildingAdapter = new BuildingAdapter(this);
+        mBuildingsRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mBuildingsRecycler.setNestedScrollingEnabled(false);
+        mBuildingsRecycler.setAdapter(mBuildingAdapter);
+        mBuildingsRecycler.setHasFixedSize(false);
         Typeface typeFace=Typeface.createFromAsset(getActivity().getAssets(),"fonts/BalsamiqSans-Bold.ttf");
         mMyCategory.setTypeface(typeFace);
         mAllCategory.setTypeface(typeFace);
+        mCoachName.setTypeface(typeFace);
     }
 
     @Override
@@ -181,6 +191,7 @@ public class AllClubsFragment extends PresenterFragment implements Refreshable, 
         mCoachRecycler.setVisibility(View.GONE);
         Log.e("err", throwable.getMessage());
         mRecyclerView.setVisibility(View.GONE);
+        mBuildingsRecycler.setVisibility(View.GONE);
     }
 
     @Override
@@ -197,8 +208,16 @@ public class AllClubsFragment extends PresenterFragment implements Refreshable, 
 
     @Override
     public void showCoaches(List<Coach> coaches) {
+        mErrorView.setVisibility(View.GONE);
         mCoachRecycler.setVisibility(View.VISIBLE);
         mCoachAdapter.addData(coaches, true);
+    }
+
+    @Override
+    public void showBuildings(List<Building> buildings) {
+        mErrorView.setVisibility(View.GONE);
+        mBuildingAdapter.addData(buildings, true);
+        mBuildingsRecycler.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -215,6 +234,14 @@ public class AllClubsFragment extends PresenterFragment implements Refreshable, 
             case "coach_clubs":
                 mCoachRecycler.setVisibility(View.GONE);
                 mPresenter.getClubsForCoach(mCoachId);
+                break;
+            case "buildings":
+                mCoachInfo.setVisibility(View.GONE);
+                mPresenter.getBuildings();
+                break;
+            case "building_clubs":
+                mBuildingsRecycler.setVisibility(View.GONE);
+                mPresenter.getClubsForBuilding(mBuildingId);
                 break;
             default:
                 break;
@@ -236,6 +263,17 @@ public class AllClubsFragment extends PresenterFragment implements Refreshable, 
         mCoachId = coach.getId();
         mCoachName.setText(String.format("%s %s. %s.", coach.getUser().getLast_name(), coach.getUser().getFirst_name().charAt(0), coach.getUser().getSecond_name().charAt(0)));
         mCoachInfo.setVisibility(View.VISIBLE);
+        mSendMessageButton.setVisibility(View.VISIBLE);
+        onRefreshData();
+    }
+
+    @Override
+    public void onBuildingClick(Building building, String name) {
+        category = "building_clubs";
+        mBuildingId = building.getId();
+        mCoachName.setText(name);
+        mCoachInfo.setVisibility(View.VISIBLE);
+        mSendMessageButton.setVisibility(View.GONE);
         onRefreshData();
     }
 }

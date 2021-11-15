@@ -1,11 +1,16 @@
 package com.example.traininglog.data.api;
 
+import android.util.SizeF;
+
 import com.example.traininglog.data.model.AuthUser;
+import com.example.traininglog.data.model.Building;
 import com.example.traininglog.data.model.Club;
 import com.example.traininglog.data.model.ClubResponse;
 import com.example.traininglog.data.model.Coach;
 import com.example.traininglog.data.model.Presence;
 import com.example.traininglog.data.model.PresenceResponse;
+import com.example.traininglog.data.model.SignUp;
+import com.example.traininglog.data.model.SignUpForCreate;
 import com.example.traininglog.data.model.SignUpResponse;
 import com.example.traininglog.data.model.User;
 import com.example.traininglog.data.model.UserResponse;
@@ -59,4 +64,13 @@ public interface EsheduleApi {
 
     @GET("coach/{coach_id}/clubs/")
     Single<ClubResponse> getClubsForCoach(@Path("coach_id") int coach_id);
+
+    @GET("buildings/")
+    Single<List<Building>> getBuildings();
+
+    @GET("building/{building_id}/clubs/")
+    Single<ClubResponse> getClubsForBuilding(@Path("building_id") int building_id);
+
+    @POST("signup/create/")
+    Single<SignUp> createSignUp(@Body SignUpForCreate signUp);
 }

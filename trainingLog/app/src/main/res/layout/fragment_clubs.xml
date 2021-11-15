@@ -87,6 +87,8 @@
             android:hint="  Введите идентификатор секции"
             android:fontFamily="@font/roboto_bold"
             android:textSize="14sp"
+            android:inputType="text"
+            android:imeOptions="actionSend"
             android:id="@+id/identifier"
             />
     </LinearLayout>

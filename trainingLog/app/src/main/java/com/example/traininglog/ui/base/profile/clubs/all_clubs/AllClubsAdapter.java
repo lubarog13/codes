@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.traininglog.R;
 import com.example.traininglog.data.model.Club;
+import com.example.traininglog.data.model.SignUp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,4 +40,5 @@ public class AllClubsAdapter extends RecyclerView.Adapter<AllClubsHolder> {
         mClubs.addAll(clubs);
         notifyDataSetChanged();
     }
+
 }

@@ -1,4 +1,4 @@
-package com.example.traininglog.ui.base.profile.clubs.all_clubs;
+package com.example.traininglog.ui.base.profile.clubs.all_clubs.coaches;
 
 import android.view.LayoutInflater;
 import android.view.View;

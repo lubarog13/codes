@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="building_names">
+        <item>СОК Ижорец</item>
+        <item>ВСОК Ижорец</item>
+        <item>Картодром "Ижорец"</item>
+        <item>Стадион "Искра"</item>
+        <item>Стадион "Парус"</item>
+        <item>ФОК "Ижорец" пос. Металлострой</item>
+        <item>СОК "Металлострой"</item>
+    </string-array>
+    <string-array name="addresses">
+        <item>Колпино, ул. Тверская, 25</item>
+        <item>Колпино, ул. Тверская, 27</item>
+        <item>Колпино, Саперный пер., 13</item>
+        <item>пос. Металлострой, ул. Садовая, 4</item>
+        <item>пос. Саперный, Лагерное шоссе, 11</item>
+        <item>пос. Металлострой, ул. Пушкинская, 3Б</item>
+        <item>пос. Металлострой, ул. Пушкинская, 3А</item>
+    </string-array>
+
+</resources>

@@ -72,4 +72,16 @@ public class ClubAdapter extends RecyclerView.Adapter<ClubHolder> {
         this.users.remove(signup_id);
         notifyDataSetChanged();
     }
+
+    public void updateData(SignUp signUp) {
+         for (int i=0; i<mSignups.size(); i++) {
+             if(signUp.getId()==mSignups.get(i).getId()){
+                 mSignups.set(i, signUp);
+                 notifyDataSetChanged();
+                 return;
+             }
+         }
+         mSignups.add(signUp);
+         notifyDataSetChanged();
+    }
 }

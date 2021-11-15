@@ -9,4 +9,6 @@ import java.util.List;
 public interface ClubsView extends BaseView {
      void setSignUps(List<SignUp> signUps);
      void setUsers(List<User> users, int signup_id);
+     void showCreatingError(Throwable throwable);
+     void updateSignUps(SignUp signUp);
 }
