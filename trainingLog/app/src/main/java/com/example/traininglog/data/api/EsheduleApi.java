@@ -1,6 +1,9 @@
 package com.example.traininglog.data.api;
 
 import com.example.traininglog.data.model.AuthUser;
+import com.example.traininglog.data.model.Club;
+import com.example.traininglog.data.model.ClubResponse;
+import com.example.traininglog.data.model.Coach;
 import com.example.traininglog.data.model.Presence;
 import com.example.traininglog.data.model.PresenceResponse;
 import com.example.traininglog.data.model.SignUpResponse;
@@ -8,7 +11,10 @@ import com.example.traininglog.data.model.User;
 import com.example.traininglog.data.model.UserResponse;
 import com.example.traininglog.data.model.WorkoutResponse;
 
+import java.util.List;
+
 import io.reactivex.Completable;
+import io.reactivex.Observable;
 import io.reactivex.Single;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -44,4 +50,13 @@ public interface EsheduleApi {
 
     @GET("club/{club_id}/users/")
     Single<UserResponse> getUsersForClub(@Path("club_id") int club_id);
+
+    @GET("clubs/")
+    Single<List<Club>> getClubs();
+
+    @GET("coaches/")
+    Single<List<Coach>> getCoaches();
+
+    @GET("coach/{coach_id}/clubs/")
+    Single<ClubResponse> getClubsForCoach(@Path("coach_id") int coach_id);
 }

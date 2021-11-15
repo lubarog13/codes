@@ -28,8 +28,11 @@ import com.example.traininglog.common.Refreshable;
 import com.example.traininglog.data.Storage;
 import com.example.traininglog.data.model.SignUp;
 import com.example.traininglog.data.model.User;
+import com.example.traininglog.ui.HomeActivity;
 import com.example.traininglog.ui.base.home.WorkoutAdapter;
 import com.example.traininglog.ui.base.profile.ProfilePresenter;
+import com.example.traininglog.ui.base.profile.clubs.all_clubs.AllClubsAdapter;
+import com.example.traininglog.ui.base.profile.clubs.all_clubs.AllClubsFragment;
 
 import java.util.List;
 
@@ -40,7 +43,6 @@ import java.util.List;
  */
 public class ClubsFragment extends PresenterFragment implements  Refreshable,  ClubsView, ClubAdapter.onItemClickListener {
 
-    private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
     private View mErrorView;
     private View mAddView;
@@ -119,6 +121,7 @@ public class ClubsFragment extends PresenterFragment implements  Refreshable,  C
         Typeface typeFace=Typeface.createFromAsset(getActivity().getAssets(),"fonts/BalsamiqSans-Bold.ttf");
         mMyCategory.setTypeface(typeFace);
         mAllCategory.setTypeface(typeFace);
+        mAllCategory.setOnClickListener(view -> changeFragment(AllClubsFragment.class));
         onRefreshData();
     }
 
@@ -174,5 +177,15 @@ public class ClubsFragment extends PresenterFragment implements  Refreshable,  C
     @Override
     public void hideUser(int signup_id) {
         mAdapter.removeUsers(signup_id);
+    }
+
+    private void changeFragment(Class fragmentClass){
+        Fragment fragment = null;
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ((HomeActivity) getActivity()).changeFragment(fragment);
     }
 }

@@ -50,7 +50,7 @@ public class ClubHolder extends RecyclerView.ViewHolder {
         mCoachName.setText(item.getClub().getCoach().getUser().getLast_name() + " "
                 + item.getClub().getCoach().getUser().getFirst_name().charAt(0) + "."
                 + item.getClub().getCoach().getUser().getSecond_name().substring(0,1) + ".");
-        mAddress.setText(item.getClub().getBuilding().getAddress());
+        mAddress.setText(item.getClub().getBuilding().getAddress() + ", "  + item.getClub().getBuilding().getNumber());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yy");
         mEndDate.setText(simpleDateFormat.format(item.getEnd_date()));
         if(users!=null) {

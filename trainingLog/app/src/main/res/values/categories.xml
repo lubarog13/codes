@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="categories">
+        <item>Все</item>
+        <item>По тренерам</item>
+        <item>По зданиям</item>
+    </string-array>
+</resources>
