@@ -10,8 +10,8 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:background="@color/colorPrimaryDark"
-        android:layout_height="20dp"
-        android:gravity="center_vertical"
+        android:layout_height="25dp"
+        android:gravity="top"
         app:layout_constraintTop_toTopOf="parent">
     </androidx.appcompat.widget.Toolbar>
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -39,7 +39,6 @@
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="20dp"
         android:visibility="visible"/>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

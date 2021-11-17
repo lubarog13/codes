@@ -7,20 +7,26 @@
         <entry key="app/src/main/res/drawable/button_rect.xml" value="0.19479166666666667" />
         <entry key="app/src/main/res/drawable/button_red.xml" value="0.21666666666666667" />
         <entry key="app/src/main/res/drawable/ic_auth.xml" value="0.2046875" />
+        <entry key="app/src/main/res/drawable/ic_ellipse_1.xml" value="0.19635416666666666" />
+        <entry key="app/src/main/res/drawable/ic_ellipse_2.xml" value="0.375" />
+        <entry key="app/src/main/res/drawable/ic_ellipse_3.xml" value="0.375" />
         <entry key="app/src/main/res/drawable/ic_groupfball.xml" value="0.36923076923076925" />
         <entry key="app/src/main/res/drawable/ic_profile.xml" value="0.36923076923076925" />
+        <entry key="app/src/main/res/drawable/ic_vector_6.xml" value="0.19635416666666666" />
         <entry key="app/src/main/res/drawable/ic_vectorbball.xml" value="0.36923076923076925" />
         <entry key="app/src/main/res/drawable/item_button_background.xml" value="0.2046875" />
         <entry key="app/src/main/res/drawable/profile_alpha_rect.xml" value="0.36923076923076925" />
         <entry key="app/src/main/res/drawable/profile_rect.xml" value="0.36923076923076925" />
         <entry key="app/src/main/res/drawable/rect.xml" value="0.20052083333333334" />
         <entry key="app/src/main/res/drawable/rect_lay.xml" value="0.20052083333333334" />
+        <entry key="app/src/main/res/drawable/selected_day.xml" value="0.20052083333333334" />
         <entry key="app/src/main/res/drawable/triangle.xml" value="0.20885416666666667" />
         <entry key="app/src/main/res/drawable/underline.xml" value="0.20885416666666667" />
         <entry key="app/src/main/res/font/caveat.xml" value="0.21458333333333332" />
         <entry key="app/src/main/res/font/caveat_my.xml" value="0.21458333333333332" />
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.18958333333333333" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.19427083333333334" />
+        <entry key="app/src/main/res/layout/calendar.xml" value="0.18020833333333333" />
         <entry key="app/src/main/res/layout/club_item_layout.xml" value="0.20052083333333334" />
         <entry key="app/src/main/res/layout/club_view.xml" value="0.2921195652173913" />
         <entry key="app/src/main/res/layout/content_home.xml" value="0.19947916666666668" />
@@ -33,6 +39,7 @@
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.18854166666666666" />
         <entry key="app/src/main/res/layout/fragment_notifications.xml" value="0.20923913043478262" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.20923913043478262" />
+        <entry key="app/src/main/res/layout/free_day_view.xml" value="0.25815217391304346" />
         <entry key="app/src/main/res/layout/home_workout.xml" value="0.19427083333333334" />
         <entry key="app/src/main/res/layout/is_attend_layout.xml" value="0.19427083333333334" />
         <entry key="app/src/main/res/layout/is_not_attend_layout.xml" value="0.19427083333333334" />

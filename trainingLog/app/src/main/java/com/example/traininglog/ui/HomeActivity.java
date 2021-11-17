@@ -14,9 +14,8 @@ import com.example.traininglog.R;
 import com.example.traininglog.common.RefreshOwner;
 import com.example.traininglog.common.Refreshable;
 import com.example.traininglog.data.Storage;
-import com.example.traininglog.ui.base.dashboard.DashboardFragment;
+import com.example.traininglog.ui.base.schedule.ScheduleFragment;
 import com.example.traininglog.ui.base.home.HomeFragment;
-import com.example.traininglog.ui.base.notifications.NotificationsFragment;
 import com.example.traininglog.ui.base.profile.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -24,13 +23,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.NavUtils;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class HomeActivity extends AppCompatActivity implements Storage.StorageOwner, RefreshOwner, SwipeRefreshLayout.OnRefreshListener {
@@ -50,13 +44,13 @@ public class HomeActivity extends AppCompatActivity implements Storage.StorageOw
                     changeFragment(HomeFragment.newInstance());
                     break;
                 case R.id.navigation_shedule:
-                    changeFragment(DashboardFragment.newInstance());
+                    changeFragment(ScheduleFragment.newInstance());
                     break;
                 case R.id.navigation_log:
-                    changeFragment(DashboardFragment.newInstance());
+                    changeFragment(ScheduleFragment.newInstance());
                     break;
                 case R.id.navigation_analysis:
-                    changeFragment(DashboardFragment.newInstance());
+                    changeFragment(ScheduleFragment.newInstance());
                     break;
                 case R.id.navigation_profile:
                     changeFragment(ProfileFragment.newInstance());

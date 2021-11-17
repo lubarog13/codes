@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/free_day"
+    android:gravity="center"
+    android:layout_height="300dp">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:id="@+id/free_image"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:text="В этот день \nтренировок нет!"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:fontFamily="@font/roboto_bold"
+        android:textColor="@color/colorSecondary"
+        android:textSize="24sp"/>
+</LinearLayout>

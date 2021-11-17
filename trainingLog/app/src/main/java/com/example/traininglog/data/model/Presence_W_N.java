@@ -10,7 +10,7 @@ public class Presence_W_N {
     @SerializedName("workout")
     private int workout;
     @SerializedName("is_attend")
-    private boolean is_attend;
+    private Boolean is_attend;
     @SerializedName("reason")
     private String reason;
     @SerializedName("delay")
@@ -63,7 +63,7 @@ public class Presence_W_N {
         return is_attend;
     }
 
-    public void setIs_attend(boolean is_attend) {
+    public void setIs_attend(Boolean is_attend) {
         this.is_attend = is_attend;
     }
 

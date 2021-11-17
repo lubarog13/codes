@@ -2,6 +2,8 @@ package com.example.traininglog.data.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Calendar;
+
 public class Presence {
     @SerializedName("id")
     private int id;
@@ -10,7 +12,7 @@ public class Presence {
     @SerializedName("workout")
     private Workout workout;
     @SerializedName("is_attend")
-    private boolean is_attend;
+    private Boolean is_attend;
     @SerializedName("reason")
     private String reason;
     @SerializedName("delay")
@@ -33,6 +35,12 @@ public class Presence {
     }
 
     public Presence() {
+    }
+
+    public boolean isInDay(Calendar calendar) {
+        Calendar calendar1 = Calendar.getInstance();
+        calendar1.setTime(this.workout.getStart_time());
+        return calendar.get(Calendar.DATE) == calendar1.get(Calendar.DATE);
     }
 
     public Presence(Boolean is_attend) {this.is_attend = is_attend;}
@@ -61,11 +69,11 @@ public class Presence {
         this.workout = workout;
     }
 
-    public boolean isIs_attend() {
+    public Boolean isIs_attend() {
         return is_attend;
     }
 
-    public void setIs_attend(boolean is_attend) {
+    public void setIs_attend(Boolean is_attend) {
         this.is_attend = is_attend;
     }
 

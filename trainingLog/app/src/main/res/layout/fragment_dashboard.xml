@@ -1,22 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.base.dashboard.DashboardFragment">
+    android:layout_height="wrap_content"
+    android:paddingTop="5dp"
+    android:layout_marginTop="40dp"
+    android:background="@color/colorPrimaryDark">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/white"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="410dp">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:id="@+id/schedule_image"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Расписание"
+            android:textSize="24sp"
+            android:fontFamily="@font/stalinist_one"
+            android:textColor="@android:color/black"
+            android:gravity="center"
+            android:layout_marginTop="20dp"/>
 
-    <TextView
-        android:id="@+id/text_dashboard"
+        <com.applandeo.materialcalendarview.CalendarView
+            android:id="@+id/calendarView"
+            android:layout_width="300dp"
+            android:layout_height="340dp"
+            android:layout_centerInParent="true"
+            android:paddingTop="40dp"
+            app:abbreviationsBarColor="#303F9F"
+            app:abbreviationsLabelsColor="@android:color/white"
+            app:daysLabelsColor="@android:color/white"
+            app:disabledDaysLabelsColor="@android:color/transparent"
+            app:eventsEnabled="true"
+            app:headerColor="#1A237E"
+            app:pagesColor="#3F51B5"
+            app:todayLabelColor="@android:color/white" />
+    </RelativeLayout>
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:paddingBottom="50dp"
+        android:id="@+id/schedule_recycler"/>
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        layout="@layout/error_view"/>
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        layout="@layout/free_day_view"/>
+</LinearLayout>
+</androidx.core.widget.NestedScrollView>

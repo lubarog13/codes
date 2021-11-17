@@ -12,7 +12,7 @@
 
     <fragment
         android:id="@+id/navigation_shedule"
-        android:name="com.example.traininglog.ui.base.dashboard.DashboardFragment"
+        android:name="com.example.traininglog.ui.base.schedule.ScheduleFragment"
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment

@@ -9,6 +9,7 @@ import com.example.traininglog.data.model.ClubResponse;
 import com.example.traininglog.data.model.Coach;
 import com.example.traininglog.data.model.Presence;
 import com.example.traininglog.data.model.PresenceResponse;
+import com.example.traininglog.data.model.PresencesResponse;
 import com.example.traininglog.data.model.SignUp;
 import com.example.traininglog.data.model.SignUpForCreate;
 import com.example.traininglog.data.model.SignUpResponse;
@@ -73,4 +74,8 @@ public interface EsheduleApi {
 
     @POST("signup/create/")
     Single<SignUp> createSignUp(@Body SignUpForCreate signUp);
+
+
+    @GET("user/{user_id}/presences/month/{month}/{year}")
+    Single<PresencesResponse> getPresencesForMonth(@Path("user_id") int user_id, @Path("month") int month, @Path("year") int year);
 }

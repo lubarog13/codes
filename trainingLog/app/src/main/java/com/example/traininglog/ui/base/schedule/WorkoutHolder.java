@@ -1,4 +1,4 @@
-package com.example.traininglog.ui.base.home;
+package com.example.traininglog.ui.base.schedule;
 
 import android.content.res.Resources;
 import android.text.Html;
@@ -15,6 +15,7 @@ import com.example.traininglog.data.model.Workout;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -28,7 +29,6 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
     private TextView mTime;
     private View mInfoView;
     private TextView mGroupName;
-    private View mMainView;
     private TextView mCoachName;
     private TextView mHallName;
     private TextView mTypeName;
@@ -43,9 +43,7 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
     private TextView mIsAttend;
     private TextView mNotAttend;
     private TextView mDatetime;
-    private String clubName;
     private View mTypeView;
-    private boolean is_opened = false;
     private Boolean is_attend;
     private boolean isWhoOpened = false;
 
@@ -62,7 +60,6 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
         mInfoView = itemView.findViewById(R.id.workout_info);
         mGroupName = itemView.findViewById(R.id.group_name);
         mCoachName = itemView.findViewById(R.id.coach_name);
-        mMainView = itemView.findViewById(R.id.home_main_view);
         mHallName = itemView.findViewById(R.id.hall_name);
         mTypeName  = itemView.findViewById(R.id.type_name);
         mButtonView = itemView.findViewById(R.id.go_buttons);
@@ -79,36 +76,13 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
         mDatetime = itemView.findViewById(R.id.train_datetime);
         mNotAttend = itemView.findViewById(R.id.is_not_attend_names);
         mTypeView = itemView.findViewById(R.id.workout_info_type);
-        mMainView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                OnItemClick();
-            }
-        });
+
         Log.e("time1", String.valueOf(System.currentTimeMillis() - startTime));
     }
 
-    public void bind(Workout item, boolean newDay, WorkoutAdapter.OnItemClickListener onItemClickListener, List<Presence_W_N> presences){
+    public void bind(Workout item, WorkoutAdapter.OnItemClickListener onItemClickListener, List<Presence_W_N> presences){
         long startTime =  System.currentTimeMillis();
-        mType.setBackgroundColor(mHallString.getColor(bindColor(item.getType())));
-        if(item.getClub().getName().length()>15) {
-            mName.setText(String.format("%s...", item.getClub().getName().substring(0, 15)));
-        } else {
-            mName.setText(item.getClub().getName());
-        }
-        clubName = item.getClub().getName();
-        mCountNotOn.setText(String.format("-%s", item.getNot_on_train()));
-        mCountOn.setText(String.format("+%s", item.getOn_train()));
-        mCountDN.setText(String.format("%s", item.getDont_know()));
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm", Locale.getDefault());
-        mTime.setText(simpleDateFormat.format(item.getStart_time()));
-        if(newDay) {
-            SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("EEEE", Locale.getDefault());
-            SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("dd.MM", Locale.getDefault());
-            String week_day = simpleDateFormat1.format(item.getStart_time());
-            mWeekDay.setText(String.format("%s  %s%s", simpleDateFormat2.format(item.getStart_time()), week_day.substring(0, 1).toUpperCase(), week_day.substring(1)));
-            mWeekDay.setVisibility(View.VISIBLE);
-        }
+        mName.setText(item.getClub().getName());
         is_attend = item.Is_on();
         mGroupName.setText(item.getClub().getGroup());
         String c_n = "", g_n="";
@@ -132,7 +106,7 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
             }
             mIsAttend.setText(stringBuilder.toString());
             List<Presence_W_N> presences2 = new ArrayList<>(presences);
-            presences2.removeIf(presence_w_n -> ( presence_w_n.isIs_attend()==null || presence_w_n.isIs_attend()==true));
+            presences2.removeIf(presence_w_n -> (presence_w_n.isIs_attend()==null || presence_w_n.isIs_attend()));
             StringBuilder stringBuilder1 = new StringBuilder();
             for (Presence_W_N presence: presences2){
                 stringBuilder1.append(presence.getUser().getLast_name()).append(" ").append(presence.getUser().getFirst_name().charAt(0)).append(".\n");
@@ -144,21 +118,38 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
         SimpleDateFormat simpleDateFormat1  = new SimpleDateFormat("dd.MM.yy hh:mm");
         mDatetime.setText(simpleDateFormat1.format(item.getStart_time()));
         mTypeView.setBackgroundColor(mHallString.getColor(bindColor(item.getType())));
+        mInfoView.setVisibility(View.VISIBLE);
+        mButtonView.setVisibility(View.VISIBLE);
+        if(is_attend!=null && is_attend==true) mOkView.setVisibility(View.VISIBLE);
+        if(is_attend!=null && is_attend==false) mNoView.setVisibility(View.VISIBLE);
+        mDatetime.setVisibility(View.VISIBLE);
+        mCountOn.setVisibility(View.GONE);
+        mCountNotOn.setVisibility(View.GONE);
+        mCountDN.setVisibility(View.GONE);
+        mTime.setVisibility(View.GONE);
+        mType.setVisibility(View.GONE);
+        mTypeView.setVisibility(View.VISIBLE);
         if (onItemClickListener != null) {
-            mOkButton.setOnClickListener(view -> {
-                onItemClickListener.onItemClick(item.getId(), true);
-                mOkView.setVisibility(View.VISIBLE);
-                mNoView.setVisibility(View.GONE);
-                is_attend=true;
-                setPresence();
-            });
-            mNoButton.setOnClickListener(view -> {
-                onItemClickListener.onItemClick(item.getId(), false);
-                mNoView.setVisibility(View.VISIBLE);
-                mOkView.setVisibility(View.GONE);
-                is_attend=false;
-                resetPresence();
-            });
+            if(item.getStart_time().compareTo(new Date())>=0) {
+                mOkButton.setOnClickListener(view -> {
+                    onItemClickListener.onItemClick(item.getId(), true);
+                    mOkView.setVisibility(View.VISIBLE);
+                    mNoView.setVisibility(View.GONE);
+                    is_attend = true;
+                    setPresence();
+                });
+                mNoButton.setOnClickListener(view -> {
+                    onItemClickListener.onItemClick(item.getId(), false);
+                    mNoView.setVisibility(View.VISIBLE);
+                    mOkView.setVisibility(View.GONE);
+                    is_attend = false;
+                    resetPresence();
+                });
+            }
+            else {
+                mOkButton.setEnabled(false);
+                mNoButton.setEnabled(false);
+            }
             mWhoButton.setOnClickListener(view -> {
                 if (!isWhoOpened) {
                     onItemClickListener.onPresencesClick(item.getId());
@@ -199,38 +190,6 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
             mCountNotOn.setText("-" + String.valueOf(Integer.parseInt(mCountOn.getText().toString()) + 1) );
             mCountOn.setText("+" + String.valueOf(Integer.parseInt(mCountNotOn.getText().toString()) - 1) );
         }
-    }
-
-    private void OnItemClick() {
-        if(!is_opened) {
-            mInfoView.setVisibility(View.VISIBLE);
-            mButtonView.setVisibility(View.VISIBLE);
-            if(is_attend!=null && is_attend==true) mOkView.setVisibility(View.VISIBLE);
-            if(is_attend!=null && is_attend==false) mNoView.setVisibility(View.VISIBLE);
-            mDatetime.setVisibility(View.VISIBLE);
-            mCountOn.setVisibility(View.GONE);
-            mCountNotOn.setVisibility(View.GONE);
-            mCountDN.setVisibility(View.GONE);
-            mTime.setVisibility(View.GONE);
-            mType.setVisibility(View.GONE);
-            mTypeView.setVisibility(View.VISIBLE);
-            mName.setText(clubName);
-        } else {
-            mInfoView.setVisibility(View.GONE);
-            mButtonView.setVisibility(View.GONE);
-            mNoView.setVisibility(View.GONE);
-            mOkView.setVisibility(View.GONE);
-            mWhoGoView.setVisibility(View.GONE);
-            mDatetime.setVisibility(View.GONE);
-            mCountOn.setVisibility(View.VISIBLE);
-            mCountNotOn.setVisibility(View.VISIBLE);
-            mCountDN.setVisibility(View.VISIBLE);
-            mTime.setVisibility(View.VISIBLE);
-            mType.setVisibility(View.VISIBLE);
-            mTypeView.setVisibility(View.GONE);
-            isWhoOpened = false;
-        }
-        is_opened = !is_opened;
     }
 
 }
