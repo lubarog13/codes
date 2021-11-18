@@ -27,6 +27,7 @@ import com.example.traininglog.common.BasePresenter;
 import com.example.traininglog.common.PresenterFragment;
 import com.example.traininglog.common.RefreshOwner;
 import com.example.traininglog.common.Refreshable;
+import com.example.traininglog.data.Storage;
 import com.example.traininglog.data.model.Presence;
 import com.example.traininglog.data.model.Presence_W_N;
 import com.example.traininglog.ui.base.profile.clubs.all_clubs.AllClubsPresenter;
@@ -48,6 +49,7 @@ public class ScheduleFragment extends PresenterFragment implements Refreshable, 
     private View mErrorView;
     private View mFreeDay;
     private RecyclerView mRecycler;
+    private Storage mStorage;
     private WorkoutAdapter mAdapter;
     private final List<Presence> mPresence = new ArrayList<>();
     private Calendar calendar;
@@ -68,6 +70,10 @@ public class ScheduleFragment extends PresenterFragment implements Refreshable, 
         if (context instanceof RefreshOwner) {
             Log.e("m", "mRefreshOwner");
             mRefreshOwner = ((RefreshOwner) context);
+        }
+        if (context instanceof Storage.StorageOwner) {
+            Log.e("m", "mStorage");
+            mStorage = ((Storage.StorageOwner) context).obtainStorage();
         }
     }
 
@@ -119,6 +125,7 @@ public class ScheduleFragment extends PresenterFragment implements Refreshable, 
         mRecycler.setNestedScrollingEnabled(false);
         mRecycler.setAdapter(mAdapter);
         mRecycler.setHasFixedSize(false);
+        mPresenter.setStorage(mStorage);
         mCalendar.setOnPreviousPageChangeListener(() -> {
             calendar.add(Calendar.MONTH, -1);
             onRefreshData();

@@ -1,7 +1,10 @@
 package com.example.traininglog.ui.base.schedule;
 
+import android.util.Log;
+
 import com.arellomobile.mvp.InjectViewState;
 import com.example.traininglog.common.BasePresenter;
+import com.example.traininglog.data.Storage;
 import com.example.traininglog.data.model.Presence;
 import com.example.traininglog.utils.ApiUtils;
 
@@ -11,15 +14,25 @@ import io.reactivex.schedulers.Schedulers;
 @InjectViewState
 public class SchedulePresenter extends BasePresenter<ScheduleView> {
 
+    private Storage mStorage;
+    private boolean hasError = false;
+
     public void getPresencesForMonth(int month, int year) {
         mCompositeDisposable.add(
                 ApiUtils.getApiService().getPresencesForMonth(ApiUtils.user_id, month, year)
                 .subscribeOn(Schedulers.io())
+                        .doOnSuccess(response -> {
+                            mStorage.insertMonthPresences(response);
+                        })
+                        .onErrorReturn(throwable ->  mStorage.getMonthPresences(month))
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> getViewState().showRefresh())
                 .doFinally(getViewState()::hideRefresh)
                 .subscribe(
-                        presenceResponse -> getViewState().showPresences(presenceResponse.getPresences()),
+                        presenceResponse -> {
+                            Log.e("responce", presenceResponse.getPresences().toString());
+                            getViewState().showPresences(presenceResponse.getPresences());
+                        },
                         throwable -> getViewState().showError(throwable)
                 )
         );
@@ -82,4 +95,7 @@ public class SchedulePresenter extends BasePresenter<ScheduleView> {
         );
     }
 
+    public void setStorage(Storage mStorage) {
+        this.mStorage = mStorage;
+    }
 }

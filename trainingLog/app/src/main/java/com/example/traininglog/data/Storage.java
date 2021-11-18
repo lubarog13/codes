@@ -8,10 +8,16 @@ import com.example.traininglog.data.database.EsheduleDao;
 import com.example.traininglog.data.model.Club;
 import com.example.traininglog.data.model.Coach;
 import com.example.traininglog.data.model.Hall;
+import com.example.traininglog.data.model.Presence;
+import com.example.traininglog.data.model.PresenceResponse;
+import com.example.traininglog.data.model.PresencesResponse;
+import com.example.traininglog.data.model.User;
 import com.example.traininglog.data.model.Workout;
 import com.example.traininglog.data.model.WorkoutResponse;
 import com.example.traininglog.utils.DateUtils;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -60,13 +66,63 @@ public class Storage {
         for(Workout workout: workouts){
             workout.setStart_time(DateUtils.FromTimestamp(workout.getStartTime()));
             workout.setEnd_time(DateUtils.FromTimestamp(workout.getEndTime()));
-            workout.setHall(mDao.selectHall(workout.getId()));
-            Coach coach = mDao.selectCoach(workout.getId());
+            workout.setHall(mDao.selectHall(workout.getHall_id()));
+            Coach coach = mDao.selectCoach(workout.getCoach_id());
             coach.setUser(mDao.selectUser(coach.getUserId()));
             workout.setCoach(coach);
-            workout.setClub(mDao.selectClub(workout.getId()));
+            workout.setClub(mDao.selectClub(workout.getClub_id()));
         }
         return new WorkoutResponse(workouts);
+    }
+
+
+
+    public void insertMonthPresences(PresencesResponse response) {
+        List<Presence> presences = new ArrayList<>(response.getPresences());
+        mDao.deletePresences();
+        List<Workout> workouts = new ArrayList<>();
+        for(Presence presence: presences) {
+            presence.setWorkoutId(presence.getWorkout().getId());
+            presence.setUserId(presence.getUser().getId());
+            if(presence.getIs_attend()==null){
+                presence.setAttend(false);
+            }
+            else presence.setAttend(presence.getIs_attend());
+            workouts.add(presence.getWorkout());
+        }
+        this.insertWorkouts(new WorkoutResponse(workouts));
+        mDao.insertUser(presences.get(0).getUser());
+        Log.e("responce", String.valueOf(presences.size()));
+        mDao.insertPresences(presences);
+    }
+
+    public PresencesResponse getMonthPresences(int month) {
+        List<Presence> presences = mDao.selectPresences();
+        for(Presence presence : presences) {
+            Workout workout = mDao.selectWorkout(presence.getId());
+            workout.setStart_time(DateUtils.FromTimestamp(workout.getStartTime()));
+            workout.setEnd_time(DateUtils.FromTimestamp(workout.getEndTime()));
+            workout.setHall(mDao.selectHall(workout.getHall_id()));
+            Coach coach = mDao.selectCoach(workout.getCoach_id());
+            if(coach==null) {
+                coach = new Coach();
+                coach.setUserId(2);
+            }
+            coach.setUser(mDao.selectUser(coach.getUserId()));
+            workout.setCoach(coach);
+            workout.setClub(mDao.selectClub(workout.getClub_id()));
+            presence.setWorkout(workout);
+            presence.setIs_attend(presence.isAttend());
+        }
+        for (Presence presence : new ArrayList<>(presences)) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(presence.getWorkout().getStart_time());
+            Log.e("month", String.valueOf(calendar.get(Calendar.MONTH)));
+            if(calendar.get(Calendar.MONTH)!=(month-1)) {
+                presences.remove(presence);
+            }
+        }
+        return new PresencesResponse(presences);
     }
     public interface StorageOwner {
         Storage obtainStorage();

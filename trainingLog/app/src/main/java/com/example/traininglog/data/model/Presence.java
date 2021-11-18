@@ -1,24 +1,88 @@
 package com.example.traininglog.data.model;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Calendar;
 
+import javax.xml.namespace.QName;
+
+@Entity(foreignKeys = {
+        @ForeignKey(
+                entity = User.class,
+                parentColumns = "id",
+                childColumns = "user_id"
+        ), @ForeignKey(
+                entity = Workout.class,
+        parentColumns = "id",
+        childColumns = "workout_id"
+)
+})
 public class Presence {
+    @ColumnInfo(name = "id")
+    @PrimaryKey
     @SerializedName("id")
     private int id;
+    @Ignore
     @SerializedName("user")
     private User user;
+    @Ignore
     @SerializedName("workout")
     private Workout workout;
+    @ColumnInfo(name = "is_attend")
     @SerializedName("is_attend")
+    @Ignore
     private Boolean is_attend;
+    @ColumnInfo(name = "reason")
     @SerializedName("reason")
     private String reason;
+    @ColumnInfo(name = "delay")
     @SerializedName("delay")
     private boolean delay;
+    @ColumnInfo(name = "early_ret")
     @SerializedName("early_ret")
     private boolean early_ret;
+
+    @ColumnInfo(name = "user_id")
+    private int userId;
+    @ColumnInfo(name = "workout_id")
+    private int workoutId;
+
+    @ColumnInfo(name = "is_attend")
+    private boolean isAttend;
+
+    public boolean isAttend() {
+        return isAttend;
+    }
+
+    public void setAttend(boolean attend) {
+        isAttend = attend;
+    }
+
+    public Boolean getIs_attend() {
+        return is_attend;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public int getWorkoutId() {
+        return workoutId;
+    }
+
+    public void setWorkoutId(int workoutId) {
+        this.workoutId = workoutId;
+    }
 
     public Presence(int id) {
         this.id = id;

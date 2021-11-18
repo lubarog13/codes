@@ -8,6 +8,10 @@ public class PresencesResponse {
     @SerializedName("Presences")
     private List<Presence> presences;
 
+    public PresencesResponse(List<Presence> presences) {
+        this.presences = presences;
+    }
+
     public List<Presence> getPresences() {
         return presences;
     }

@@ -2,6 +2,8 @@ package com.example.traininglog.data.api;
 
 import android.util.SizeF;
 
+import androidx.room.Query;
+
 import com.example.traininglog.data.model.AuthUser;
 import com.example.traininglog.data.model.Building;
 import com.example.traininglog.data.model.Club;
@@ -24,13 +26,13 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
-import retrofit2.http.Query;
 
 public interface EsheduleApi {
     @POST("auth/token/login/")
