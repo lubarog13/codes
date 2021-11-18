@@ -20,6 +20,7 @@
         <entry key="app/src/main/res/drawable/rect.xml" value="0.20052083333333334" />
         <entry key="app/src/main/res/drawable/rect_lay.xml" value="0.20052083333333334" />
         <entry key="app/src/main/res/drawable/selected_day.xml" value="0.20052083333333334" />
+        <entry key="app/src/main/res/drawable/textarea.xml" value="0.375" />
         <entry key="app/src/main/res/drawable/triangle.xml" value="0.20885416666666667" />
         <entry key="app/src/main/res/drawable/underline.xml" value="0.20885416666666667" />
         <entry key="app/src/main/res/font/caveat.xml" value="0.21458333333333332" />
@@ -45,6 +46,7 @@
         <entry key="app/src/main/res/layout/is_not_attend_layout.xml" value="0.19427083333333334" />
         <entry key="app/src/main/res/layout/item_button_layout.xml" value="0.18854166666666666" />
         <entry key="app/src/main/res/layout/profile_container.xml" value="0.196875" />
+        <entry key="app/src/main/res/layout/reason_layout.xml" value="0.25815217391304346" />
         <entry key="app/src/main/res/layout/text_for_spinner.xml" value="0.2921195652173913" />
         <entry key="app/src/main/res/layout/who_attend_layout.xml" value="0.18854166666666666" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.35885416666666664" />

@@ -68,4 +68,18 @@ public class SchedulePresenter extends BasePresenter<ScheduleView> {
         );
     }
 
+    public void updateReason(String reason, int workout_id) {
+        mCompositeDisposable.add(
+                ApiUtils.getApiService().updatePresenceForWorkout(ApiUtils.user_id, workout_id, new Presence(null, reason))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnSubscribe(disposable -> getViewState().showRefresh())
+                        .doFinally(getViewState()::hideRefresh)
+                        .subscribe(
+                                () -> {},
+                                throwable -> getViewState().showNetworkError()
+                        )
+        );
+    }
+
 }

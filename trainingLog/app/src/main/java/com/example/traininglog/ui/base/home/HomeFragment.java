@@ -184,6 +184,11 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
     }
 
     @Override
+    public void onSendClick(String reason, int workout_id) {
+        mPresenter.updateReason(reason, workout_id);
+    }
+
+    @Override
     public void onDetach() {
         mStorage = null;
         super.onDetach();

@@ -45,6 +45,9 @@ public class Presence {
 
     public Presence(Boolean is_attend) {this.is_attend = is_attend;}
 
+
+    public Presence(Boolean is_attend, String reason) {this.is_attend = is_attend; this.reason = reason;}
+
     public int getId() {
         return id;
     }

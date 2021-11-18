@@ -5,6 +5,7 @@ import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -44,6 +45,9 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
     private TextView mNotAttend;
     private TextView mDatetime;
     private View mTypeView;
+    private View mReasonView;
+    private EditText mReasonEditText;
+    private Button mSendReason;
     private Boolean is_attend;
     private boolean isWhoOpened = false;
 
@@ -65,6 +69,9 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
         mButtonView = itemView.findViewById(R.id.go_buttons);
         mOkButton = itemView.findViewById(R.id.i_am_go);
         mNoButton = itemView.findViewById(R.id.i_am_not);
+        mReasonView = itemView.findViewById(R.id.reason);
+        mReasonEditText = itemView.findViewById(R.id.reason_text);
+        mSendReason = itemView.findViewById(R.id.send_reason);
         mWhoButton = itemView.findViewById(R.id.who_go);
         mHallString = itemView.getResources();
         mOkView = itemView.findViewById(R.id.is_attend_ok);
@@ -120,8 +127,14 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
         mTypeView.setBackgroundColor(mHallString.getColor(bindColor(item.getType())));
         mInfoView.setVisibility(View.VISIBLE);
         mButtonView.setVisibility(View.VISIBLE);
-        if(is_attend!=null && is_attend==true) mOkView.setVisibility(View.VISIBLE);
-        if(is_attend!=null && is_attend==false) mNoView.setVisibility(View.VISIBLE);
+        if(is_attend!=null && is_attend==true){
+            mOkView.setVisibility(View.VISIBLE);
+            mNoView.setVisibility(View.GONE);
+        }
+        else if (is_attend!=null && is_attend==false){
+            mNoView.setVisibility(View.VISIBLE);
+            mOkView.setVisibility(View.GONE);
+        }
         mDatetime.setVisibility(View.VISIBLE);
         mCountOn.setVisibility(View.GONE);
         mCountNotOn.setVisibility(View.GONE);
@@ -135,6 +148,7 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
                     onItemClickListener.onItemClick(item.getId(), true);
                     mOkView.setVisibility(View.VISIBLE);
                     mNoView.setVisibility(View.GONE);
+                    mReasonView.setVisibility(View.GONE);
                     is_attend = true;
                     setPresence();
                 });
@@ -142,8 +156,13 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
                     onItemClickListener.onItemClick(item.getId(), false);
                     mNoView.setVisibility(View.VISIBLE);
                     mOkView.setVisibility(View.GONE);
+                    mReasonView.setVisibility(View.VISIBLE);
                     is_attend = false;
                     resetPresence();
+                });
+                mSendReason.setOnClickListener(v -> {
+                    onItemClickListener.setReason(mReasonEditText.getText().toString(), item.getId());
+                    mReasonView.setVisibility(View.GONE);
                 });
             }
             else {

@@ -5,6 +5,7 @@ import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,6 +44,9 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
     private TextView mIsAttend;
     private TextView mNotAttend;
     private TextView mDatetime;
+    private View mReasonView;
+    private EditText mReasonEditText;
+    private Button mSendReason;
     private String clubName;
     private View mTypeView;
     private boolean is_opened = false;
@@ -79,6 +83,9 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
         mDatetime = itemView.findViewById(R.id.train_datetime);
         mNotAttend = itemView.findViewById(R.id.is_not_attend_names);
         mTypeView = itemView.findViewById(R.id.workout_info_type);
+        mReasonView = itemView.findViewById(R.id.reason);
+        mReasonEditText = itemView.findViewById(R.id.reason_text);
+        mSendReason = itemView.findViewById(R.id.send_reason);
         mMainView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,6 +129,7 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
         if(item.getHall().getNumber()!=0)  g_n = item.getHall().getName() + ", " + item.getHall().getNumber();
         else g_n = item.getHall().getName();
         mHallName.setText(Html.fromHtml(mHallString.getString(R.string.hall_name, g_n), Html.FROM_HTML_MODE_LEGACY));
+        Log.e("date", item.getStart_time().toString());
         mTypeName.setText(item.getType());
         if(presences!=null) {
             List<Presence_W_N> presences1 = new ArrayList<>(presences);
@@ -149,6 +157,7 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
                 onItemClickListener.onItemClick(item.getId(), true);
                 mOkView.setVisibility(View.VISIBLE);
                 mNoView.setVisibility(View.GONE);
+                mReasonView.setVisibility(View.GONE);
                 is_attend=true;
                 setPresence();
             });
@@ -156,6 +165,7 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
                 onItemClickListener.onItemClick(item.getId(), false);
                 mNoView.setVisibility(View.VISIBLE);
                 mOkView.setVisibility(View.GONE);
+                mReasonView.setVisibility(View.VISIBLE);
                 is_attend=false;
                 resetPresence();
             });
@@ -167,6 +177,10 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
                     onItemClickListener.removePresences(item.getId());
                     isWhoOpened=false;
                 }
+            });
+            mSendReason.setOnClickListener(v -> {
+                onItemClickListener.onSendClick(mReasonEditText.getText().toString(), item.getId());
+                mReasonView.setVisibility(View.GONE);
             });
         }
         Log.e("time2", String.valueOf(System.currentTimeMillis() - startTime));
@@ -224,6 +238,7 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
             mDatetime.setVisibility(View.GONE);
             mCountOn.setVisibility(View.VISIBLE);
             mCountNotOn.setVisibility(View.VISIBLE);
+            mReasonView.setVisibility(View.GONE);
             mCountDN.setVisibility(View.VISIBLE);
             mTime.setVisibility(View.VISIBLE);
             mType.setVisibility(View.VISIBLE);

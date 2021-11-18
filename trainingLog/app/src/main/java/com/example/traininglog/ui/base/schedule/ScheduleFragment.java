@@ -230,4 +230,9 @@ public class ScheduleFragment extends PresenterFragment implements Refreshable, 
     public void removePresences(int workout_id) {
         mAdapter.removePresence(workout_id);
     }
+
+    @Override
+    public void setReason(String reason, int workout_id) {
+        mPresenter.updateReason(reason, workout_id);
+    }
 }

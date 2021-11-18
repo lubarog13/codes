@@ -67,6 +67,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutHolder> {
         void onItemClick(int workout_id, boolean is_attend);
         void onPresencesClick(int workout_id);
         void removePresences(int workout_id);
+        void setReason(String reason, int workout_id);
     }
 
     public void addPresences(List<Presence_W_N> presences) {

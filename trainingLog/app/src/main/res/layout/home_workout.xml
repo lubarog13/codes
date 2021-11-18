@@ -283,6 +283,10 @@
         android:visibility="gone"
         android:id="@+id/is_attend_not"/>
     <include
+        layout="@layout/reason_layout"
+        android:visibility="gone"
+        android:id="@+id/reason"/>
+    <include
         layout="@layout/who_attend_layout"
         android:id="@+id/who_go_view"
         android:visibility="gone"/>
