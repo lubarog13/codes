@@ -86,9 +86,9 @@ public class AuthFragment extends PresenterFragment implements AuthView, Refresh
         password = getActivity().findViewById(R.id.password_enter);
         sp = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
         mPresenter.setSharedPreferences(sp);
-        if(sp.contains("id")){
-            mPresenter.logIn();
-        }
+//        if(sp.contains("id")){
+//            mPresenter.logIn();
+//        }
         mPresenter.login = RxTextView.textChanges(login).map(CharSequence::toString);
         mPresenter.password = RxTextView.textChanges(password).map(CharSequence::toString);
         mErrorText = getActivity().findViewById(R.id.error_text);
@@ -123,6 +123,17 @@ public class AuthFragment extends PresenterFragment implements AuthView, Refresh
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(login.getText().toString().length()==0) {
+                    mErrorText.setText("Введите логин");
+                    mErrorText.setVisibility(View.VISIBLE);
+                    return;
+                }
+                if (password.getText().length()==0) {
+                    mErrorText.setText("Введите пароль");
+                    mErrorText.setVisibility(View.VISIBLE);
+                    return;
+                }
+                mErrorText.setVisibility(View.GONE);
                 mPresenter.logIn();
             }
         });
@@ -150,6 +161,7 @@ public class AuthFragment extends PresenterFragment implements AuthView, Refresh
 
     @Override
     public void showError(Throwable throwable) {
+        this.mErrorText.setVisibility(View.VISIBLE);
         if (Objects.requireNonNull(throwable.getMessage()).contains("400"))
             this.mErrorText.setText(Html.fromHtml(getActivity().getResources()
                     .getString(R.string.hall_name, "Неверный логин или пароль"), Html.FROM_HTML_MODE_LEGACY));

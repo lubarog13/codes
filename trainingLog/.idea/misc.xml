@@ -21,6 +21,9 @@
         <entry key="app/src/main/res/drawable/rect_lay.xml" value="0.20052083333333334" />
         <entry key="app/src/main/res/drawable/selected_day.xml" value="0.20052083333333334" />
         <entry key="app/src/main/res/drawable/textarea.xml" value="0.375" />
+        <entry key="app/src/main/res/drawable/toggle.xml" value="0.37916666666666665" />
+        <entry key="app/src/main/res/drawable/toggle_of.xml" value="0.37916666666666665" />
+        <entry key="app/src/main/res/drawable/toggle_on.xml" value="0.37916666666666665" />
         <entry key="app/src/main/res/drawable/triangle.xml" value="0.20885416666666667" />
         <entry key="app/src/main/res/drawable/underline.xml" value="0.20885416666666667" />
         <entry key="app/src/main/res/font/caveat.xml" value="0.21458333333333332" />

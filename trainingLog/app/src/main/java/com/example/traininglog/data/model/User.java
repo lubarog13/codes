@@ -40,6 +40,13 @@ public class User {
     @ColumnInfo(name = "username")
     private String username;
 
+    @SerializedName("password")
+    @Ignore
+    private String password;
+    @SerializedName("re_password")
+    @Ignore
+    private String re_password;
+
     public User(int id, String first_name, String last_name, String second_name, String email, Date date_birth, String sex, boolean is_coach, String username) {
         this.id = id;
         this.first_name = first_name;
@@ -129,5 +136,62 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public User(String first_name, String last_name, String second_name, String email, Date date_birth, String sex, boolean is_coach, String username, String password, String re_password) {
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.second_name = second_name;
+        this.email = email;
+        this.date_birth = date_birth;
+        this.sex = sex;
+        this.is_coach = is_coach;
+        this.username = username;
+        this.password = password;
+        this.re_password = re_password;
+    }
+
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRe_password() {
+        return re_password;
+    }
+
+    public void setRe_password(String re_password) {
+        this.re_password = re_password;
+    }
+
+    public User(String first_name, String last_name, String second_name, String email, Date date_birth, String sex, boolean is_coach) {
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.second_name = second_name;
+        this.email = email;
+        this.date_birth = date_birth;
+        this.sex = sex;
+        this.is_coach = is_coach;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", first_name='" + first_name + '\'' +
+                ", last_name='" + last_name + '\'' +
+                ", second_name='" + second_name + '\'' +
+                ", email='" + email + '\'' +
+                ", date_birth=" + date_birth +
+                ", sex='" + sex + '\'' +
+                ", is_coach=" + is_coach +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", re_password='" + re_password + '\'' +
+                '}';
     }
 }

@@ -1,13 +1,9 @@
 package com.example.traininglog.ui.auth;
 
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.example.traininglog.common.BasePresenter;
-import com.example.traininglog.data.api.APIKeyInterceptor;
 import com.example.traininglog.data.model.AuthUser;
 import com.example.traininglog.data.model.User;
 import com.example.traininglog.utils.ApiUtils;
@@ -27,12 +23,12 @@ public class AuthPresenter extends BasePresenter<AuthView> {
     }
 
     public void logIn() {
-        if(sp.contains("id")){
-            ApiUtils.user_id = sp.getInt("id", 0);
-            ApiUtils.token = sp.getString("token", "");
-            getViewState().showSuccess(new AuthUser(ApiUtils.token));
-            return;
-        }
+//        if(sp.contains("id")){
+//            ApiUtils.user_id = sp.getInt("id", 0);
+//            ApiUtils.token = sp.getString("token", "");
+//            getViewState().showSuccess(new AuthUser(ApiUtils.token));
+//            return;
+//        }
          mCompositeDisposable.add(
             ApiUtils.getApiService().auth(new AuthUser(login.blockingFirst(), password.blockingFirst()))
                 .subscribeOn(Schedulers.io())
@@ -47,9 +43,9 @@ public class AuthPresenter extends BasePresenter<AuthView> {
     }
 
     public void getUser() {
-        if(!ApiUtils.token.equals("")){
-            getViewState().navigateHome();
-        }
+//        if(!ApiUtils.token.equals("")){
+//            getViewState().navigateHome();
+//        }
         mCompositeDisposable.add(
                 ApiUtils.getApiService().me()
                         .subscribeOn(Schedulers.io())

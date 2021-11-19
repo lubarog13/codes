@@ -1,9 +1,5 @@
 package com.example.traininglog.data.api;
 
-import android.util.SizeF;
-
-import androidx.room.Query;
-
 import com.example.traininglog.data.model.AuthUser;
 import com.example.traininglog.data.model.Building;
 import com.example.traininglog.data.model.Club;
@@ -22,16 +18,11 @@ import com.example.traininglog.data.model.WorkoutResponse;
 import java.util.List;
 
 import io.reactivex.Completable;
-import io.reactivex.Observable;
 import io.reactivex.Single;
-import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.DELETE;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
-import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 public interface EsheduleApi {
@@ -80,4 +71,7 @@ public interface EsheduleApi {
 
     @GET("user/{user_id}/presences/month/{month}/{year}")
     Single<PresencesResponse> getPresencesForMonth(@Path("user_id") int user_id, @Path("month") int month, @Path("year") int year);
+
+    @POST("auth/users/")
+    Single<User> registration(@Body AuthUser user);
 }

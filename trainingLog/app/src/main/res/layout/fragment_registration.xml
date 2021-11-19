@@ -1,14 +1,304 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.registration.RegistrationFragment">
+    android:background="@android:color/black"
+    android:layout_height="match_parent">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/registrationImage"
+        android:scaleType="centerCrop"
+        />
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    android:text="Регистрация"
+    android:textColor="@android:color/white"
+    android:gravity="center"
+    android:fontFamily="@font/stalinist_one"
+    android:textSize="24sp"/>
 
-</FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/registration_1"
+        android:layout_width="277dp"
+        android:layout_height="500dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/rect"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <EditText
+            android:id="@+id/firstname"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="@android:color/white"
+            android:fontFamily="@font/roboto_bold"
+            android:hint="Имя"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/lastname"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/white"
+            android:fontFamily="@font/roboto_bold"
+            android:hint="Фамилия"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/second_name"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/white"
+            android:fontFamily="@font/roboto_bold"
+            android:hint="Отчество"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white" />
+
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/white"
+            android:fontFamily="@font/roboto_bold"
+            android:hint="email"
+            android:inputType="textEmailAddress"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_bold"
+                android:gravity="center_vertical"
+                android:text="Пол"
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
+
+            <ToggleButton
+                android:id="@+id/m_s"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="30dp"
+                android:background="@drawable/toggle"
+                android:checked="true"
+                android:fontFamily="@font/roboto_bold"
+                android:textColor="@android:color/white"
+                android:textOff="М"
+                android:textOn="М"
+                android:textSize="24sp" />
+
+            <ToggleButton
+                android:id="@+id/f_s"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/toggle"
+                android:checked="false"
+                android:fontFamily="@font/roboto_bold"
+                android:textColor="@android:color/white"
+                android:textOff="Ж"
+                android:textOn="Ж"
+                android:textSize="24sp" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="180dp"
+            android:layout_height="40dp"
+            android:fontFamily="@font/roboto_bold"
+            android:gravity="bottom"
+            android:text="Дата рождения"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_bold"
+                android:text='""'
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/birth_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/white"
+                android:fontFamily="@font/roboto_bold"
+                android:inputType="number"
+                android:maxLength="2"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_bold"
+                android:text='""'
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/birth_month"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/white"
+                android:fontFamily="@font/roboto_bold"
+                android:inputType="text"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_bold"
+                android:text=' '
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/year_birth"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/white"
+                android:fontFamily="@font/roboto_bold"
+                android:inputType="number"
+                android:maxLength="4"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/error_text1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_mono_medium"
+            android:text="Заполните поля"
+            android:textColor="@color/colorRedDark"
+            android:textSize="14sp"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/next_button"
+            android:layout_width="222dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button_blue"
+            android:fontFamily="@font/roboto_bold"
+            android:text="Далее"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/cleanButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:fontFamily="@font/roboto_mono_medium"
+            android:gravity="bottom"
+            android:text="@string/clear"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="17sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="50dp"
+        android:layout_width="277dp"
+        android:layout_height="359dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/rect"
+        android:id="@+id/registration_2"
+        android:visibility="gone"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/login_reg"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="@android:color/white"
+            android:fontFamily="@font/roboto_bold"
+            android:hint="Логин"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/password_reg"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/white"
+            android:fontFamily="@font/roboto_bold"
+            android:hint="Пароль"
+            android:inputType="textPassword"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/password_repeat"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/white"
+            android:fontFamily="@font/roboto_bold"
+            android:hint="Повторите пароль"
+            android:inputType="textPassword"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Заполните поля"
+            android:textColor="@color/colorRedDark"
+            android:fontFamily="@font/roboto_mono_medium"
+            android:textSize="14sp"
+            android:visibility="gone"
+            android:id="@+id/error_text2"/>
+        <Button
+            android:layout_width="222dp"
+            android:layout_height="46dp"
+            android:background="@drawable/button_blue"
+            android:text="Зарегестрироваться"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:fontFamily="@font/roboto_bold"
+            android:layout_marginTop="50dp"
+            android:id="@+id/registrationButton"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:fontFamily="@font/roboto_mono_medium"
+            android:gravity="bottom"
+            android:text="@string/clear"
+            android:id="@+id/cleanButton2"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="17sp" />
+    </LinearLayout>
+
+</RelativeLayout>
