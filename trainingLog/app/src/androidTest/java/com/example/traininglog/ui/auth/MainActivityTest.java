@@ -48,6 +48,16 @@ public class MainActivityTest {
         onView(withId(R.id.error_text)).check(matches(withText("Неверный логин или пароль")));
     }
 
+    @Test
+    public void wrongLogin() {
+        onView(withId(R.id.login_enter)).perform(typeText("ivan_smirnov_11"));
+        onView(withId(R.id.password_enter)).perform(typeText("hello123 Somebody"));
+        onView(withId(R.id.login)).perform(click());
+        SystemClock.sleep(500);
+        onView(withId(R.id.error_text)).check(matches(isDisplayed()));
+        onView(withId(R.id.error_text)).check(matches(withText("Неверный логин или пароль")));
+    }
+
 
     @Test
     public void noLoginEnter() {
@@ -74,4 +84,19 @@ public class MainActivityTest {
         SystemClock.sleep(1500);
         onView(withId(R.id.week_workouts)).check(matches(withText("Тренировки на этой неделе")));
     }
+
+    @Test
+    public void registrationEnter() {
+        onView(withId(R.id.reg)).perform(click());
+        SystemClock.sleep(20);
+        onView(withId(R.id.registrationImage)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void resetPasswordEnter() {
+        onView(withId(R.id.set_pass)).perform(click());
+        SystemClock.sleep(20);
+        onView(withId(R.id.resetText)).check(matches(withText("Восстановление")));
+    }
+
 }

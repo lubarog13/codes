@@ -30,6 +30,7 @@ import com.example.traininglog.data.model.AuthUser;
 import com.example.traininglog.data.model.User;
 import com.example.traininglog.ui.auth.AuthFragment;
 import com.example.traininglog.ui.auth.MainActivity;
+import com.example.traininglog.utils.ApiUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,6 +38,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -249,7 +251,16 @@ public class RegistrationFragment extends PresenterFragment implements Registrat
 
     @Override
     public void showError(Throwable throwable) {
-        Toast.makeText(getActivity(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
+        mErrorText2.setVisibility(View.VISIBLE);
+        if (Objects.requireNonNull(throwable.getMessage()).contains("400")) {
+            mErrorText2.setText("Некорректно введен логин или пароль слишком простой");
+            return;
+        }
+        if(ApiUtils.NETWORK_EXCEPTIONS.contains(throwable.getClass())) {
+           mErrorText2.setText("Ошибка сервера или интернет-соединения");
+           return;
+        }
+        mErrorText2.setText("Ошибка");
     }
 
     @Override
