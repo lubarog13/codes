@@ -33,11 +33,13 @@
         <entry key="app/src/main/res/layout/calendar.xml" value="0.18020833333333333" />
         <entry key="app/src/main/res/layout/club_item_layout.xml" value="0.20052083333333334" />
         <entry key="app/src/main/res/layout/club_view.xml" value="0.2921195652173913" />
+        <entry key="app/src/main/res/layout/coach_item.xml" value="0.36302083333333335" />
         <entry key="app/src/main/res/layout/content_home.xml" value="0.19947916666666668" />
         <entry key="app/src/main/res/layout/custom_action_bar_layout.xml" value="0.30434782608695654" />
         <entry key="app/src/main/res/layout/error_view.xml" value="0.19427083333333334" />
         <entry key="app/src/main/res/layout/fragment_all_clubs.xml" value="0.19270833333333334" />
         <entry key="app/src/main/res/layout/fragment_clubs.xml" value="0.20052083333333334" />
+        <entry key="app/src/main/res/layout/fragment_coach.xml" value="0.36302083333333335" />
         <entry key="app/src/main/res/layout/fragment_container.xml" value="0.20416666666666666" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.20052083333333334" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.18854166666666666" />

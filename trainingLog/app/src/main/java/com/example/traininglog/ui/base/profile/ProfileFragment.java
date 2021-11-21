@@ -26,6 +26,7 @@ import com.example.traininglog.ui.HomeActivity;
 import com.example.traininglog.ui.auth.MainActivity;
 import com.example.traininglog.ui.base.home.HomePresenter;
 import com.example.traininglog.ui.base.profile.clubs.ClubsFragment;
+import com.example.traininglog.ui.base.profile.coaches.CoachFragment;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -94,6 +95,7 @@ public class ProfileFragment extends PresenterFragment implements ProfileView {
         mCoaches = view.findViewById(R.id.coaches);
         mLogout = view.findViewById(R.id.logout);
         mClubs.setOnClickListener(view1 -> changeFragment(ClubsFragment.class));
+        mCoaches.setOnClickListener(view1 -> changeFragment(CoachFragment.class));
         mProfileImage = view.findViewById(R.id.profile_image);
         try
         {

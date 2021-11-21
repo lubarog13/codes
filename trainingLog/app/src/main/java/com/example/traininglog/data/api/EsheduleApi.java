@@ -74,4 +74,5 @@ public interface EsheduleApi {
 
     @POST("auth/users/")
     Single<User> registration(@Body AuthUser user);
+
 }
