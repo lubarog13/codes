@@ -3,6 +3,7 @@ package com.example.traininglog.data;
 import android.util.Log;
 
 import com.example.traininglog.data.database.EsheduleDao;
+import com.example.traininglog.data.model.Building;
 import com.example.traininglog.data.model.Club;
 import com.example.traininglog.data.model.Coach;
 import com.example.traininglog.data.model.Hall;
@@ -135,6 +136,14 @@ public class Storage {
             mDao.insertUser(coach.getUser());
             mDao.insertCoach(coach);
         }
+    }
+
+    public void insertBuildings(List<Building> buildings) {
+        mDao.insertBuildings(buildings);
+    }
+
+    public List<Building> getBuildings() {
+        return mDao.selectBuildings();
     }
 
     public interface StorageOwner {

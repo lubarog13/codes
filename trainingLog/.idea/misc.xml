@@ -38,6 +38,7 @@
         <entry key="app/src/main/res/layout/custom_action_bar_layout.xml" value="0.30434782608695654" />
         <entry key="app/src/main/res/layout/error_view.xml" value="0.19427083333333334" />
         <entry key="app/src/main/res/layout/fragment_all_clubs.xml" value="0.19270833333333334" />
+        <entry key="app/src/main/res/layout/fragment_buildings.xml" value="0.17552083333333332" />
         <entry key="app/src/main/res/layout/fragment_clubs.xml" value="0.20052083333333334" />
         <entry key="app/src/main/res/layout/fragment_coach.xml" value="0.36302083333333335" />
         <entry key="app/src/main/res/layout/fragment_container.xml" value="0.20416666666666666" />

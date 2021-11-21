@@ -25,6 +25,7 @@ import com.example.traininglog.common.PresenterFragment;
 import com.example.traininglog.ui.HomeActivity;
 import com.example.traininglog.ui.auth.MainActivity;
 import com.example.traininglog.ui.base.home.HomePresenter;
+import com.example.traininglog.ui.base.profile.buildings.BuildingsFragment;
 import com.example.traininglog.ui.base.profile.clubs.ClubsFragment;
 import com.example.traininglog.ui.base.profile.coaches.CoachFragment;
 
@@ -97,6 +98,7 @@ public class ProfileFragment extends PresenterFragment implements ProfileView {
         mClubs.setOnClickListener(view1 -> changeFragment(ClubsFragment.class));
         mCoaches.setOnClickListener(view1 -> changeFragment(CoachFragment.class));
         mProfileImage = view.findViewById(R.id.profile_image);
+        mHalls.setOnClickListener(v -> changeFragment(BuildingsFragment.class));
         try
         {
             // get input stream

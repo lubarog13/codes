@@ -5,6 +5,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import com.example.traininglog.data.model.Building;
 import com.example.traininglog.data.model.Club;
 import com.example.traininglog.data.model.Coach;
 import com.example.traininglog.data.model.Hall;
@@ -22,19 +23,13 @@ public interface EsheduleDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertPresences(List<Presence> presences);
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertPresence(Presence presence);
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertCoaches(List<Coach> coaches);
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertClub(Club club);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertWorkout(Workout workout);
-
+    void insertBuildings(List<Building> building);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertCoach(Coach coach);
@@ -76,5 +71,7 @@ public interface EsheduleDao {
     @Query("select * from coach")
     List<Coach> selectCoaches();
 
+    @Query("select * from building")
+    List<Building> selectBuildings();
 
 }
