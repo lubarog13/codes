@@ -26,6 +26,10 @@ public interface EsheduleDao {
     void insertPresence(Presence presence);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertCoaches(List<Coach> coaches);
+
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertClub(Club club);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -68,5 +72,9 @@ public interface EsheduleDao {
 
     @Query("select * from presence")
     List<Presence> selectPresences();
+
+    @Query("select * from coach")
+    List<Coach> selectCoaches();
+
 
 }

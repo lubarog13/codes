@@ -2,16 +2,12 @@ package com.example.traininglog.data;
 
 import android.util.Log;
 
-import androidx.room.Database;
-
 import com.example.traininglog.data.database.EsheduleDao;
 import com.example.traininglog.data.model.Club;
 import com.example.traininglog.data.model.Coach;
 import com.example.traininglog.data.model.Hall;
 import com.example.traininglog.data.model.Presence;
-import com.example.traininglog.data.model.PresenceResponse;
 import com.example.traininglog.data.model.PresencesResponse;
-import com.example.traininglog.data.model.User;
 import com.example.traininglog.data.model.Workout;
 import com.example.traininglog.data.model.WorkoutResponse;
 import com.example.traininglog.utils.DateUtils;
@@ -124,6 +120,23 @@ public class Storage {
         }
         return new PresencesResponse(presences);
     }
+
+    public List<Coach> getCoaches() {
+        List<Coach> coaches = mDao.selectCoaches();
+        for (Coach coach: coaches) {
+            coach.setUser(mDao.selectUser(coach.getUserId()));
+        }
+        return coaches;
+    }
+
+    public void insertCoaches(List<Coach> coaches) {
+        for (Coach coach : coaches) {
+            coach.setUserId(coach.getUser().getId());
+            mDao.insertUser(coach.getUser());
+            mDao.insertCoach(coach);
+        }
+    }
+
     public interface StorageOwner {
         Storage obtainStorage();
     }

@@ -1,7 +1,6 @@
 package com.example.traininglog.ui.base.home;
 
 import com.arellomobile.mvp.InjectViewState;
-import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.example.traininglog.common.BasePresenter;
 import com.example.traininglog.data.Storage;
 import com.example.traininglog.data.model.Presence;

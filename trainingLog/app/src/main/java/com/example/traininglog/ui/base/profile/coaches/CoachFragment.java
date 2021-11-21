@@ -20,6 +20,7 @@ import com.example.traininglog.common.BasePresenter;
 import com.example.traininglog.common.PresenterFragment;
 import com.example.traininglog.common.RefreshOwner;
 import com.example.traininglog.common.Refreshable;
+import com.example.traininglog.data.Storage;
 import com.example.traininglog.data.model.Coach;
 
 import java.util.List;
@@ -34,12 +35,13 @@ public class CoachFragment extends PresenterFragment implements Refreshable, Coa
     private CoachAdapter mCoachAdapter;
     private View mErrorView;
     private RefreshOwner mRefreshOwner;
+    private Storage mStorage;
     @InjectPresenter
     CoachPresenter mPresenter;
 
     @ProvidePresenter
     CoachPresenter providePresenter() {
-        return new CoachPresenter();
+        return new CoachPresenter(mStorage);
     }
 
     public CoachFragment() {
@@ -67,6 +69,9 @@ public class CoachFragment extends PresenterFragment implements Refreshable, Coa
         super.onAttach(context);
         if (context instanceof RefreshOwner) {
             mRefreshOwner = ((RefreshOwner) context);
+        }
+        if(context instanceof Storage.StorageOwner) {
+            mStorage = ((Storage.StorageOwner) context).obtainStorage();
         }
     }
 
@@ -110,6 +115,7 @@ public class CoachFragment extends PresenterFragment implements Refreshable, Coa
 
     @Override
     public void showCoaches(List<Coach> coaches) {
+        Log.e("size", String.valueOf(coaches.size()));
         mErrorView.setVisibility(View.GONE);
         mRecycler.setVisibility(View.VISIBLE);
         mCoachAdapter.addData(coaches, true);
