@@ -32,9 +32,11 @@ import { HttpClientModule } from '@angular/common/http'
 import { HomeComponent } from './home/home.component';
 import { baseURL } from './shared/baseurl';
 import { ContactComponent } from './contact/contact.component';
+import { ProcessHTTPMsgService } from './services/process-httpmsg.service';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { LoginComponent } from './login/login.component';
+import { HighlightDirective } from './directives/highlight.directive';
 
 @NgModule({
   imports: [
@@ -62,6 +64,7 @@ import { LoginComponent } from './login/login.component';
   providers: [DishService, 
     LeaderService, 
     PromotionService,  
+    ProcessHTTPMsgService,
     {provide: 'BaseURL', useValue: baseURL},
   ],
   declarations: [
@@ -73,7 +76,8 @@ import { LoginComponent } from './login/login.component';
     ContactComponent,
     HeaderComponent,
     FooterComponent,
-    LoginComponent
+    LoginComponent,
+    HighlightDirective
   ],
   entryComponents: [LoginComponent],
   bootstrap: [AppComponent],

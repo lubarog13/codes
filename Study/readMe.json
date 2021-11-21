@@ -1,0 +1,8 @@
+{
+    "Name": "Liubov",
+    "Surname": "Rogozina",
+    "Tel": [
+        {"Mobile":true, "Number":"123456789"},
+        {"Mobile":false, "Number": "567890"}
+    ]
+}

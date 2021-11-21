@@ -7,7 +7,7 @@
     fxLayoutGap.xs="0">
   <div fxFlex="100" *ngIf="dish">
     <div fxLayout="column" fxLayout.gt-sm="row">
-    <mat-card fxFlex="40" fxFlexOffset="10" *ngIf="dish">
+    <mat-card fxFlex="40" fxFlexOffset="10" *ngIf="dish" [@visibility]="visibility">
     <div>
       <h3>{{dish.name | uppercase}}</h3>
       <hr>
@@ -26,7 +26,7 @@
         <button mat-button [routerLink]="['/dishdetail', next]"><span class="fa fa-chevron-right fa-lg"></span></button>
     </mat-card-actions>
     </mat-card>
-<mat-card fxFlex="40" *ngIf="dish">
+<mat-card fxFlex="40" *ngIf="dish" [@visibility]="visibility">
 <mat-card-title><h3>Comments</h3></mat-card-title>
 <mat-card-content >
   <div fxLayout="column">
@@ -68,6 +68,10 @@
 </div>
 
 </div>
-<div [hidden]="dish" >
+<div [hidden]="dish || errMes">
   <mat-spinner></mat-spinner><h4>Loading . . . Please Wait</h4>
+</div>
+<div fxFlex *ngIf="errMes">
+  <h2>Error</h2>
+  <h4>{{errMes}}</h4>
 </div>
