@@ -182,6 +182,8 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
                 onItemClickListener.onSendClick(mReasonEditText.getText().toString(), item.getId());
                 mReasonView.setVisibility(View.GONE);
             });
+
+            mHallName.setOnClickListener(v -> onItemClickListener.onHallClick(item.getHall().getId()));
         }
         Log.e("time2", String.valueOf(System.currentTimeMillis() - startTime));
     }

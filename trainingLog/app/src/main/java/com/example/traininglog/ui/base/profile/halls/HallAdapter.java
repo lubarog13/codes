@@ -15,6 +15,12 @@ import java.util.List;
 
 public class HallAdapter extends RecyclerView.Adapter<HallHolder> {
     private final List<Hall> mHalls = new ArrayList<>();
+    private final   onItemClickListener onItemClickListener;
+
+    public HallAdapter(HallAdapter.onItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
     @NonNull
     @Override
     public HallHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -30,7 +36,7 @@ public class HallAdapter extends RecyclerView.Adapter<HallHolder> {
         if (!(position*2==(mHalls.size()-1))) {
             hall2 = mHalls.get(position * 2 + 1);
         }
-        holder.bind(hall1, hall2);
+        holder.bind(hall1, hall2, onItemClickListener);
     }
 
     @Override
@@ -43,5 +49,9 @@ public class HallAdapter extends RecyclerView.Adapter<HallHolder> {
         if(isRefreshed) mHalls.clear();
         mHalls.addAll(halls);
         notifyDataSetChanged();
+    }
+
+    public interface onItemClickListener {
+        void onClick(int hall_id);
     }
 }

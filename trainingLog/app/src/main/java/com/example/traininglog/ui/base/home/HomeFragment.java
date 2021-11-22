@@ -29,6 +29,8 @@ import com.example.traininglog.data.Storage;
 import com.example.traininglog.data.model.Presence;
 import com.example.traininglog.data.model.Presence_W_N;
 import com.example.traininglog.data.model.Workout;
+import com.example.traininglog.ui.HomeActivity;
+import com.example.traininglog.ui.base.hall.HallViewFragment;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -186,6 +188,11 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
     @Override
     public void onSendClick(String reason, int workout_id) {
         mPresenter.updateReason(reason, workout_id);
+    }
+
+    @Override
+    public void onHallClick(int hall_id) {
+        ((HomeActivity) getActivity()).changeFragment(HallViewFragment.newInstance(hall_id));
     }
 
     @Override

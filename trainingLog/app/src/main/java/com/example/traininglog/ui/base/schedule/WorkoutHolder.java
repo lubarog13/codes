@@ -18,7 +18,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class WorkoutHolder extends RecyclerView.ViewHolder {
     private TextView mType;
@@ -178,6 +177,7 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
                     isWhoOpened=false;
                 }
             });
+            mHallName.setOnClickListener(v -> onItemClickListener.HallClick(item.getHall().getId()));
         }
         Log.e("time2", String.valueOf(System.currentTimeMillis() - startTime));
     }

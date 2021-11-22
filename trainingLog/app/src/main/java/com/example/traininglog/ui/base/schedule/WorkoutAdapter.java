@@ -12,11 +12,9 @@ import com.example.traininglog.data.model.Presence;
 import com.example.traininglog.data.model.Presence_W_N;
 import com.example.traininglog.data.model.Workout;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutHolder> {
@@ -68,6 +66,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutHolder> {
         void onPresencesClick(int workout_id);
         void removePresences(int workout_id);
         void setReason(String reason, int workout_id);
+        void HallClick(int hall_id);
     }
 
     public void addPresences(List<Presence_W_N> presences) {

@@ -31,15 +31,17 @@ public class HallHolder extends RecyclerView.ViewHolder {
     }
 
 
-    public void bind(Hall item1, Hall item2) {
+    public void bind(Hall item1, Hall item2, HallAdapter.onItemClickListener onItemClickListener) {
         if(item1!=null) {
             Picasso.with(mImage1.getContext()).load(BuildConfig.API_URL + "media/" + item1.getId() + "_hall.jpg").fit().into(mImage1);
             mName1.setText(item1.getName());
+            mCard1.setOnClickListener(v -> onItemClickListener.onClick(item1.getId()));
             mCard1.setVisibility(View.VISIBLE);
         } else mCard1.setVisibility(View.GONE);
         if(item2!=null) {
             Picasso.with(mImage2.getContext()).load(BuildConfig.API_URL + "media/" + item2.getId() + "_hall.jpg").fit().into(mImage2);
             mName2.setText(item2.getName());
+            mCard2.setOnClickListener(v -> onItemClickListener.onClick(item2.getId()));
             mCard2.setVisibility(View.VISIBLE);
         } else mCard2.setVisibility(View.GONE);
     }

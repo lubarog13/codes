@@ -103,4 +103,16 @@ public class Hall {
     public void setBuilding_id(int building_id) {
         this.building_id = building_id;
     }
+
+    @Override
+    public String toString() {
+        return "Hall{" +
+                "id=" + id +
+                ", building=" + building +
+                ", name='" + name + '\'' +
+                ", number=" + number +
+                ", occupancy=" + occupancy +
+                ", building_id=" + building_id +
+                '}';
+    }
 }

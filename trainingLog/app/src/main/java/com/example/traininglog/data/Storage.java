@@ -46,6 +46,9 @@ public class Storage {
             Club club = workout.getClub();
             coach.setUserId(coach.getUser().getId());
             Hall hall = workout.getHall();
+            Building building = hall.getBuilding();
+            hall.setBuilding_id(building.getId());
+            mDao.insertBuilding(building);
             mDao.insertClub(club);
             mDao.insertHall(hall);
             mDao.insertUser(coach.getUser());
@@ -163,6 +166,19 @@ public class Storage {
             hall.setBuilding(building);
         }
         return new HallsResponse(halls);
+    }
+
+    public void insertHall(Hall hall) {
+        hall.setBuilding_id(hall.getBuilding().getId());
+        mDao.insertBuilding(hall.getBuilding());
+        mDao.insertHall(hall);
+    }
+
+
+    public Hall getHall(int hall_id) {
+        Hall hall = mDao.selectHall(hall_id);
+        hall.setBuilding(mDao.selectBuilding(hall.getBuilding_id()));
+        return hall;
     }
 
     public interface StorageOwner {

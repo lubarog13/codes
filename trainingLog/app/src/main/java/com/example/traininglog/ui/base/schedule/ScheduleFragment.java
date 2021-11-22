@@ -30,6 +30,8 @@ import com.example.traininglog.common.Refreshable;
 import com.example.traininglog.data.Storage;
 import com.example.traininglog.data.model.Presence;
 import com.example.traininglog.data.model.Presence_W_N;
+import com.example.traininglog.ui.HomeActivity;
+import com.example.traininglog.ui.base.hall.HallViewFragment;
 import com.example.traininglog.ui.base.profile.clubs.all_clubs.AllClubsPresenter;
 
 import java.io.IOException;
@@ -241,5 +243,10 @@ public class ScheduleFragment extends PresenterFragment implements Refreshable, 
     @Override
     public void setReason(String reason, int workout_id) {
         mPresenter.updateReason(reason, workout_id);
+    }
+
+    @Override
+    public void HallClick(int hall_id) {
+        ((HomeActivity) getActivity()).changeFragment(HallViewFragment.newInstance(hall_id));
     }
 }

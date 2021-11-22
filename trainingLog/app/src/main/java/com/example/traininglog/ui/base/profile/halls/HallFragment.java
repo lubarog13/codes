@@ -25,6 +25,7 @@ import com.example.traininglog.common.Refreshable;
 import com.example.traininglog.data.Storage;
 import com.example.traininglog.data.model.Hall;
 import com.example.traininglog.ui.HomeActivity;
+import com.example.traininglog.ui.base.hall.HallViewFragment;
 import com.example.traininglog.ui.base.profile.buildings.BuildingsFragment;
 
 import java.io.IOException;
@@ -37,7 +38,7 @@ import java.util.List;
  * create an instance of this fragment.
  *
  */
-public class HallFragment extends PresenterFragment implements Refreshable, HallView {
+public class HallFragment extends PresenterFragment implements Refreshable, HallView, HallAdapter.onItemClickListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -124,7 +125,7 @@ public class HallFragment extends PresenterFragment implements Refreshable, Hall
             return;
         }
         mRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mHallAdapter  = new HallAdapter();
+        mHallAdapter  = new HallAdapter(this);
         mRecycler.setAdapter(mHallAdapter);
         mBuildingButton.setOnClickListener(v -> ((HomeActivity) getActivity()).changeFragment(BuildingsFragment.newInstance()));
         onRefreshData();
@@ -162,5 +163,10 @@ public class HallFragment extends PresenterFragment implements Refreshable, Hall
     @Override
     protected HallPresenter getPresenter() {
         return mPresenter;
+    }
+
+    @Override
+    public void onClick(int hall_id) {
+        ((HomeActivity) getActivity()).changeFragment(HallViewFragment.newInstance(hall_id));
     }
 }

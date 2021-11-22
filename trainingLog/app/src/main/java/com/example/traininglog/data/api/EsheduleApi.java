@@ -5,6 +5,7 @@ import com.example.traininglog.data.model.Building;
 import com.example.traininglog.data.model.Club;
 import com.example.traininglog.data.model.ClubResponse;
 import com.example.traininglog.data.model.Coach;
+import com.example.traininglog.data.model.Hall;
 import com.example.traininglog.data.model.HallsResponse;
 import com.example.traininglog.data.model.Presence;
 import com.example.traininglog.data.model.PresenceResponse;
@@ -79,4 +80,6 @@ public interface EsheduleApi {
     @GET("building/{building_id}/halls/")
     Single<HallsResponse> getHallsForBuilding(@Path("building_id") int building_id);
 
+    @GET("hall/{hall_id}/")
+    Single<Hall> getHall(@Path("hall_id") int hall_id);
 }

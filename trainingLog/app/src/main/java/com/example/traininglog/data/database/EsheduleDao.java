@@ -31,6 +31,10 @@ public interface EsheduleDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertBuildings(List<Building> building);
 
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertBuilding(Building building);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertCoach(Coach coach);
 
@@ -82,4 +86,5 @@ public interface EsheduleDao {
 
     @Query("select * from hall where building_id=:building_id")
     List<Hall> selectHalls(int building_id);
+
 }
