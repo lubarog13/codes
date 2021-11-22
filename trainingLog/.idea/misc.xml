@@ -15,6 +15,7 @@
         <entry key="app/src/main/res/drawable/ic_vector_6.xml" value="0.19635416666666666" />
         <entry key="app/src/main/res/drawable/ic_vectorbball.xml" value="0.36923076923076925" />
         <entry key="app/src/main/res/drawable/item_button_background.xml" value="0.2046875" />
+        <entry key="app/src/main/res/drawable/iten_button_background_blue.xml" value="0.37916666666666665" />
         <entry key="app/src/main/res/drawable/profile_alpha_rect.xml" value="0.36923076923076925" />
         <entry key="app/src/main/res/drawable/profile_rect.xml" value="0.36923076923076925" />
         <entry key="app/src/main/res/drawable/rect.xml" value="0.20052083333333334" />
@@ -43,12 +44,14 @@
         <entry key="app/src/main/res/layout/fragment_coach.xml" value="0.36302083333333335" />
         <entry key="app/src/main/res/layout/fragment_container.xml" value="0.20416666666666666" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.20052083333333334" />
+        <entry key="app/src/main/res/layout/fragment_hall.xml" value="0.36186594202898553" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.18854166666666666" />
         <entry key="app/src/main/res/layout/fragment_notifications.xml" value="0.20923913043478262" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.20923913043478262" />
         <entry key="app/src/main/res/layout/fragment_registration.xml" value="0.18020833333333333" />
         <entry key="app/src/main/res/layout/fragment_reset_password.xml" value="0.20989583333333334" />
         <entry key="app/src/main/res/layout/free_day_view.xml" value="0.25815217391304346" />
+        <entry key="app/src/main/res/layout/hall_item_layout.xml" value="0.36186594202898553" />
         <entry key="app/src/main/res/layout/home_workout.xml" value="0.19427083333333334" />
         <entry key="app/src/main/res/layout/is_attend_layout.xml" value="0.19427083333333334" />
         <entry key="app/src/main/res/layout/is_not_attend_layout.xml" value="0.19427083333333334" />
