@@ -15,4 +15,11 @@ public class HallsResponse {
     public void setHalls(List<Hall> halls) {
         this.halls = halls;
     }
+
+    public HallsResponse(List<Hall> halls) {
+        this.halls = halls;
+    }
+
+    public HallsResponse() {
+    }
 }

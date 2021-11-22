@@ -7,6 +7,7 @@ import com.example.traininglog.data.model.Building;
 import com.example.traininglog.data.model.Club;
 import com.example.traininglog.data.model.Coach;
 import com.example.traininglog.data.model.Hall;
+import com.example.traininglog.data.model.HallsResponse;
 import com.example.traininglog.data.model.Presence;
 import com.example.traininglog.data.model.PresencesResponse;
 import com.example.traininglog.data.model.Workout;
@@ -144,6 +145,24 @@ public class Storage {
 
     public List<Building> getBuildings() {
         return mDao.selectBuildings();
+    }
+
+
+    public void insertHalls(HallsResponse response) {
+        List<Hall> halls = response.getHalls();
+        for (Hall hall: halls) {
+            hall.setBuilding_id(hall.getBuilding().getId());
+        }
+        mDao.insertHalls(halls);
+    }
+
+    public HallsResponse getHalls(int building_id) {
+        List<Hall> halls = mDao.selectHalls(building_id);
+        Building building = mDao.selectBuilding(building_id);
+        for (Hall hall: halls) {
+            hall.setBuilding(building);
+        }
+        return new HallsResponse(halls);
     }
 
     public interface StorageOwner {

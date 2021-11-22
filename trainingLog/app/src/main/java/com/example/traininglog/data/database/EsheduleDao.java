@@ -34,6 +34,9 @@ public interface EsheduleDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertCoach(Coach coach);
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertHalls(List<Hall> halls);
+
     @Query("delete from presence")
     void deletePresences();
 
@@ -74,4 +77,9 @@ public interface EsheduleDao {
     @Query("select * from building")
     List<Building> selectBuildings();
 
+    @Query("select * from building where id=:building_id")
+    Building selectBuilding(int building_id);
+
+    @Query("select * from hall where building_id=:building_id")
+    List<Hall> selectHalls(int building_id);
 }

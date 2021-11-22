@@ -19,13 +19,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.example.traininglog.R;
-import com.example.traininglog.common.BasePresenter;
 import com.example.traininglog.common.PresenterFragment;
 import com.example.traininglog.common.RefreshOwner;
 import com.example.traininglog.common.Refreshable;
+import com.example.traininglog.data.Storage;
 import com.example.traininglog.data.model.Hall;
 import com.example.traininglog.ui.HomeActivity;
-import com.example.traininglog.ui.auth.MainActivity;
 import com.example.traininglog.ui.base.profile.buildings.BuildingsFragment;
 
 import java.io.IOException;
@@ -52,23 +51,14 @@ public class HallFragment extends PresenterFragment implements Refreshable, Hall
     HallPresenter mPresenter;
     @ProvidePresenter
     HallPresenter providePresenter() {
-        return new HallPresenter();
+        return new HallPresenter(mStorage);
     }
 
     // TODO: Rename and change types of parameters
     private String mBuildingName;
     private int mBuildingId;
+    private Storage mStorage;
     private Button mBuildingButton;
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HallFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static HallFragment newInstance(String param1, int param2) {
         HallFragment fragment = new HallFragment();
         Bundle args = new Bundle();
@@ -83,6 +73,9 @@ public class HallFragment extends PresenterFragment implements Refreshable, Hall
         super.onAttach(context);
         if(context instanceof RefreshOwner)
             mRefreshOwner = ((RefreshOwner) context);
+        if (context instanceof Storage.StorageOwner){
+            mStorage = ((Storage.StorageOwner) context).obtainStorage();
+        }
     }
 
     public HallFragment() {
