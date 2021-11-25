@@ -7,12 +7,14 @@ import com.example.traininglog.data.model.ClubResponse;
 import com.example.traininglog.data.model.Coach;
 import com.example.traininglog.data.model.Hall;
 import com.example.traininglog.data.model.HallsResponse;
+import com.example.traininglog.data.model.MonthsResponse;
 import com.example.traininglog.data.model.Presence;
 import com.example.traininglog.data.model.PresenceResponse;
 import com.example.traininglog.data.model.PresencesResponse;
 import com.example.traininglog.data.model.SignUp;
 import com.example.traininglog.data.model.SignUpForCreate;
 import com.example.traininglog.data.model.SignUpResponse;
+import com.example.traininglog.data.model.TypesResponse;
 import com.example.traininglog.data.model.User;
 import com.example.traininglog.data.model.UserResponse;
 import com.example.traininglog.data.model.WorkoutResponse;
@@ -82,4 +84,13 @@ public interface EsheduleApi {
 
     @GET("hall/{hall_id}/")
     Single<Hall> getHall(@Path("hall_id") int hall_id);
+
+    @GET("user/{user_id}/analysis/types/")
+    Single<TypesResponse> getCountForTypes(@Path("user_id") int user_id);
+
+    @GET("user/{user_id}/analysis/{year}/")
+    Single<MonthsResponse> getCountForMonth(@Path("user_id") int user_id, @Path("year") int year);
+
+    @GET("user/{user_id}/presences/count/{month}/")
+    Single<TypesResponse> getCountForTypesInMonth(@Path("user_id") int user_id, @Path("month") int month);
 }
