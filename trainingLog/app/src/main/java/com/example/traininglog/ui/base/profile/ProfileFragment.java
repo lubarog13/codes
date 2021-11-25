@@ -26,6 +26,7 @@ import com.example.traininglog.ui.HomeActivity;
 import com.example.traininglog.ui.auth.MainActivity;
 import com.example.traininglog.ui.base.home.HomePresenter;
 import com.example.traininglog.ui.base.profile.buildings.BuildingsFragment;
+import com.example.traininglog.ui.base.profile.club_info.ClubInfoFragment;
 import com.example.traininglog.ui.base.profile.clubs.ClubsFragment;
 import com.example.traininglog.ui.base.profile.coaches.CoachFragment;
 
@@ -119,6 +120,7 @@ public class ProfileFragment extends PresenterFragment implements ProfileView {
         mUsername.setText(name);
         mPresenter.setSp(sp);
         mLogout.setOnClickListener(view1 -> mPresenter.logout());
+        mAbout.setOnClickListener(v -> changeFragment(ClubInfoFragment.class));
     }
 
     @Override
