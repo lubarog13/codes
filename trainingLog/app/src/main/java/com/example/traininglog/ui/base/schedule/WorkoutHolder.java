@@ -124,6 +124,9 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
         SimpleDateFormat simpleDateFormat1  = new SimpleDateFormat("dd.MM.yy hh:mm");
         mDatetime.setText(simpleDateFormat1.format(item.getStart_time()));
         mTypeView.setBackgroundColor(mHallString.getColor(bindColor(item.getType())));
+        if (item.getType().equals("другое") && item.getOther_type()!=null) {
+            mTypeName.setText(item.getOther_type());
+        }
         mInfoView.setVisibility(View.VISIBLE);
         mButtonView.setVisibility(View.VISIBLE);
         if(is_attend!=null && is_attend==true){

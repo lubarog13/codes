@@ -14,6 +14,7 @@ import com.example.traininglog.R;
 import com.example.traininglog.common.RefreshOwner;
 import com.example.traininglog.common.Refreshable;
 import com.example.traininglog.data.Storage;
+import com.example.traininglog.ui.base.analysis.AnalysisFragment;
 import com.example.traininglog.ui.base.schedule.ScheduleFragment;
 import com.example.traininglog.ui.base.home.HomeFragment;
 import com.example.traininglog.ui.base.profile.ProfileFragment;
@@ -50,7 +51,7 @@ public class HomeActivity extends AppCompatActivity implements Storage.StorageOw
                     changeFragment(ScheduleFragment.newInstance());
                     break;
                 case R.id.navigation_analysis:
-                    changeFragment(ScheduleFragment.newInstance());
+                    changeFragment(AnalysisFragment.newInstance());
                     break;
                 case R.id.navigation_profile:
                     changeFragment(ProfileFragment.newInstance());

@@ -129,6 +129,9 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
         if(item.getHall().getNumber()!=0)  g_n = item.getHall().getName() + ", " + item.getHall().getNumber();
         else g_n = item.getHall().getName();
         mHallName.setText(Html.fromHtml(mHallString.getString(R.string.hall_name, g_n), Html.FROM_HTML_MODE_LEGACY));
+        if (item.getType().equals("другое") && item.getOther_type()!=null) {
+            mTypeName.setText(item.getOther_type());
+        }
         Log.e("date", item.getStart_time().toString());
         mTypeName.setText(item.getType());
         if(presences!=null) {

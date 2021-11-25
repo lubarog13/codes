@@ -6,6 +6,8 @@
         <entry key="app/src/main/res/drawable/button_blue.xml" value="0.21666666666666667" />
         <entry key="app/src/main/res/drawable/button_rect.xml" value="0.19479166666666667" />
         <entry key="app/src/main/res/drawable/button_red.xml" value="0.21666666666666667" />
+        <entry key="app/src/main/res/drawable/card_draw.xml" value="0.37916666666666665" />
+        <entry key="app/src/main/res/drawable/gradient_drawable.xml" value="0.37916666666666665" />
         <entry key="app/src/main/res/drawable/ic_auth.xml" value="0.2046875" />
         <entry key="app/src/main/res/drawable/ic_ellipse_1.xml" value="0.19635416666666666" />
         <entry key="app/src/main/res/drawable/ic_ellipse_2.xml" value="0.375" />
@@ -39,6 +41,7 @@
         <entry key="app/src/main/res/layout/custom_action_bar_layout.xml" value="0.30434782608695654" />
         <entry key="app/src/main/res/layout/error_view.xml" value="0.19427083333333334" />
         <entry key="app/src/main/res/layout/fragment_all_clubs.xml" value="0.19270833333333334" />
+        <entry key="app/src/main/res/layout/fragment_analysis.xml" value="0.22" />
         <entry key="app/src/main/res/layout/fragment_buildings.xml" value="0.17552083333333332" />
         <entry key="app/src/main/res/layout/fragment_clubs.xml" value="0.20052083333333334" />
         <entry key="app/src/main/res/layout/fragment_coach.xml" value="0.36302083333333335" />
