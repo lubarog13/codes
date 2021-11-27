@@ -7,7 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,6 +29,7 @@ public class ClubInfoFragment extends Fragment {
     private TextView mText;
     private TextView mHeader;
     private ImageView mImage;
+    private VideoView mVideo;
 
     public ClubInfoFragment() {
         // Required empty public constructor
@@ -53,6 +56,7 @@ public class ClubInfoFragment extends Fragment {
         mText = view.findViewById(R.id.club_info_text);
         mHeader = view.findViewById(R.id.main_club_name);
         mImage = view.findViewById(R.id.club_image);
+        mVideo = view.findViewById(R.id.club_video);
     }
 
     @Override
@@ -95,5 +99,9 @@ public class ClubInfoFragment extends Fragment {
                 "\n" +
                 " \n" +
                 "СОК «Ижорец» предоставляет возможность для занятий физической культурой и спортом населению всех возрастов Колпинского и близлежащих районов.");
+        mVideo.setVideoPath("android.resource://com.example.traininglog/" + R.raw.izhora); //set the path of the video that we need to use in our VideoView
+        mVideo.setMediaController(new MediaController(getContext()));
+        mVideo.requestFocus(0);
+        mVideo.start();
     }
 }

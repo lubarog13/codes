@@ -7,6 +7,7 @@ import com.example.traininglog.data.model.ClubResponse;
 import com.example.traininglog.data.model.Coach;
 import com.example.traininglog.data.model.Hall;
 import com.example.traininglog.data.model.HallsResponse;
+import com.example.traininglog.data.model.MessageResponse;
 import com.example.traininglog.data.model.MonthsResponse;
 import com.example.traininglog.data.model.Presence;
 import com.example.traininglog.data.model.PresenceResponse;
@@ -93,4 +94,10 @@ public interface EsheduleApi {
 
     @GET("user/{user_id}/presences/count/{month}/")
     Single<TypesResponse> getCountForTypesInMonth(@Path("user_id") int user_id, @Path("month") int month);
+
+    @GET("user/{user_id}/messages/")
+    Single<MessageResponse> getMessagesForUser(@Path("user_id") int user_id);
+
+    @GET("user/{user_id}/messages/send/")
+    Single<MessageResponse> getMessagesFromUser(@Path("user_id") int user_id);
 }

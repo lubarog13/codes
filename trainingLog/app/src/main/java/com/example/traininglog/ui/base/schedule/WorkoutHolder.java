@@ -16,6 +16,7 @@ import com.example.traininglog.data.model.Workout;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -88,6 +89,10 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
 
     public void bind(Workout item, WorkoutAdapter.OnItemClickListener onItemClickListener, List<Presence_W_N> presences){
         long startTime =  System.currentTimeMillis();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(item.getStart_time());
+        calendar.add(Calendar.HOUR, -3);
+        item.setStart_time(calendar.getTime());
         mName.setText(item.getClub().getName());
         is_attend = item.Is_on();
         mGroupName.setText(item.getClub().getGroup());
@@ -121,8 +126,9 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
             mWhoGoView.setVisibility(View.VISIBLE);
             isWhoOpened = true;
         }
-        SimpleDateFormat simpleDateFormat1  = new SimpleDateFormat("dd.MM.yy hh:mm");
-        mDatetime.setText(simpleDateFormat1.format(item.getStart_time()));
+        SimpleDateFormat simpleDateFormat1  = new SimpleDateFormat("dd.MM.yy HH:mm");
+        Log.e("time", item.getEnd_time().toString());
+        mDatetime.setText(simpleDateFormat1.format(item.getStart_time().getTime()));
         mTypeView.setBackgroundColor(mHallString.getColor(bindColor(item.getType())));
         if (item.getType().equals("другое") && item.getOther_type()!=null) {
             mTypeName.setText(item.getOther_type());

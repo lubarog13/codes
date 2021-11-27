@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+<androidx.recyclerview.widget.RecyclerView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/input_messagesRecycler"
+    android:nestedScrollingEnabled="false"
+    >
+</androidx.recyclerview.widget.RecyclerView>
+    <include
+        layout="@layout/error_view"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="-100dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_width="match_parent"/>
+</RelativeLayout>

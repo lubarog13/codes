@@ -4,15 +4,13 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-    android:layout_marginTop="40dp"
-        android:paddingTop="5dp"
         android:background="@color/colorPrimaryDark"
         android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/white"
-        android:paddingBottom="50dp"
+        android:paddingBottom="90dp"
         android:gravity="center"
         android:orientation="vertical">
     <include
@@ -26,22 +24,21 @@
     android:layout_height="match_parent">
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="225dp"
+        android:layout_height="300dp"
         android:id="@+id/image_main"
         android:scaleType="centerCrop"/>
+
     <TextView
+        android:id="@+id/main_title"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:text="Главная"
-        android:id="@+id/main_title"
-        android:textSize="36sp"
-        android:fontFamily="@font/stalinist_one"
-        android:textColor="@android:color/white"
         android:layout_gravity="center"
+        android:fontFamily="@font/stalinist_one"
         android:gravity="center"
         android:paddingTop="100dp"
-        >
-    </TextView>
+        android:text="Главная"
+        android:textColor="@android:color/white"
+        android:textSize="36sp"></TextView>
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="500dp"

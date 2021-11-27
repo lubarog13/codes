@@ -7,6 +7,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.traininglog.AppDelegate;
@@ -15,6 +17,7 @@ import com.example.traininglog.common.RefreshOwner;
 import com.example.traininglog.common.Refreshable;
 import com.example.traininglog.data.Storage;
 import com.example.traininglog.ui.base.analysis.AnalysisFragment;
+import com.example.traininglog.ui.base.messages.MessagesFragment;
 import com.example.traininglog.ui.base.schedule.ScheduleFragment;
 import com.example.traininglog.ui.base.home.HomeFragment;
 import com.example.traininglog.ui.base.profile.ProfileFragment;
@@ -74,11 +77,11 @@ public class HomeActivity extends AppCompatActivity implements Storage.StorageOw
         this.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         this.getSupportActionBar().setDisplayShowCustomEnabled(true);
         this.getSupportActionBar().setCustomView(R.layout.custom_action_bar_layout);
+        ImageButton imageButton = findViewById(R.id.action_bar_message);
         Log.e("NotErr", "NotErr");
         mSwipeRefreshLayout = findViewById(R.id.home_refresher);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         setTitle("");
-        Intent intent = getIntent();
         if(is_firstOpened) {
             changeFragment(HomeFragment.newInstance());
             is_firstOpened=false;
@@ -130,5 +133,10 @@ public class HomeActivity extends AppCompatActivity implements Storage.StorageOw
     @Override
     public void setRefreshState(boolean refreshing) {
         mSwipeRefreshLayout.post(() -> mSwipeRefreshLayout.setRefreshing(refreshing));
+    }
+
+    public void clickMessages(View view) {
+        Log.e("messages", "messages");
+        changeFragment(MessagesFragment.newInstance());
     }
 }

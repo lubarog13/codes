@@ -16,4 +16,5 @@
     <color name="colorDark">#3F51B5</color>
     <color name="colorRedDark">#F8000D</color>
     <color name="lightBlue">#A5C3FF</color>
+    <color name="colorWhite">#FFFFFF</color>
 </resources>
