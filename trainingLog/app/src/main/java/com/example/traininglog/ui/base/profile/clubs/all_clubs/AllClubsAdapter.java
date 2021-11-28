@@ -9,13 +9,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.traininglog.R;
 import com.example.traininglog.data.model.Club;
-import com.example.traininglog.data.model.SignUp;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AllClubsAdapter extends RecyclerView.Adapter<AllClubsHolder> {
     private final List<Club> mClubs = new ArrayList<>();
+    private final onItemClickListener onItemClickListener;
+
+    public AllClubsAdapter(AllClubsAdapter.onItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
     @NonNull
     @Override
     public AllClubsHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -27,7 +32,7 @@ public class AllClubsAdapter extends RecyclerView.Adapter<AllClubsHolder> {
     @Override
     public void onBindViewHolder(@NonNull AllClubsHolder holder, int position) {
         Club club = mClubs.get(position);
-        holder.bind(club);
+        holder.bind(club, onItemClickListener);
     }
 
     @Override
@@ -39,6 +44,9 @@ public class AllClubsAdapter extends RecyclerView.Adapter<AllClubsHolder> {
         if(isRefreshed) mClubs.clear();
         mClubs.addAll(clubs);
         notifyDataSetChanged();
+    }
+    public interface onItemClickListener{
+        void createSignup(String club_name);
     }
 
 }

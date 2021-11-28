@@ -9,10 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.traininglog.R;
-import com.example.traininglog.data.model.Club;
 import com.example.traininglog.data.model.SignUp;
 import com.example.traininglog.data.model.User;
-import com.example.traininglog.ui.base.home.WorkoutAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -70,7 +68,10 @@ public class ClubHolder extends RecyclerView.ViewHolder {
             Log.e("sb", sb.toString());
             is_opened=true;
         }
-        mSignUps.setOnClickListener(view -> OpenUsers(onItemClickListener, item.getClub().getId(), item.getId()));
+        if(onItemClickListener!=null) {
+            mSignUps.setOnClickListener(view -> OpenUsers(onItemClickListener, item.getClub().getId(), item.getId()));
+        }
+
     }
 
     private void OpenUsers(ClubAdapter.onItemClickListener onItemClickListener, int club_id, int signup_id) {

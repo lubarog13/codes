@@ -23,15 +23,13 @@ import com.example.traininglog.data.model.Message;
 import com.example.traininglog.ui.base.home.WorkoutAdapter;
 import com.example.traininglog.ui.base.messages.MessageAdapter;
 import com.example.traininglog.ui.base.messages.MessagesFragment;
+import com.example.traininglog.ui.base.messages.create.CreateMessageFragment;
+import com.example.traininglog.ui.base.messages.create.CreateMessageFragment$$PresentersBinder;
 import com.example.traininglog.ui.base.messages.update.UpdateMessageFragment;
 
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link IncomingMessagesFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class IncomingMessagesFragment extends PresenterFragment implements IncomingMessagesView, Refreshable, MessageAdapter.onItemClickListener {
     private RecyclerView mRecycler;
     private View mErrorView;
@@ -118,5 +116,10 @@ public class IncomingMessagesFragment extends PresenterFragment implements Incom
 
     @Override
     public void onUpdateClick(int message_id) {
+    }
+
+    @Override
+    public void onResendClick(int user_id, String username) {
+        if(getParentFragment()!=null) ((MessagesFragment)getParentFragment()).changeFragment(CreateMessageFragment.newInstance(user_id, username));
     }
 }

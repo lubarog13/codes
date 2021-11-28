@@ -14,14 +14,18 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.traininglog.R;
+import com.example.traininglog.ui.base.messages.create.CreateMessageFragment;
+import com.example.traininglog.ui.base.messages.create.CreateMessageFragment$$PresentersBinder;
 import com.example.traininglog.ui.base.messages.incoming.IncomingMessagesFragment;
 import com.example.traininglog.ui.base.messages.outcoming.OutcomingMessagesFragment;
+import com.example.traininglog.ui.base.messages.update.UpdateMessageFragment;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 public class MessagesFragment extends Fragment {
-
+    private static final  String ARG_PARAM1 = "param1";
+    private String mClubName;
     private Button mInButton;
     private Button mOutButton;
 
@@ -29,14 +33,23 @@ public class MessagesFragment extends Fragment {
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
     public static MessagesFragment newInstance() {
         return new MessagesFragment();
+    }
+    public static MessagesFragment newInstance(String club_name) {
+        MessagesFragment fragment = new MessagesFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, club_name);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(getArguments()!=null) {
+            mClubName = getArguments().getString(ARG_PARAM1);
+        }
     }
 
     @Override
@@ -51,7 +64,10 @@ public class MessagesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mInButton = view.findViewById(R.id.enter_messages);
         mOutButton = view.findViewById(R.id.out_messages);
-        changeFragment(IncomingMessagesFragment.newInstance());
+        if(mClubName!=null) {
+            changeFragment(CreateMessageFragment.newInstance(true, mClubName));
+        }
+        else changeFragment(IncomingMessagesFragment.newInstance());
     }
 
     @Override
@@ -74,13 +90,11 @@ public class MessagesFragment extends Fragment {
         }
         mInButton.setOnClickListener(v -> {
             changeFragment(IncomingMessagesFragment.newInstance());
-            mInButton.setBackgroundColor(getActivity().getResources().getColor(R.color.colorWhite));
-            mOutButton.setBackgroundColor(getActivity().getResources().getColor(R.color.colorDivider));
+            changeColors(true);
         });
         mOutButton.setOnClickListener(v -> {
             changeFragment(OutcomingMessagesFragment.newInstance());
-            mOutButton.setBackgroundColor(getActivity().getResources().getColor(R.color.colorWhite));
-            mInButton.setBackgroundColor(getActivity().getResources().getColor(R.color.colorDivider));
+            changeColors(false);
         });
     }
 
@@ -89,5 +103,14 @@ public class MessagesFragment extends Fragment {
                 .replace(R.id.child_fragment_container, fragment);
         transaction.addToBackStack(fragment.getClass().getSimpleName());
         transaction.commit();
+    }
+    public void changeColors(boolean is_in) {
+        if (is_in) {
+            mInButton.setBackgroundColor(getActivity().getResources().getColor(R.color.colorWhite));
+            mOutButton.setBackgroundColor(getActivity().getResources().getColor(R.color.colorDivider));
+        } else {
+            mOutButton.setBackgroundColor(getActivity().getResources().getColor(R.color.colorWhite));
+            mInButton.setBackgroundColor(getActivity().getResources().getColor(R.color.colorDivider));
+        }
     }
 }

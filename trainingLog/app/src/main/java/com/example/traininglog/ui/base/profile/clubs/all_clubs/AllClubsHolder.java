@@ -25,12 +25,15 @@ public class AllClubsHolder extends RecyclerView.ViewHolder {
         mCreate = itemView.findViewById(R.id.create_signup);
     }
 
-    public void bind(Club club) {
+    public void bind(Club club, AllClubsAdapter.onItemClickListener onItemClickListener) {
         mClubName.setText(club.getName());
         mGroupName.setText(club.getGroup());
         mCoachName.setText(club.getCoach().getUser().getLast_name() + " "
                 + club.getCoach().getUser().getFirst_name().charAt(0) + "."
                 + club.getCoach().getUser().getSecond_name().substring(0,1) + ".");
         mAddress.setText(club.getBuilding().getAddress() + ", " + club.getBuilding().getNumber());
+        if (onItemClickListener!=null) {
+            mCreate.setOnClickListener(v -> onItemClickListener.createSignup(club.getName() + " " + club.getGroup()));
+        }
     }
 }

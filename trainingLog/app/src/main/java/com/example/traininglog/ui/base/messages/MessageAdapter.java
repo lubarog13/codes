@@ -49,5 +49,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageHolder> {
     }
     public interface onItemClickListener{
         void onUpdateClick(int message_id);
+        void onResendClick(int user_id, String username);
     }
 }

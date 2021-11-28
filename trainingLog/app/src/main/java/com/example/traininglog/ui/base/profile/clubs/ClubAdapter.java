@@ -8,11 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.traininglog.R;
-import com.example.traininglog.data.model.Club;
 import com.example.traininglog.data.model.SignUp;
 import com.example.traininglog.data.model.User;
-import com.example.traininglog.data.model.Workout;
-import com.example.traininglog.ui.base.home.WorkoutAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -69,6 +69,8 @@ public class MessageHolder extends RecyclerView.ViewHolder {
                         onItemClickListener.onUpdateClick(item.getId());
                     else Toast.makeText(mSenderName.getContext(), "С момента отправки прошло более 24х часов", Toast.LENGTH_LONG).show();
                 });
+            } else {
+                mResendButton.setOnClickListener(v -> onItemClickListener.onResendClick(item.getSender().getId(), item.getSender().getUsername()));
             }
         }
     }

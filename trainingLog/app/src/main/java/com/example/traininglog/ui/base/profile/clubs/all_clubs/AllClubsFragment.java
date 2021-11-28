@@ -30,6 +30,7 @@ import com.example.traininglog.data.model.Building;
 import com.example.traininglog.data.model.Club;
 import com.example.traininglog.data.model.Coach;
 import com.example.traininglog.ui.HomeActivity;
+import com.example.traininglog.ui.base.messages.MessagesFragment;
 import com.example.traininglog.ui.base.profile.clubs.ClubsFragment;
 import com.example.traininglog.ui.base.profile.clubs.all_clubs.buildings.BuildingAdapter;
 import com.example.traininglog.ui.base.profile.clubs.all_clubs.coaches.CoachesAdapter;
@@ -41,7 +42,7 @@ import java.util.List;
  * Use the {@link AllClubsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AllClubsFragment extends PresenterFragment implements Refreshable, AllClubsView, CoachesAdapter.OnItemClickListener, BuildingAdapter.OnItemClickListener {
+public class AllClubsFragment extends PresenterFragment implements Refreshable, AllClubsView, CoachesAdapter.OnItemClickListener, BuildingAdapter.OnItemClickListener, AllClubsAdapter.onItemClickListener {
     private RecyclerView mRecyclerView;
     private View mErrorView;
     private Button mMyCategory;
@@ -154,7 +155,7 @@ public class AllClubsFragment extends PresenterFragment implements Refreshable, 
                     }
                 }
         );
-        mAdapter = new AllClubsAdapter();
+        mAdapter = new AllClubsAdapter(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setNestedScrollingEnabled(false);
         mRecyclerView.setAdapter(mAdapter);
@@ -275,5 +276,10 @@ public class AllClubsFragment extends PresenterFragment implements Refreshable, 
         mCoachInfo.setVisibility(View.VISIBLE);
         mSendMessageButton.setVisibility(View.GONE);
         onRefreshData();
+    }
+
+    @Override
+    public void createSignup(String club_name) {
+        ((HomeActivity) getActivity()).changeFragment(MessagesFragment.newInstance(club_name));
     }
 }

@@ -131,4 +131,9 @@ public class OutcomingMessagesFragment extends PresenterFragment implements Refr
             ((MessagesFragment) getParentFragment()).changeFragment(UpdateMessageFragment.newInstance(message_id));
         }
     }
+
+    @Override
+    public void onResendClick(int user_id, String username) {
+
+    }
 }
