@@ -23,6 +23,9 @@ import com.example.traininglog.common.RefreshOwner;
 import com.example.traininglog.common.Refreshable;
 import com.example.traininglog.data.model.Message;
 import com.example.traininglog.ui.base.messages.MessageAdapter;
+import com.example.traininglog.ui.base.messages.MessagesFragment;
+import com.example.traininglog.ui.base.messages.create.CreateMessageFragment;
+import com.example.traininglog.ui.base.messages.create.CreateMessageView;
 import com.example.traininglog.ui.base.messages.incoming.IncomingMessagesPresenter;
 import com.example.traininglog.ui.base.messages.incoming.IncomingMessagesView;
 
@@ -82,6 +85,10 @@ public class OutcomingMessagesFragment extends PresenterFragment implements Refr
         mRecycler.setHasFixedSize(false);
         mAdapter = new MessageAdapter(false);
         mRecycler.setAdapter(mAdapter);
+        mCreateButton.setOnClickListener(v ->{
+            if(getParentFragment()!=null)
+            ((MessagesFragment) getParentFragment()).changeFragment(CreateMessageFragment.newInstance());
+        });
         onRefreshData();
     }
 

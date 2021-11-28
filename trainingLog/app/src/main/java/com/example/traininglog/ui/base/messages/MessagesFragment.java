@@ -84,7 +84,7 @@ public class MessagesFragment extends Fragment {
         });
     }
 
-    private void changeFragment(Fragment fragment) {
+    public void changeFragment(Fragment fragment) {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction()
                 .replace(R.id.child_fragment_container, fragment);
         transaction.addToBackStack(fragment.getClass().getSimpleName());

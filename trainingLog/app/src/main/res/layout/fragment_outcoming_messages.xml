@@ -10,7 +10,7 @@
         <Button
             android:layout_width="198dp"
             android:layout_height="31dp"
-            android:background="@drawable/button_blue"
+            android:background="@drawable/blue_button_2"
             android:layout_gravity="center"
             android:layout_margin="20dp"
             android:textAllCaps="false"

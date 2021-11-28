@@ -133,7 +133,7 @@
             android:layout_width="198dp"
             android:layout_height="31dp"
             android:layout_marginStart="30dp"
-            android:background="@drawable/button_blue"
+            android:background="@drawable/blue_button_2"
             android:text="Посмотреть занимающихся"
             android:textAllCaps="false"
             android:fontFamily="@font/roboto_bold"

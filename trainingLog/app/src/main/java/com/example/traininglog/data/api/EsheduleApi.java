@@ -7,6 +7,7 @@ import com.example.traininglog.data.model.ClubResponse;
 import com.example.traininglog.data.model.Coach;
 import com.example.traininglog.data.model.Hall;
 import com.example.traininglog.data.model.HallsResponse;
+import com.example.traininglog.data.model.MessageCreate;
 import com.example.traininglog.data.model.MessageResponse;
 import com.example.traininglog.data.model.MonthsResponse;
 import com.example.traininglog.data.model.Presence;
@@ -100,4 +101,10 @@ public interface EsheduleApi {
 
     @GET("user/{user_id}/messages/send/")
     Single<MessageResponse> getMessagesFromUser(@Path("user_id") int user_id);
+
+    @POST("search/user/")
+    Single<UserResponse> getUsersByName(@Body User name);
+
+    @POST("message/create/")
+    Completable createMessage(@Body MessageCreate message);
 }
