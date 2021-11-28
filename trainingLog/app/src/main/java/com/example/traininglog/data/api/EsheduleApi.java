@@ -7,6 +7,7 @@ import com.example.traininglog.data.model.ClubResponse;
 import com.example.traininglog.data.model.Coach;
 import com.example.traininglog.data.model.Hall;
 import com.example.traininglog.data.model.HallsResponse;
+import com.example.traininglog.data.model.Message;
 import com.example.traininglog.data.model.MessageCreate;
 import com.example.traininglog.data.model.MessageResponse;
 import com.example.traininglog.data.model.MonthsResponse;
@@ -26,9 +27,11 @@ import java.util.List;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface EsheduleApi {
@@ -107,4 +110,14 @@ public interface EsheduleApi {
 
     @POST("message/create/")
     Completable createMessage(@Body MessageCreate message);
+
+    @GET("message/{message_id}/")
+    Single<Message> getMessage(@Path("message_id") int id);
+
+    @PUT("message/{message_id}/update/")
+    Completable updateMessage(@Path("message_id") int id, @Body MessageCreate messageCreate);
+
+    @DELETE("message/{message_id}/delete/")
+    Completable deleteMessage(@Path("message_id") int id);
+
 }

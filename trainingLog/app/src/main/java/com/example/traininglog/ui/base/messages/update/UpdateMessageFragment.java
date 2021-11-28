@@ -1,7 +1,8 @@
-package com.example.traininglog.ui.base.messages.create;
+package com.example.traininglog.ui.base.messages.update;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,54 +24,58 @@ import com.example.traininglog.common.Refreshable;
 import com.example.traininglog.data.model.Message;
 import com.example.traininglog.data.model.MessageCreate;
 import com.example.traininglog.data.model.User;
-import com.example.traininglog.ui.HomeActivity;
 import com.example.traininglog.ui.base.messages.MessagesFragment;
 import com.example.traininglog.ui.base.messages.outcoming.OutcomingMessagesFragment;
 import com.example.traininglog.utils.ApiUtils;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 
-public class CreateMessageFragment extends PresenterFragment implements Refreshable, CreateMessageView {
+public class UpdateMessageFragment extends PresenterFragment implements Refreshable, UpdateMessageView {
 
-
+    private static final String ARG_PARAM1 = "param1";
+    private Message mMessage;
+    private int mMessageId;
     private EditText mUser;
     private RefreshOwner mRefreshOwner;
     private EditText mHeading;
     private EditText mText;
     private Button mSaveButton;
     private Button mResetButton;
+    private Button mDeleteButton;
     @InjectPresenter
-    CreateMessagePresenter mPresenter;
+    UpdateMessagePresenter mPresenter;
     @ProvidePresenter
-    CreateMessagePresenter providePresenter(){return new CreateMessagePresenter();}
+    UpdateMessagePresenter providePresenter(){return new UpdateMessagePresenter();}
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof RefreshOwner) mRefreshOwner = (RefreshOwner) context;
+        if(context instanceof RefreshOwner) mRefreshOwner = (RefreshOwner) context;
     }
 
-    public CreateMessageFragment() {
-        // Required empty public constructor
-    }
-
-    public static CreateMessageFragment newInstance() {
-        return new CreateMessageFragment();
+    public static UpdateMessageFragment newInstance(int message_id ) {
+       UpdateMessageFragment fragment = new UpdateMessageFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_PARAM1, message_id);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mMessageId = getArguments().getInt(ARG_PARAM1);
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_create_message, container, false);
+        return inflater.inflate(R.layout.fragment_update_message, container, false);
     }
 
     @Override
@@ -81,23 +86,24 @@ public class CreateMessageFragment extends PresenterFragment implements Refresha
         mText = view.findViewById(R.id.message_text);
         mSaveButton = view.findViewById(R.id.create_message_button);
         mResetButton = view.findViewById(R.id.cleanButton);
+        mDeleteButton = view.findViewById(R.id.delete_button);
         mResetButton.setOnClickListener(v -> {
-            mUser.setText("");
-            mHeading.setText("");
-            mText.setText("");
+            mHeading.setText(mMessage.getHeding());
+            mText.setText(mMessage.getMessage());
         });
-        mSaveButton.setOnClickListener(v -> {
-            String name = mUser.getText().toString();
-            if(name.length()!=0 && mHeading.getText().length()!=0) {
-                mPresenter.getUsers(name);
-            }
-            else if (mHeading.getText().length()==0) {
+        mSaveButton.setOnClickListener(v->{
+            if (mHeading.getText().length()==0) {
                 mHeading.setError("Введите заголовок");
             }
             else {
-                mUser.setError("Введите имя");
+                mPresenter.updateMessage(mMessageId, new MessageCreate(mHeading.getText().toString(),
+                        mText.getText().toString(),mMessage.getSend_time(), ApiUtils.user_id, mMessage.getRecipient().getId()));
             }
         });
+            mDeleteButton.setOnClickListener(v -> {
+                mPresenter.deleteMessage(mMessageId);
+            });
+        onRefreshData();
     }
 
 
@@ -113,23 +119,23 @@ public class CreateMessageFragment extends PresenterFragment implements Refresha
 
     @Override
     public void showError(Throwable throwable) {
-        if (throwable!=null && throwable.getMessage().contains("404")) {
-            mUser.setError("Пользователь не найден");
-            return;
-        }
-        Toast.makeText(getActivity(), "Ошибка сервера", Toast.LENGTH_LONG).show();
+        if (throwable!=null)
+        Toast.makeText(getActivity(), throwable.getMessage(), Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onRefreshData() {
+        mPresenter.getMessage(mMessageId);
     }
 
     @Override
-    public void showUsers(List<User> users) {
-        User user = new User(users.get(0).getId());
-        User me = new User(ApiUtils.user_id);
-        MessageCreate message = new MessageCreate(mHeading.getText().toString(), mText.getText().toString(), new Date(), me.getId(), user.getId());
-        mPresenter.createMessage(message);
+    public void showMessage(Message message) {
+        mMessage = message;
+        mUser.setText(message.getRecipient().getUsername());
+        mHeading.setText(message.getHeding());
+        mUser.setEnabled(false);
+        if(message.getMessage()!=null)
+        mText.setText(message.getMessage());
     }
 
     @Override
@@ -138,8 +144,10 @@ public class CreateMessageFragment extends PresenterFragment implements Refresha
         ((MessagesFragment) getParentFragment()).changeFragment(OutcomingMessagesFragment.newInstance());
     }
 
+
+
     @Override
-    protected CreateMessagePresenter getPresenter() {
+    protected UpdateMessagePresenter getPresenter() {
         return mPresenter;
     }
 }

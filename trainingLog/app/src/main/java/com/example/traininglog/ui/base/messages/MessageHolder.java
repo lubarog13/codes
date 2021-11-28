@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,7 +41,7 @@ public class MessageHolder extends RecyclerView.ViewHolder {
         resources = itemView.getResources();
     }
 
-    public void bind(Message item, boolean isInput) {
+    public void bind(Message item, boolean isInput, MessageAdapter.onItemClickListener onItemClickListener) {
         mIsInput = isInput;
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(item.getSend_time());
@@ -59,6 +60,17 @@ public class MessageHolder extends RecyclerView.ViewHolder {
         mSendTime.setText(simpleDateFormat.format(item.getSend_time().getTime()));
         mHeader.setText(item.getHeding());
         mShowButton.setOnClickListener(v -> showText());
+        if (onItemClickListener!=null) {
+            if(!isInput) {
+                mResendButton.setOnClickListener(v -> {
+                    Calendar calendar1 = Calendar.getInstance();
+                    calendar.add(Calendar.HOUR, -24);
+                    if(calendar1.getTime().compareTo(item.getSend_time())>=0)
+                        onItemClickListener.onUpdateClick(item.getId());
+                    else Toast.makeText(mSenderName.getContext(), "С момента отправки прошло более 24х часов", Toast.LENGTH_LONG).show();
+                });
+            }
+        }
     }
 
     private void showText() {

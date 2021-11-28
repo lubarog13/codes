@@ -16,12 +16,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.example.traininglog.R;
-import com.example.traininglog.common.BasePresenter;
 import com.example.traininglog.common.PresenterFragment;
 import com.example.traininglog.common.RefreshOwner;
 import com.example.traininglog.common.Refreshable;
 import com.example.traininglog.data.model.Message;
+import com.example.traininglog.ui.base.home.WorkoutAdapter;
 import com.example.traininglog.ui.base.messages.MessageAdapter;
+import com.example.traininglog.ui.base.messages.MessagesFragment;
+import com.example.traininglog.ui.base.messages.update.UpdateMessageFragment;
 
 import java.util.List;
 
@@ -30,7 +32,7 @@ import java.util.List;
  * Use the {@link IncomingMessagesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class IncomingMessagesFragment extends PresenterFragment implements IncomingMessagesView, Refreshable {
+public class IncomingMessagesFragment extends PresenterFragment implements IncomingMessagesView, Refreshable, MessageAdapter.onItemClickListener {
     private RecyclerView mRecycler;
     private View mErrorView;
     private MessageAdapter mAdapter;
@@ -75,7 +77,7 @@ public class IncomingMessagesFragment extends PresenterFragment implements Incom
         super.onActivityCreated(savedInstanceState);
         mRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecycler.setHasFixedSize(false);
-        mAdapter = new MessageAdapter(true);
+        mAdapter = new MessageAdapter(true, this);
         mRecycler.setAdapter(mAdapter);
         onRefreshData();
     }
@@ -112,5 +114,9 @@ public class IncomingMessagesFragment extends PresenterFragment implements Incom
     @Override
     protected IncomingMessagesPresenter getPresenter() {
         return mPresenter;
+    }
+
+    @Override
+    public void onUpdateClick(int message_id) {
     }
 }

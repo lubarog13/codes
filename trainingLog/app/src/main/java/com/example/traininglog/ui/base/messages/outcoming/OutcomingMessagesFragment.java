@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.example.traininglog.R;
-import com.example.traininglog.common.BasePresenter;
 import com.example.traininglog.common.PresenterFragment;
 import com.example.traininglog.common.RefreshOwner;
 import com.example.traininglog.common.Refreshable;
@@ -25,13 +24,13 @@ import com.example.traininglog.data.model.Message;
 import com.example.traininglog.ui.base.messages.MessageAdapter;
 import com.example.traininglog.ui.base.messages.MessagesFragment;
 import com.example.traininglog.ui.base.messages.create.CreateMessageFragment;
-import com.example.traininglog.ui.base.messages.create.CreateMessageView;
 import com.example.traininglog.ui.base.messages.incoming.IncomingMessagesPresenter;
 import com.example.traininglog.ui.base.messages.incoming.IncomingMessagesView;
+import com.example.traininglog.ui.base.messages.update.UpdateMessageFragment;
 
 import java.util.List;
 
-public class OutcomingMessagesFragment extends PresenterFragment implements Refreshable, IncomingMessagesView {
+public class OutcomingMessagesFragment extends PresenterFragment implements Refreshable, IncomingMessagesView, MessageAdapter.onItemClickListener {
 
     private RecyclerView mRecycler;
     private View mErrorView;
@@ -83,7 +82,7 @@ public class OutcomingMessagesFragment extends PresenterFragment implements Refr
         super.onActivityCreated(savedInstanceState);
         mRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecycler.setHasFixedSize(false);
-        mAdapter = new MessageAdapter(false);
+        mAdapter = new MessageAdapter(false, this);
         mRecycler.setAdapter(mAdapter);
         mCreateButton.setOnClickListener(v ->{
             if(getParentFragment()!=null)
@@ -124,5 +123,12 @@ public class OutcomingMessagesFragment extends PresenterFragment implements Refr
     @Override
     protected IncomingMessagesPresenter getPresenter() {
         return mPresenter;
+    }
+
+    @Override
+    public void onUpdateClick(int message_id) {
+        if(getParentFragment()!=null) {
+            ((MessagesFragment) getParentFragment()).changeFragment(UpdateMessageFragment.newInstance(message_id));
+        }
     }
 }

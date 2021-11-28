@@ -16,9 +16,11 @@ import java.util.List;
 public class MessageAdapter extends RecyclerView.Adapter<MessageHolder> {
     private final List<Message> mMessages = new ArrayList<>();
     private final boolean isInput;
+    private final onItemClickListener onClick;
 
-    public MessageAdapter(boolean isInput) {
+    public MessageAdapter(boolean isInput, onItemClickListener onClick) {
         this.isInput = isInput;
+        this.onClick = onClick;
     }
 
     @NonNull
@@ -32,7 +34,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageHolder> {
     @Override
     public void onBindViewHolder(@NonNull MessageHolder holder, int position) {
         Message message = mMessages.get(position);
-        holder.bind(message, isInput);
+        holder.bind(message, isInput, onClick);
     }
 
     @Override
@@ -44,5 +46,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageHolder> {
         if(isRefreshed) mMessages.clear();
         mMessages.addAll(data);
         notifyDataSetChanged();
+    }
+    public interface onItemClickListener{
+        void onUpdateClick(int message_id);
     }
 }

@@ -21,7 +21,7 @@ public class MessageCreate{
     public MessageCreate(String heding, String message, Date send_time, int sender, int recipient) {
         this.heding = heding;
         this.message = message;
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         this.send_time = format.format(send_time).replace(" ", "T");
         this.sender = sender;
         this.recipient = recipient;
@@ -44,7 +44,7 @@ public class MessageCreate{
     }
 
     public Date getSend_time() {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         try {
             return format.parse(send_time.replace("T", " "));
         } catch (ParseException e) {
@@ -53,7 +53,7 @@ public class MessageCreate{
     }
 
     public void setSend_time(Date send_time) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         this.send_time = format.format(send_time).replace(" ", "T");
     }
 
