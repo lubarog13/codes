@@ -17,12 +17,18 @@ public class BuildingsPresenter extends BasePresenter<BuildingsView> {
         this.mStorage = mStorage;
     }
 
-    public void getBuildings() {
+    public void getBuildings(boolean saveData) {
         mCompositeDisposable.add(
                 ApiUtils.getApiService().getBuildings()
                         .subscribeOn(Schedulers.io())
-                        .doOnSuccess(mStorage::insertBuildings)
-                        .onErrorReturn(throwable -> mStorage.getBuildings())
+                        .doOnSuccess(buildings -> {
+                                if(saveData)
+                                mStorage.insertBuildings(buildings);
+                        }
+                                )
+                        .onErrorReturn(throwable ->{
+                            return saveData? mStorage.getBuildings(): null;
+                        })
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnSubscribe(disposable -> getViewState().showRefresh())
                         .doFinally(getViewState()::hideRefresh)

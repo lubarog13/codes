@@ -40,12 +40,11 @@ import java.util.List;
  */
 public class HallFragment extends PresenterFragment implements Refreshable, HallView, HallAdapter.onItemClickListener {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private RecyclerView mRecycler;
     private RefreshOwner mRefreshOwner;
+    private boolean saveData;
     private HallAdapter mHallAdapter;
     private View mErrorView;
     @InjectPresenter
@@ -113,6 +112,7 @@ public class HallFragment extends PresenterFragment implements Refreshable, Hall
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         ImageView imageView = getActivity().findViewById(R.id.buildings_image);
+        saveData = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE).getBoolean("save_data", true);
         try
         {
             InputStream ims = getActivity().getAssets().open("image 17.png");
@@ -144,13 +144,14 @@ public class HallFragment extends PresenterFragment implements Refreshable, Hall
     @Override
     public void showError(Throwable throwable) {
         mErrorView.setVisibility(View.VISIBLE);
+        if(throwable!=null)
         Log.e("err", throwable.getMessage());
         mRecycler.setVisibility(View.GONE);
     }
 
     @Override
     public void onRefreshData() {
-        mPresenter.getHalls(mBuildingId);
+        mPresenter.getHalls(mBuildingId, saveData);
     }
 
     @Override

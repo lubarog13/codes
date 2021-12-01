@@ -17,14 +17,17 @@ public class SchedulePresenter extends BasePresenter<ScheduleView> {
     private Storage mStorage;
     private boolean hasError = false;
 
-    public void getPresencesForMonth(int month, int year) {
+    public void getPresencesForMonth(int month, int year, boolean saveData) {
         mCompositeDisposable.add(
                 ApiUtils.getApiService().getPresencesForMonth(ApiUtils.user_id, month, year)
                 .subscribeOn(Schedulers.io())
                         .doOnSuccess(response -> {
+                            if(saveData)
                             mStorage.insertMonthPresences(response);
                         })
-                        .onErrorReturn(throwable ->  mStorage.getMonthPresences(month))
+                        .onErrorReturn(throwable ->  {
+                            return saveData? mStorage.getMonthPresences(month):null;
+                        })
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> getViewState().showRefresh())
                 .doFinally(getViewState()::hideRefresh)

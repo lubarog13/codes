@@ -51,6 +51,7 @@ public class ScheduleFragment extends PresenterFragment implements Refreshable, 
     private View mErrorView;
     private View mFreeDay;
     private RecyclerView mRecycler;
+    private boolean saveData;
     private Storage mStorage;
     private WorkoutAdapter mAdapter;
     private final List<Presence> mPresence = new ArrayList<>();
@@ -95,6 +96,8 @@ public class ScheduleFragment extends PresenterFragment implements Refreshable, 
         mErrorView.setPadding(0, 0, 0, 100);
         ImageView imageView = view.findViewById(R.id.schedule_image);
         ImageView imageView1 = view.findViewById(R.id.free_image);
+        if(getActivity()!=null)
+        saveData = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE).getBoolean("save_data", true);
         try {
             // get input stream
             InputStream ims = getActivity().getAssets().open("image 3.png");
@@ -162,7 +165,7 @@ public class ScheduleFragment extends PresenterFragment implements Refreshable, 
 
     @Override
     public void onRefreshData() {
-        mPresenter.getPresencesForMonth(calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR));
+        mPresenter.getPresencesForMonth(calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR), saveData);
     }
 
     @Override

@@ -16,12 +16,16 @@ public class HallPresenter extends BasePresenter<HallView> {
         this.mStorage = mStorage;
     }
 
-    public void getHalls(int building_id) {
+    public void getHalls(int building_id, boolean saveData) {
         mCompositeDisposable.add(
                 ApiUtils.getApiService().getHallsForBuilding(building_id)
                 .subscribeOn(Schedulers.io())
-                        .doOnSuccess(mStorage::insertHalls)
-                        .onErrorReturn(throwable -> mStorage.getHalls(building_id))
+                        .doOnSuccess(response -> {
+                            if (saveData) mStorage.insertHalls(response);
+                        })
+                        .onErrorReturn(throwable -> {
+                            return saveData? mStorage.getHalls(building_id): null;
+                        })
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> getViewState().showRefresh())
                 .doFinally(getViewState()::hideRefresh)

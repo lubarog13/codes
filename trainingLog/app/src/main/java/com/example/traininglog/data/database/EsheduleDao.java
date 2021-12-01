@@ -44,6 +44,24 @@ public interface EsheduleDao {
     @Query("delete from presence")
     void deletePresences();
 
+    @Query("delete from user")
+    void deleteUsers();
+
+    @Query("delete from building")
+    void deleteBuildings();
+
+    @Query("delete from hall")
+    void deleteHalls();
+
+    @Query("delete from workout")
+    void deleteWorkouts();
+
+    @Query("delete from coach")
+    void deleteCoaches();
+
+    @Query("delete from club")
+    void deleteClubs();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertUser(User user);
 

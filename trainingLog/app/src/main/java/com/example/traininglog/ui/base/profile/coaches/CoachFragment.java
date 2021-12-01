@@ -35,6 +35,7 @@ public class CoachFragment extends PresenterFragment implements Refreshable, Coa
     private CoachAdapter mCoachAdapter;
     private View mErrorView;
     private RefreshOwner mRefreshOwner;
+    private boolean saveData;
     private Storage mStorage;
     @InjectPresenter
     CoachPresenter mPresenter;
@@ -88,6 +89,8 @@ public class CoachFragment extends PresenterFragment implements Refreshable, Coa
         mCoachAdapter = new CoachAdapter();
         mRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecycler.setAdapter(mCoachAdapter);
+        if(getActivity()!=null)
+        saveData = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE).getBoolean("save_data", true);
         onRefreshData();
     }
 
@@ -105,12 +108,13 @@ public class CoachFragment extends PresenterFragment implements Refreshable, Coa
     public void showError(Throwable throwable) {
         mErrorView.setVisibility(View.VISIBLE);
         mRecycler.setVisibility(View.GONE);
+        if(throwable!=null)
         Log.e("error", throwable.getMessage());
     }
 
     @Override
     public void onRefreshData() {
-        mPresenter.getCoaches();
+        mPresenter.getCoaches(saveData);
     }
 
     @Override

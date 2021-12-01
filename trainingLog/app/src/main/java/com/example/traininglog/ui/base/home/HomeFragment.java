@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,12 +42,12 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
     @InjectPresenter
     HomePresenter mPresenter;
 
-    private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
     private View mErrorView;
     private View mHomeView;
     private Storage mStorage;
     private WorkoutAdapter mWorkoutAdapter;
+    private boolean showData = true;
     private RefreshOwner mRefreshOwner;
 
     public static HomeFragment newInstance() {return new HomeFragment();}
@@ -97,6 +98,7 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
         TextView textView = getActivity().findViewById(R.id.week_workouts);
         Typeface typeFace=Typeface.createFromAsset(getActivity().getAssets(),"fonts/BalsamiqSans-Bold.ttf");
         textView.setTypeface(typeFace);
+        showData = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE).getBoolean("save_data", true);
         ImageView imageView = getActivity().findViewById(R.id.image_main);
         try
         {
@@ -134,6 +136,7 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
     public void showError(Throwable throwable) {
         mErrorView.setVisibility(View.VISIBLE);
         mHomeView.setVisibility(View.GONE);
+        if(throwable!=null)
         Log.e("err", throwable.getMessage());
     }
 
@@ -141,7 +144,7 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
 
     @Override
     public void onRefreshData() {
-        mPresenter.getWorkouts();
+        mPresenter.getWorkouts(showData);
     }
 
     @Override

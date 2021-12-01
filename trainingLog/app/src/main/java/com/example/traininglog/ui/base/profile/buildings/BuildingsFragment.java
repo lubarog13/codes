@@ -42,6 +42,7 @@ public class BuildingsFragment extends PresenterFragment implements BuildingsVie
     private BuildingAdapter mBuildingAdapter;
     private View mErrorView;
     private Storage mStorage;
+    private boolean saveData;
     private RefreshOwner mRefreshOwner;
     @InjectPresenter
     BuildingsPresenter mPresenter;
@@ -92,6 +93,7 @@ public class BuildingsFragment extends PresenterFragment implements BuildingsVie
         mBuildingAdapter = new BuildingAdapter(this);
         mRecycler.setAdapter(mBuildingAdapter);
         ImageView imageView = getActivity().findViewById(R.id.buildings_image);
+        saveData = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE).getBoolean("save_data", true);
         try
         {
             InputStream ims = getActivity().getAssets().open("image 17.png");
@@ -124,7 +126,7 @@ public class BuildingsFragment extends PresenterFragment implements BuildingsVie
 
     @Override
     public void onRefreshData() {
-        mPresenter.getBuildings();
+        mPresenter.getBuildings(saveData);
     }
 
     @Override

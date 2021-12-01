@@ -19,18 +19,19 @@ public class HomePresenter extends BasePresenter<HomeView> {
         this.mStorage = mStorage;
     }
 
-    public void getWorkouts() {
+    public void getWorkouts(boolean save_data) {
         HomeActivity.is_firstOpened = false;
         mCompositeDisposable.add(
                 ApiUtils.getApiService().getWeekWorkouts(ApiUtils.user_id)
                 .subscribeOn(Schedulers.io())
                         .doOnSuccess(response -> {
+                            if(save_data)
                             mStorage.insertWorkouts(response);
                             hasError = false;
                         })
                         .onErrorReturn(throwable -> {
                             hasError = true;
-                            return mStorage.getWeekWorkout();
+                            return save_data? mStorage.getWeekWorkout(): null;
                         })
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnSubscribe(disposable -> getViewState().showRefresh())

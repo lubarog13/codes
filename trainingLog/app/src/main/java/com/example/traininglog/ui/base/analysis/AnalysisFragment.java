@@ -48,6 +48,7 @@ public class AnalysisFragment extends PresenterFragment implements Refreshable, 
     private PieChart pieChart;
     private View mErrorView;
     private View mView;
+    private View mHideView;
     private ValueLineChart mCubicValueLineChart;
     private RefreshOwner mRefreshOwner;
     private TextView mCardioCount;
@@ -97,6 +98,7 @@ public class AnalysisFragment extends PresenterFragment implements Refreshable, 
         mErrorView = view.findViewById(R.id.errorView);
         mView = view.findViewById(R.id.analysis_content);
         mTypeText = view.findViewById(R.id.typeText);
+        mHideView = view.findViewById(R.id.hide_view);
          pieChart = view.findViewById(R.id.piechart);
          mAllTrainButton = view.findViewById(R.id.all_train_button);
          mAllTrainButton.setOnClickListener(v -> mPresenter.getAnalysisForTypes());
@@ -152,7 +154,12 @@ public class AnalysisFragment extends PresenterFragment implements Refreshable, 
         {
             return;
         }
+        if(getActivity().getSharedPreferences("user", Context.MODE_PRIVATE).getBoolean("show_analysis", true))
         onRefreshData();
+        else {
+            mHideView.setVisibility(View.VISIBLE);
+            mView.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -174,6 +181,10 @@ public class AnalysisFragment extends PresenterFragment implements Refreshable, 
 
     @Override
     public void onRefreshData() {
+        if(!getActivity().getSharedPreferences("user", Context.MODE_PRIVATE).getBoolean("show_analysis", true)) {
+            hideRefresh();
+            return;
+        }
         mPresenter.getAnalysisForTypes();
     }
 

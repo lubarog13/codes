@@ -17,12 +17,17 @@ public class CoachPresenter extends BasePresenter<CoachView> {
         this.mStorage = mStorage;
     }
 
-    public void getCoaches() {
+    public void getCoaches(boolean saveData) {
         mCompositeDisposable.add(
                 ApiUtils.getApiService().getCoaches()
                 .subscribeOn(Schedulers.io())
-                        .doOnSuccess(mStorage::insertCoaches)
-                        .onErrorReturn(throwable -> mStorage.getCoaches())
+                        .doOnSuccess(coaches -> {
+                            if(saveData)
+                                mStorage.insertCoaches(coaches);
+                        })
+                        .onErrorReturn(throwable -> {
+                            return saveData? mStorage.getCoaches(): null;
+                        })
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> getViewState().showRefresh())
                 .doFinally(getViewState()::hideRefresh)

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,10 +23,10 @@ import androidx.fragment.app.Fragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.example.traininglog.R;
-import com.example.traininglog.common.BasePresenter;
 import com.example.traininglog.common.PresenterFragment;
 import com.example.traininglog.common.RefreshOwner;
 import com.example.traininglog.common.Refreshable;
+import com.example.traininglog.data.Storage;
 import com.example.traininglog.data.model.AuthUser;
 import com.example.traininglog.data.model.User;
 
@@ -54,6 +55,7 @@ public class SettingsFragment extends PresenterFragment implements Refreshable, 
     private ToggleButton mMale;
     private RefreshOwner mRefreshOwner;
     private SharedPreferences preferences;
+    private Storage mStorage;
     private ToggleButton mFemale;
     private Button mSave;
     private SwitchCompat mShowAnalysis;
@@ -76,6 +78,7 @@ public class SettingsFragment extends PresenterFragment implements Refreshable, 
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         if (context instanceof RefreshOwner) mRefreshOwner = (RefreshOwner) context;
+        if (context instanceof Storage.StorageOwner) mStorage = ((Storage.StorageOwner) context).obtainStorage();
     }
 
     @Override
@@ -118,6 +121,19 @@ public class SettingsFragment extends PresenterFragment implements Refreshable, 
         if(getActivity()==null) return;
         ImageView imageView = getActivity().findViewById(R.id.settings_image);
         preferences = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
+        mSaveData.setOnCheckedChangeListener(((buttonView, isChecked) -> {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("save_data", !isChecked);
+            editor.apply();
+            Log.e("storage","storage");
+            if(isChecked)
+            mPresenter.clearTables(mStorage);
+        }));
+        mShowAnalysis.setOnCheckedChangeListener(((buttonView, isChecked) -> {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("show_analysis", !isChecked);
+            editor.apply();
+        }));
         try
         {
             // get input stream
@@ -158,7 +174,8 @@ public class SettingsFragment extends PresenterFragment implements Refreshable, 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM", new Locale("ru"));
         mMonth.setText(simpleDateFormat.format(date));
         mYear.setText(String.valueOf(calendar.get(Calendar.YEAR)));
-
+        mSaveData.setChecked(!preferences.getBoolean("save_data", true));
+        mShowAnalysis.setChecked(!preferences.getBoolean("show_analysis", true));
     }
 
     private void saveUser() {

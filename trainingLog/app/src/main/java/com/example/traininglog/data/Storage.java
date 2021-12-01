@@ -181,6 +181,23 @@ public class Storage {
         return hall;
     }
 
+    public void clearTables() {
+        Log.e("storage", "all right");
+        mDao.deletePresences();
+        Log.e("storage", "all right");
+        mDao.deleteWorkouts();
+        Log.e("storage", "all right");
+        mDao.deleteClubs();
+        Log.e("storage", "all right");
+        mDao.deleteHalls();
+        Log.e("storage", "all right");
+        mDao.deleteCoaches();
+        Log.e("storage", "all right");
+        mDao.deleteUsers();
+        Log.e("storage", "all right");
+        mDao.deleteBuildings();
+    }
+
     public interface StorageOwner {
         Storage obtainStorage();
     }
