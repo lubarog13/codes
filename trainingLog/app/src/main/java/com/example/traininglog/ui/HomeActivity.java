@@ -21,6 +21,7 @@ import com.example.traininglog.ui.base.messages.MessagesFragment;
 import com.example.traininglog.ui.base.schedule.ScheduleFragment;
 import com.example.traininglog.ui.base.home.HomeFragment;
 import com.example.traininglog.ui.base.profile.ProfileFragment;
+import com.example.traininglog.ui.base.settings.SettingsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
@@ -99,7 +100,7 @@ public class HomeActivity extends AppCompatActivity implements Storage.StorageOw
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menu_settings) {
-            Toast.makeText(this, "message", Toast.LENGTH_LONG).show();
+            changeFragment(SettingsFragment.newInstance());
         }
         return super.onOptionsItemSelected(item);
     }

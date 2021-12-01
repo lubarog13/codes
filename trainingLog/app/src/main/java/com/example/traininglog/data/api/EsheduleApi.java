@@ -120,4 +120,7 @@ public interface EsheduleApi {
     @DELETE("message/{message_id}/delete/")
     Completable deleteMessage(@Path("message_id") int id);
 
+    @PATCH("auth/users/me/")
+    Single<User> updateUser(@Body AuthUser authUser);
+
 }
