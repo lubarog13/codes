@@ -24,9 +24,13 @@ public class ClubHolder extends RecyclerView.ViewHolder {
     private TextView mEndDate;
     private Button mSignUps;
     private Button mDelete;
+    private View mAcceptView;
     private View mNames;
     private TextView mNames1;
     private TextView mNames2;
+    private Button mAcceptButton;
+    private Button mDenyButton;
+    private boolean isAcceptOpen = false;
     private boolean is_opened=false;
     public ClubHolder(@NonNull View itemView) {
         super(itemView);
@@ -40,6 +44,9 @@ public class ClubHolder extends RecyclerView.ViewHolder {
         mNames = itemView.findViewById(R.id.names_in_club);
         mNames1 = itemView.findViewById(R.id.usernames_1);
         mNames2 = itemView.findViewById(R.id.usernames_2);
+        mAcceptView = itemView.findViewById(R.id.accept_delete);
+        mAcceptButton = itemView.findViewById(R.id.yes_button);
+        mDenyButton = itemView.findViewById(R.id.no_button);
     }
 
     public void bind(SignUp item, List<User> users, ClubAdapter.onItemClickListener onItemClickListener) {
@@ -70,6 +77,12 @@ public class ClubHolder extends RecyclerView.ViewHolder {
         }
         if(onItemClickListener!=null) {
             mSignUps.setOnClickListener(view -> OpenUsers(onItemClickListener, item.getClub().getId(), item.getId()));
+            mAcceptButton.setOnClickListener(v -> {
+                acceptDelete();
+                onItemClickListener.deleteSignUp(item.getId());
+            });
+            mDenyButton.setOnClickListener(v -> acceptDelete());
+            mDelete.setOnClickListener(v -> acceptDelete());
         }
 
     }
@@ -84,6 +97,15 @@ public class ClubHolder extends RecyclerView.ViewHolder {
             mSignUps.setText("Скрыть занимаюихся");
         }
         is_opened = !is_opened;
+    }
+
+    private void acceptDelete() {
+        if(isAcceptOpen) {
+            mAcceptView.setVisibility(View.GONE);
+        } else {
+            mAcceptView.setVisibility(View.VISIBLE);
+        }
+        isAcceptOpen = !isAcceptOpen;
     }
 }
 

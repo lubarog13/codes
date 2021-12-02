@@ -126,6 +126,50 @@
     </GridLayout>
     <LinearLayout
         android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/accept_delete"
+        android:visibility="gone"
+        android:background="@drawable/profile_alpha_rect"
+        android:layout_height="100dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="Вы действительно хотите удалить запись?"
+            android:paddingStart="50dp"
+            android:textSize="16sp"
+            android:fontFamily="@font/roboto_bold"
+            android:textColor="@color/colorRed"
+            android:layout_marginTop="20dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="4dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="150dp"
+                android:textAllCaps="false"
+                android:layout_height="match_parent"
+                android:text="Да"
+                android:id="@+id/yes_button"
+                android:fontFamily="@font/roboto_bold"
+                android:background="@drawable/outlined_button"
+                />
+            <Button
+                android:layout_width="150dp"
+                android:layout_marginStart="30dp"
+                android:layout_height="match_parent"
+                android:textAllCaps="false"
+                android:id="@+id/no_button"
+                android:text="Нет"
+                android:fontFamily="@font/roboto_bold"
+                android:background="@drawable/outlined_button"
+                />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="56dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">

@@ -62,4 +62,18 @@ public class ClubsPresenter extends BasePresenter<ClubsView> {
                         )
         );
     }
+
+    public void deleteSignUp(int id) {
+        mCompositeDisposable.add(
+                ApiUtils.getApiService().deleteSignup(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> getViewState().showRefresh())
+                .doFinally(getViewState()::hideRefresh)
+                .subscribe(
+                        getViewState()::showSuccess,
+                        getViewState()::showCreatingError
+                )
+        );
+    }
 }

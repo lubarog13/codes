@@ -11,4 +11,5 @@ public interface ClubsView extends BaseView {
      void setUsers(List<User> users, int signup_id);
      void showCreatingError(Throwable throwable);
      void updateSignUps(SignUp signUp);
+     void showSuccess();
 }

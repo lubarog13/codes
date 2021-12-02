@@ -188,12 +188,18 @@ public class ClubsFragment extends PresenterFragment implements  Refreshable,  C
 
     @Override
     public void showCreatingError(Throwable throwable) {
-        Toast.makeText(getActivity(), "Ошибка создания записи, возможно идентификатор неверен", Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), "Ошибка создания или удаления записи, возможно идентификатор неверен", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void updateSignUps(SignUp signUp) {
         mAdapter.updateData(signUp);
+    }
+
+    @Override
+    public void showSuccess() {
+        Toast.makeText(getActivity(), "Успешно удалено!", Toast.LENGTH_SHORT).show();
+        onRefreshData();
     }
 
     @Override
@@ -209,6 +215,11 @@ public class ClubsFragment extends PresenterFragment implements  Refreshable,  C
     @Override
     public void hideUser(int signup_id) {
         mAdapter.removeUsers(signup_id);
+    }
+
+    @Override
+    public void deleteSignUp(int signup_id) {
+        mPresenter.deleteSignUp(signup_id);
     }
 
     private void changeFragment(Class fragmentClass){

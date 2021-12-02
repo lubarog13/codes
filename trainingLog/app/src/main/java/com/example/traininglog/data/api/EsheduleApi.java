@@ -123,4 +123,7 @@ public interface EsheduleApi {
     @PATCH("auth/users/me/")
     Single<User> updateUser(@Body AuthUser authUser);
 
+    @DELETE("signup/{signup_id}/delete/")
+    Completable deleteSignup(@Path("signup_id") int signup_id);
+
 }

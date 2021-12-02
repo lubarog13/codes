@@ -56,6 +56,7 @@ public class ClubAdapter extends RecyclerView.Adapter<ClubHolder> {
     public interface onItemClickListener{
          void onUsersClick(int club_id, int signup_id);
          void hideUser(int signup_id);
+         void deleteSignUp(int signup_id);
     }
 
     public void addUsers(int signup_id, List<User> user){
