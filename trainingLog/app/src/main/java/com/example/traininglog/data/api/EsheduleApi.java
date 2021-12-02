@@ -126,4 +126,7 @@ public interface EsheduleApi {
     @DELETE("signup/{signup_id}/delete/")
     Completable deleteSignup(@Path("signup_id") int signup_id);
 
+    @GET("halls/")
+    Single<List<Hall>> getHalls();
+
 }

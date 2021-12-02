@@ -58,7 +58,6 @@ public class AuthPresenter extends BasePresenter<AuthView> {
                         )
         );
     }
-
     private void saveUser(User user) {
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt("id", user.getId());

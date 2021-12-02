@@ -27,11 +27,15 @@ import com.example.traininglog.common.PresenterFragment;
 import com.example.traininglog.common.RefreshOwner;
 import com.example.traininglog.common.Refreshable;
 import com.example.traininglog.data.Storage;
+import com.example.traininglog.data.model.Club;
+import com.example.traininglog.data.model.Coach;
+import com.example.traininglog.data.model.Hall;
 import com.example.traininglog.data.model.Presence;
 import com.example.traininglog.data.model.Presence_W_N;
 import com.example.traininglog.data.model.Workout;
 import com.example.traininglog.ui.HomeActivity;
 import com.example.traininglog.ui.base.hall.HallViewFragment;
+import com.example.traininglog.ui.base.home.coach.CoachWorkoutAdapter;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,7 +45,7 @@ import java.util.List;
 public class HomeFragment extends PresenterFragment implements HomeView, Refreshable, WorkoutAdapter.OnItemClickListener {
     @InjectPresenter
     HomePresenter mPresenter;
-
+    private CoachWorkoutAdapter mCoachWorkoutAdapter;
     private RecyclerView mRecyclerView;
     private View mErrorView;
     private View mHomeView;
@@ -49,6 +53,7 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
     private WorkoutAdapter mWorkoutAdapter;
     private boolean showData = true;
     private RefreshOwner mRefreshOwner;
+    private boolean is_coach;
 
     public static HomeFragment newInstance() {return new HomeFragment();}
 
@@ -89,16 +94,19 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        is_coach = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE).getBoolean("is_coach", false);
+        mCoachWorkoutAdapter = new CoachWorkoutAdapter();
         mWorkoutAdapter = new WorkoutAdapter(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
-        mRecyclerView.setAdapter(mWorkoutAdapter);
+        mRecyclerView.setAdapter(is_coach? mCoachWorkoutAdapter: mWorkoutAdapter);
         mRecyclerView.setNestedScrollingEnabled(false);
         mRecyclerView.setHasFixedSize(false);
         TextView textView = getActivity().findViewById(R.id.week_workouts);
         Typeface typeFace=Typeface.createFromAsset(getActivity().getAssets(),"fonts/BalsamiqSans-Bold.ttf");
         textView.setTypeface(typeFace);
         showData = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE).getBoolean("save_data", true);
+
         ImageView imageView = getActivity().findViewById(R.id.image_main);
         try
         {
@@ -114,7 +122,10 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
         {
             return;
         }
-        onRefreshData();
+        if(is_coach){
+            mPresenter.getData();
+        }
+        else onRefreshData();
     }
 
     @Override
@@ -136,6 +147,7 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
     public void showError(Throwable throwable) {
         mErrorView.setVisibility(View.VISIBLE);
         mHomeView.setVisibility(View.GONE);
+        this.hideRefresh();
         if(throwable!=null)
         Log.e("err", throwable.getMessage());
     }
@@ -151,7 +163,9 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
     public void saveWorkouts(List<Workout> workouts) {
         mErrorView.setVisibility(View.GONE);
         mHomeView.setVisibility(View.VISIBLE);
-        mWorkoutAdapter.addData(workouts, true);
+        if(is_coach)
+            mCoachWorkoutAdapter.addData(workouts, true);
+        else mWorkoutAdapter.addData(workouts, true);
     }
 
     @Override
@@ -167,6 +181,12 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
     @Override
     public void showNetworkError() {
         Toast.makeText(getActivity(), "Ошибка интернет-соединения", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showValues(List<Hall> halls, List<Coach> coaches, List<Club> clubs) {
+        mCoachWorkoutAdapter.addValues(coaches, halls, clubs);
+        onRefreshData();
     }
 
     @Override

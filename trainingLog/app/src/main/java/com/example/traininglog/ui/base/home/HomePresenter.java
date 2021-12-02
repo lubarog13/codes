@@ -3,9 +3,14 @@ package com.example.traininglog.ui.base.home;
 import com.arellomobile.mvp.InjectViewState;
 import com.example.traininglog.common.BasePresenter;
 import com.example.traininglog.data.Storage;
+import com.example.traininglog.data.model.Coach;
+import com.example.traininglog.data.model.Hall;
 import com.example.traininglog.data.model.Presence;
 import com.example.traininglog.ui.HomeActivity;
 import com.example.traininglog.utils.ApiUtils;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -98,6 +103,47 @@ public class HomePresenter extends BasePresenter<HomeView> {
                                 () -> {},
                                 throwable -> getViewState().showNetworkError()
                         )
+        );
+    }
+
+    public void getData() {
+        mCompositeDisposable.add(
+                ApiUtils.getApiService().getHalls()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable ->  getViewState().showRefresh())
+                .subscribe(
+                        this::getCoaches,
+                        getViewState()::showError
+                )
+        );
+    }
+
+    private void getCoaches(List<Hall> halls) {
+        mCompositeDisposable.add(
+                ApiUtils.getApiService().getCoaches()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> getViewState().showRefresh())
+                .subscribe(
+                        coaches -> this.getClubs(halls, coaches),
+                        getViewState()::showError
+                )
+        );
+    }
+
+    private void getClubs(List<Hall> halls, List<Coach> coaches) {
+        Coach coach_ = coaches.stream().filter(coach -> coach.getUser().getId()==ApiUtils.user_id).collect(Collectors.toList()).get(0);
+        mCompositeDisposable.add(
+                ApiUtils.getApiService().getClubsForCoach(coach_.getId())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> getViewState().showRefresh())
+                .doFinally(getViewState()::hideRefresh)
+                .subscribe(
+                        clubResponse -> getViewState().showValues(halls, coaches, clubResponse.getClubs()),
+                        getViewState()::showError
+                )
         );
     }
 

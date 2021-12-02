@@ -1,9 +1,9 @@
 package com.example.traininglog.ui.base.home;
 
-import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
-import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 import com.example.traininglog.common.BaseView;
-import com.example.traininglog.data.model.Presence;
+import com.example.traininglog.data.model.Club;
+import com.example.traininglog.data.model.Coach;
+import com.example.traininglog.data.model.Hall;
 import com.example.traininglog.data.model.Presence_W_N;
 import com.example.traininglog.data.model.Workout;
 
@@ -14,4 +14,5 @@ public interface HomeView extends BaseView {
     void updatePresence(boolean is_attend);
     void showPresences(List<Presence_W_N> presences);
     void showNetworkError();
+    void showValues(List<Hall> halls, List<Coach> coaches, List<Club> clubs);
 }
