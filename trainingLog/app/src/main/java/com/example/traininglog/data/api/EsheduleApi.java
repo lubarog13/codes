@@ -1,10 +1,13 @@
 package com.example.traininglog.data.api;
 
+
+
 import com.example.traininglog.data.model.AuthUser;
 import com.example.traininglog.data.model.Building;
 import com.example.traininglog.data.model.Club;
 import com.example.traininglog.data.model.ClubResponse;
 import com.example.traininglog.data.model.Coach;
+import com.example.traininglog.data.model.CoachResponse;
 import com.example.traininglog.data.model.Hall;
 import com.example.traininglog.data.model.HallsResponse;
 import com.example.traininglog.data.model.Message;
@@ -128,5 +131,11 @@ public interface EsheduleApi {
 
     @GET("halls/")
     Single<List<Hall>> getHalls();
+
+    @GET("coach/user{user_id}/")
+    Single<CoachResponse> getCoach(@Path("user_id") int user_id);
+
+    @GET("coach/{coach_id}/week_workouts/")
+    Single<WorkoutResponse> getWorkoutsForCoach(@Path("coach_id") int coach_id);
 
 }
