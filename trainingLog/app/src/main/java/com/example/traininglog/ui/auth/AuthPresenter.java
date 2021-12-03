@@ -26,6 +26,7 @@ public class AuthPresenter extends BasePresenter<AuthView> {
         if(sp.contains("id")){
             ApiUtils.user_id = sp.getInt("id", 0);
             ApiUtils.token = sp.getString("token", "");
+            ApiUtils.coach_id = sp.getInt("coach_id", -1);
             getViewState().showSuccess(new AuthUser(ApiUtils.token));
             return;
         }
@@ -53,12 +54,31 @@ public class AuthPresenter extends BasePresenter<AuthView> {
                         .doOnSubscribe(disposable -> getViewState().showRefresh())
                         .doFinally(getViewState()::hideRefresh)
                         .subscribe(
-                                this::saveUser,
+                                this::getCoach,
                                 throwable -> getViewState().showError(throwable)
                         )
         );
     }
-    private void saveUser(User user) {
+
+    public void getCoach(User user) {
+        if(!user.getIs_coach()){
+            saveUser(user, -1);
+            return;
+        }
+        mCompositeDisposable.add(
+                ApiUtils.getApiService().getCoach(user.getId())
+                .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnSubscribe(disposable -> getViewState().showRefresh())
+                        .doFinally(getViewState()::hideRefresh)
+                        .subscribe(
+                                coachResponse -> saveUser(user, coachResponse.getCoach().getId()),
+                                throwable -> getViewState().showError(throwable)
+                        )
+        );
+    }
+
+    private void saveUser(User user, int coach_id) {
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt("id", user.getId());
         editor.putString("first_name", user.getFirst_name());
@@ -69,8 +89,10 @@ public class AuthPresenter extends BasePresenter<AuthView> {
         editor.putString("date_birth", user.getDate_birth().toString());
         editor.putString("username", user.getUsername());
         editor.putBoolean("is_coach", user.getIs_coach());
+        editor.putInt("coach_id", coach_id);
         editor.putString("token", ApiUtils.token);
         ApiUtils.user_id = user.getId();
+        ApiUtils.coach_id = coach_id;
         editor.apply();
         getViewState().navigateHome();
     }

@@ -109,7 +109,7 @@
         android:paddingTop="20dp"
         android:layout_height="wrap_content"
         android:rowCount="4"
-        android:visibility="visible"
+        android:visibility="gone"
         android:id="@+id/workout_info"
         android:columnCount="3">
         <TextView
@@ -222,7 +222,7 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:rowCount="1"
-        android:visibility="visible"
+        android:visibility="gone"
         android:id="@+id/go_buttons"
         android:columnCount="3">
         <Button

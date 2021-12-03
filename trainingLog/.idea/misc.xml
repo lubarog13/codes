@@ -3,92 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="app/src/main/res/drawable/blue_button_2.xml" value="0.37916666666666665" />
-        <entry key="app/src/main/res/drawable/button_blue.xml" value="0.21666666666666667" />
-        <entry key="app/src/main/res/drawable/button_green.xml" value="0.37916666666666665" />
-        <entry key="app/src/main/res/drawable/button_rect.xml" value="0.19479166666666667" />
-        <entry key="app/src/main/res/drawable/button_red.xml" value="0.21666666666666667" />
-        <entry key="app/src/main/res/drawable/button_red_dark.xml" value="0.1921875" />
-        <entry key="app/src/main/res/drawable/card_draw.xml" value="0.37916666666666665" />
-        <entry key="app/src/main/res/drawable/gradient_drawable.xml" value="0.37916666666666665" />
-        <entry key="app/src/main/res/drawable/ic_auth.xml" value="0.2046875" />
-        <entry key="app/src/main/res/drawable/ic_ellipse_1.xml" value="0.19635416666666666" />
-        <entry key="app/src/main/res/drawable/ic_ellipse_2.xml" value="0.375" />
-        <entry key="app/src/main/res/drawable/ic_ellipse_3.xml" value="0.375" />
-        <entry key="app/src/main/res/drawable/ic_groupfball.xml" value="0.36923076923076925" />
-        <entry key="app/src/main/res/drawable/ic_profile.xml" value="0.36923076923076925" />
-        <entry key="app/src/main/res/drawable/ic_vector_6.xml" value="0.19635416666666666" />
-        <entry key="app/src/main/res/drawable/ic_vectorbball.xml" value="0.36923076923076925" />
-        <entry key="app/src/main/res/drawable/item_button_background.xml" value="0.2046875" />
-        <entry key="app/src/main/res/drawable/iten_button_background_blue.xml" value="0.37916666666666665" />
-        <entry key="app/src/main/res/drawable/outlined_button.xml" value="0.184375" />
-        <entry key="app/src/main/res/drawable/outlined_button_red.xml" value="0.184375" />
-        <entry key="app/src/main/res/drawable/profile_alpha_rect.xml" value="0.36923076923076925" />
-        <entry key="app/src/main/res/drawable/profile_rect.xml" value="0.36923076923076925" />
-        <entry key="app/src/main/res/drawable/rect.xml" value="0.20052083333333334" />
-        <entry key="app/src/main/res/drawable/rect_lay.xml" value="0.20052083333333334" />
-        <entry key="app/src/main/res/drawable/selected_day.xml" value="0.20052083333333334" />
-        <entry key="app/src/main/res/drawable/textarea.xml" value="0.375" />
-        <entry key="app/src/main/res/drawable/toggle.xml" value="0.37916666666666665" />
-        <entry key="app/src/main/res/drawable/toggle_1.xml" value="0.2015625" />
-        <entry key="app/src/main/res/drawable/toggle_of.xml" value="0.37916666666666665" />
-        <entry key="app/src/main/res/drawable/toggle_off_2.xml" value="0.2015625" />
-        <entry key="app/src/main/res/drawable/toggle_on.xml" value="0.37916666666666665" />
-        <entry key="app/src/main/res/drawable/toggle_on_1.xml" value="0.2015625" />
-        <entry key="app/src/main/res/drawable/triangle.xml" value="0.20885416666666667" />
-        <entry key="app/src/main/res/drawable/underline.xml" value="0.20885416666666667" />
-        <entry key="app/src/main/res/font/caveat.xml" value="0.21458333333333332" />
-        <entry key="app/src/main/res/font/caveat_my.xml" value="0.21458333333333332" />
-        <entry key="app/src/main/res/layout/activity_home.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.19427083333333334" />
-        <entry key="app/src/main/res/layout/calendar.xml" value="0.18020833333333333" />
-        <entry key="app/src/main/res/layout/club_item_layout.xml" value="0.20052083333333334" />
-        <entry key="app/src/main/res/layout/club_view.xml" value="0.2921195652173913" />
-        <entry key="app/src/main/res/layout/coach_home_workout.xml" value="0.17604166666666668" />
-        <entry key="app/src/main/res/layout/coach_item.xml" value="0.36302083333333335" />
-        <entry key="app/src/main/res/layout/content_home.xml" value="0.19947916666666668" />
-        <entry key="app/src/main/res/layout/custom_action_bar_layout.xml" value="0.30434782608695654" />
-        <entry key="app/src/main/res/layout/dont_show_layout.xml" value="0.1796875" />
-        <entry key="app/src/main/res/layout/edit_workout_layout.xml" value="0.17604166666666668" />
-        <entry key="app/src/main/res/layout/error_view.xml" value="0.19427083333333334" />
-        <entry key="app/src/main/res/layout/fragment_all_clubs.xml" value="0.19270833333333334" />
-        <entry key="app/src/main/res/layout/fragment_analysis.xml" value="0.22" />
-        <entry key="app/src/main/res/layout/fragment_buildings.xml" value="0.17552083333333332" />
-        <entry key="app/src/main/res/layout/fragment_club_info.xml" value="0.3500905797101449" />
-        <entry key="app/src/main/res/layout/fragment_clubs.xml" value="0.20052083333333334" />
-        <entry key="app/src/main/res/layout/fragment_coach.xml" value="0.36302083333333335" />
-        <entry key="app/src/main/res/layout/fragment_container.xml" value="0.20416666666666666" />
-        <entry key="app/src/main/res/layout/fragment_create_message.xml" value="0.338768115942029" />
-        <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.20052083333333334" />
-        <entry key="app/src/main/res/layout/fragment_hall.xml" value="0.36186594202898553" />
-        <entry key="app/src/main/res/layout/fragment_hall_view.xml" value="0.1578125" />
-        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.18854166666666666" />
-        <entry key="app/src/main/res/layout/fragment_incoming_messages.xml" value="0.16822916666666668" />
-        <entry key="app/src/main/res/layout/fragment_messages.xml" value="0.16822916666666668" />
-        <entry key="app/src/main/res/layout/fragment_notifications.xml" value="0.20923913043478262" />
-        <entry key="app/src/main/res/layout/fragment_outcoming_messages.xml" value="0.1890625" />
-        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.20923913043478262" />
-        <entry key="app/src/main/res/layout/fragment_registration.xml" value="0.18020833333333333" />
-        <entry key="app/src/main/res/layout/fragment_reset_password.xml" value="0.20989583333333334" />
-        <entry key="app/src/main/res/layout/fragment_settings.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_update_message.xml" value="0.3342391304347826" />
-        <entry key="app/src/main/res/layout/free_day_view.xml" value="0.25815217391304346" />
-        <entry key="app/src/main/res/layout/hall_item_layout.xml" value="0.36186594202898553" />
-        <entry key="app/src/main/res/layout/home_workout.xml" value="0.19427083333333334" />
-        <entry key="app/src/main/res/layout/is_attend_layout.xml" value="0.19427083333333334" />
-        <entry key="app/src/main/res/layout/is_not_attend_layout.xml" value="0.19427083333333334" />
-        <entry key="app/src/main/res/layout/item_button_layout.xml" value="0.18854166666666666" />
-        <entry key="app/src/main/res/layout/message_item_layout.xml" value="0.16822916666666668" />
-        <entry key="app/src/main/res/layout/profile_container.xml" value="0.196875" />
-        <entry key="app/src/main/res/layout/reason_layout.xml" value="0.25815217391304346" />
-        <entry key="app/src/main/res/layout/text_for_spinner.xml" value="0.2921195652173913" />
-        <entry key="app/src/main/res/layout/who_attend_layout.xml" value="0.18854166666666666" />
-        <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.35885416666666664" />
-        <entry key="app/src/main/res/menu/main_menu.xml" value="0.18958333333333333" />
+        <entry key="app/src/main/res/layout/coach_home_workout.xml" value="0.20104166666666667" />
+        <entry key="app/src/main/res/layout/edit_workout_layout.xml" value="0.20104166666666667" />
+        <entry key="app/src/main/res/layout/text_for_edit_spinner.xml" value="0.20104166666666667" />
+        <entry key="app/src/main/res/layout/text_for_spinner.xml" value="0.20104166666666667" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

@@ -25,6 +25,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
     private Spinner mGroupSpinner;
@@ -150,19 +151,19 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
         for (Club club: clubs) {
             groups.add(club.getGroup());
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(mEditView.getContext(), R.layout.text_for_spinner, groups);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(mEditView.getContext(), R.layout.text_for_edit_spinner, groups);
         mGroupSpinner.setAdapter(adapter);
         ArrayList<String> hall = new ArrayList<>();
         for(Hall hall1 : halls) {
             hall.add(hall1.getName());
         }
-        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(mEditView.getContext(), R.layout.text_for_spinner, hall);
+        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(mEditView.getContext(), R.layout.text_for_edit_spinner, hall);
         mHallSpinner.setAdapter(adapter1);
         ArrayList<String> coach = new ArrayList<>();
         for(Coach coach1: coaches){
             coach.add(String.format("%s %s.%s.", coach1.getUser().getLast_name(), coach1.getUser().getFirst_name().charAt(0), coach1.getUser().getSecond_name().charAt(0)));
         }
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(mEditView.getContext(), R.layout.text_for_spinner, coach);
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(mEditView.getContext(), R.layout.text_for_edit_spinner, coach);
         mCoachSpinner.setAdapter(adapter2);
         types = new ArrayList<>();
         types.add("на технику");
@@ -170,7 +171,7 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
         types.add("силовая");
         types.add("общая");
         types.add("другое");
-        ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(mEditView.getContext(), R.layout.text_for_spinner, types);
+        ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(mEditView.getContext(), R.layout.text_for_edit_spinner, types);
         mTypeSpinner.setAdapter(adapter3);
         mSaveButton.setOnClickListener(v -> {
             Calendar calendar1 = Calendar.getInstance();
@@ -204,6 +205,7 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
             }
             isEditViewOpened = !isEditViewOpened;
         });
+        mMainView.setOnClickListener(v -> OnItemClick());
     }
     private int bindColor(String type) {
         switch (type){
@@ -217,22 +219,53 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
     }
 
     private void initEdit(Workout item) {
+        Coach coach;
         if(item.getCoach()!=null) {
-            if (coaches.contains(item.getCoach()))
-                mCoachSpinner.setSelection(coaches.indexOf(item.getCoach()));
+            coach = coaches.stream().filter(coach1 -> coach1.getId() == item.getCoach().getId()).collect(Collectors.toList()).get(0);
         } else {
-            if(coaches.contains(item.getClub().getCoach())){
-                mCoachSpinner.setSelection(coaches.indexOf(item.getClub().getCoach()));
-            }
+            coach = coaches.stream().filter(coach1 -> coach1.getId() == item.getClub().getCoach().getId()).collect(Collectors.toList()).get(0);
         }
-        mGroupSpinner.setSelection(clubs.indexOf(item.getClub()));
+        mCoachSpinner.setSelection(coaches.indexOf(coach));
+        Club club =clubs.stream().filter(club1 -> club1.getId()==item.getClub().getId()).collect(Collectors.toList()).get(0);
+        mGroupSpinner.setSelection(clubs.indexOf(club));
         mTypeSpinner.setSelection(types.indexOf(item.getType()));
-        mHallSpinner.setSelection(halls.indexOf(item.getHall()));
+        Hall hall = halls.stream().filter(hall1 -> hall1.getId()==item.getHall().getId()).collect(Collectors.toList()).get(0);
+        mHallSpinner.setSelection(halls.indexOf(hall));
         SimpleDateFormat format = new SimpleDateFormat("HH:mm");
         mStartTime.setText(format.format(item.getStart_time()));
-        mEndTime.setText(format.format(item.getEndTime()));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(item.getEnd_time());
+        calendar.add(Calendar.HOUR, -3);
+        mEndTime.setText(format.format(calendar.getTime()));
         if(item.getOther_type()!=null){
             mTypeText.setText(item.getOther_type());
         }
+    }
+    private void OnItemClick() {
+        if(!is_opened) {
+            mInfoView.setVisibility(View.VISIBLE);
+            mButtonView.setVisibility(View.VISIBLE);
+            mDatetime.setVisibility(View.VISIBLE);
+            mCountOn.setVisibility(View.GONE);
+            mCountNotOn.setVisibility(View.GONE);
+            mCountDN.setVisibility(View.GONE);
+            mTime.setVisibility(View.GONE);
+            mType.setVisibility(View.GONE);
+            mTypeView.setVisibility(View.VISIBLE);
+            mName.setText(clubName);
+        } else {
+            mInfoView.setVisibility(View.GONE);
+            mButtonView.setVisibility(View.GONE);
+            mDatetime.setVisibility(View.GONE);
+            mCountOn.setVisibility(View.VISIBLE);
+            mCountNotOn.setVisibility(View.VISIBLE);
+            mCountDN.setVisibility(View.VISIBLE);
+            mTime.setVisibility(View.VISIBLE);
+            mType.setVisibility(View.VISIBLE);
+            mTypeView.setVisibility(View.GONE);
+            mEditView.setVisibility(View.GONE);
+            isEditViewOpened = false;
+        }
+        is_opened = !is_opened;
     }
 }

@@ -26,26 +26,50 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
     public void getWorkouts(boolean save_data) {
         HomeActivity.is_firstOpened = false;
-        mCompositeDisposable.add(
-                ApiUtils.getApiService().getWeekWorkouts(ApiUtils.user_id)
-                .subscribeOn(Schedulers.io())
-                        .doOnSuccess(response -> {
-                            if(save_data)
-                            mStorage.insertWorkouts(response);
-                            hasError = false;
-                        })
-                        .onErrorReturn(throwable -> {
-                            hasError = true;
-                            return save_data? mStorage.getWeekWorkout(): null;
-                        })
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .doOnSubscribe(disposable -> getViewState().showRefresh())
-                        .doFinally(getViewState()::hideRefresh)
-                        .subscribe(
-                                workoutResponse -> getViewState().saveWorkouts(workoutResponse.getWorkouts()),
-                                throwable -> getViewState().showError(throwable)
-                        )
-        );
+        if(ApiUtils.coach_id==-1) {
+            mCompositeDisposable.add(
+                    ApiUtils.getApiService().getWeekWorkouts(ApiUtils.user_id)
+                            .subscribeOn(Schedulers.io())
+                            .doOnSuccess(response -> {
+                                if (save_data)
+                                    mStorage.insertWorkouts(response);
+                                hasError = false;
+                            })
+                            .onErrorReturn(throwable -> {
+                                hasError = true;
+                                return save_data ? mStorage.getWeekWorkout() : null;
+                            })
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .doOnSubscribe(disposable -> getViewState().showRefresh())
+                            .doFinally(getViewState()::hideRefresh)
+                            .subscribe(
+                                    workoutResponse -> getViewState().saveWorkouts(workoutResponse.getWorkouts()),
+                                    throwable -> getViewState().showError(throwable)
+                            )
+            );
+        }
+        else {
+            mCompositeDisposable.add(
+                    ApiUtils.getApiService().getWorkoutsForCoach(ApiUtils.coach_id)
+                            .subscribeOn(Schedulers.io())
+                            .doOnSuccess(response -> {
+                                if (save_data)
+                                    mStorage.insertWorkouts(response);
+                                hasError = false;
+                            })
+                            .onErrorReturn(throwable -> {
+                                hasError = true;
+                                return save_data ? mStorage.getWeekWorkout() : null;
+                            })
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .doOnSubscribe(disposable -> getViewState().showRefresh())
+                            .doFinally(getViewState()::hideRefresh)
+                            .subscribe(
+                                    workoutResponse -> getViewState().saveWorkouts(workoutResponse.getWorkouts()),
+                                    throwable -> getViewState().showError(throwable)
+                            )
+            );
+        }
         if(hasError) getViewState().showNetworkError();
     }
 
