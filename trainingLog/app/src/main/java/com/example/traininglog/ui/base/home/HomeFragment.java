@@ -93,7 +93,7 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         is_coach = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE).getBoolean("is_coach", false);
-        mCoachWorkoutAdapter = new CoachWorkoutAdapter(this);
+        mCoachWorkoutAdapter = new CoachWorkoutAdapter(this, this);
         mWorkoutAdapter = new WorkoutAdapter(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
@@ -173,7 +173,8 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
 
     @Override
     public void showPresences(List<Presence_W_N> presences) {
-        mWorkoutAdapter.addPresences(presences);
+        if(is_coach) mCoachWorkoutAdapter.addPresences(presences);
+        else mWorkoutAdapter.addPresences(presences);
     }
 
     @Override
@@ -208,7 +209,8 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
 
     @Override
     public void removePresences(int workout_id) {
-        mWorkoutAdapter.removePresence(workout_id);
+        if(is_coach) mCoachWorkoutAdapter.removePresence(workout_id);
+        else mWorkoutAdapter.removePresence(workout_id);
     }
 
     @Override

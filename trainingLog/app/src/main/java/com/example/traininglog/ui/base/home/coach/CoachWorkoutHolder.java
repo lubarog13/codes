@@ -18,8 +18,10 @@ import com.example.traininglog.R;
 import com.example.traininglog.data.model.Club;
 import com.example.traininglog.data.model.Coach;
 import com.example.traininglog.data.model.Hall;
+import com.example.traininglog.data.model.Presence_W_N;
 import com.example.traininglog.data.model.Workout;
 import com.example.traininglog.data.model.WorkoutForEdit;
+import com.example.traininglog.ui.base.home.WorkoutAdapter;
 
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
@@ -62,6 +64,9 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
     private TextView mDatetime;
     private View mTypeView;
     private Resources mHallString;
+    private View mWhoGoView;
+    private TextView mIsAttend;
+    private TextView mNotAttend;
     private List<Hall> halls;
     private List<Coach> coaches;
     private List<Club> clubs;
@@ -70,6 +75,8 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
     private boolean is_opened = false;
     private String clubName;
     private boolean isEditViewOpened = false;
+    private boolean isWhoOpened = false;
+    private boolean whoGoesClick = false;
     public CoachWorkoutHolder(@NonNull View itemView) {
         super(itemView);
         mType = itemView.findViewById(R.id.workout_week_type);
@@ -102,9 +109,12 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
         mResetButton = itemView.findViewById(R.id.reset_button);
         mDatetime = itemView.findViewById(R.id.train_datetime);
         mTypeView = itemView.findViewById(R.id.workout_info_type);
+        mWhoGoView = itemView.findViewById(R.id.who_go_view);
+        mIsAttend = itemView.findViewById(R.id.is_attend_names);
+        mNotAttend = itemView.findViewById(R.id.is_not_attend_names);
     }
 
-    public void bind(Workout item, boolean newDay, List<Coach> coaches, List<Hall> halls, List<Club> clubs, CoachWorkoutAdapter.OnItemClickListener onItemClickListener) {
+    public void bind(Workout item, boolean newDay, List<Coach> coaches, List<Hall> halls, List<Club> clubs, CoachWorkoutAdapter.OnItemClickListener onItemClickListener, WorkoutAdapter.OnItemClickListener onClick, List<Presence_W_N> presences) {
         this.coaches = coaches;
         this.halls = halls;
         this.clubs =clubs;
@@ -112,12 +122,32 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(item.getStart_time());
         calendar.add(Calendar.HOUR, -3);
+        if(presences==null&&!whoGoesClick)
         item.setStart_time(calendar.getTime());
         if(item.getClub().getName().length()>15) {
             mName.setText(String.format("%s...", item.getClub().getName().substring(0, 15)));
         } else {
             mName.setText(item.getClub().getName());
         }
+        if(presences!=null) {
+            List<Presence_W_N> presences1 = new ArrayList<>(presences);
+            presences1.removeIf(presence -> presence.isIs_attend()==null || !presence.isIs_attend());
+            StringBuilder stringBuilder = new StringBuilder();
+            for (Presence_W_N presence: presences1){
+                stringBuilder.append(presence.getUser().getLast_name()).append(" ").append(presence.getUser().getFirst_name().charAt(0)).append(".\n");
+            }
+            mIsAttend.setText(stringBuilder.toString());
+            List<Presence_W_N> presences2 = new ArrayList<>(presences);
+            presences2.removeIf(presence_w_n -> ( presence_w_n.isIs_attend()==null || presence_w_n.isIs_attend()==true));
+            StringBuilder stringBuilder1 = new StringBuilder();
+            for (Presence_W_N presence: presences2){
+                stringBuilder1.append(presence.getUser().getLast_name()).append(" ").append(presence.getUser().getFirst_name().charAt(0)).append(".\n");
+            }
+            mNotAttend.setText(stringBuilder1.toString());
+            mWhoGoView.setVisibility(View.VISIBLE);
+            isWhoOpened = true;
+        }
+        whoGoesClick = false;
         clubName = item.getClub().getName();
         mCountNotOn.setText(String.format("-%s", item.getNot_on_train()));
         mCountOn.setText(String.format("+%s", item.getOn_train()));
@@ -209,6 +239,18 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
             }
             isEditViewOpened = !isEditViewOpened;
         });
+        if(onClick!=null) {
+            mWhoButton.setOnClickListener(v -> {
+                if (!isWhoOpened) {
+                    onClick.onPresencesClick(item.getId());
+                } else {
+                    mWhoGoView.setVisibility(View.GONE);
+                    onClick.removePresences(item.getId());
+                    isWhoOpened=false;
+                    whoGoesClick = true;
+                }
+            });
+        }
         mMainView.setOnClickListener(v -> OnItemClick());
     }
     private int bindColor(String type) {
@@ -289,6 +331,8 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
             mType.setVisibility(View.GONE);
             mTypeView.setVisibility(View.VISIBLE);
             mName.setText(clubName);
+            mWhoGoView.setVisibility(View.GONE);
+            isWhoOpened = false;
         } else {
             mInfoView.setVisibility(View.GONE);
             mButtonView.setVisibility(View.GONE);
@@ -301,6 +345,8 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
             mTypeView.setVisibility(View.GONE);
             mEditView.setVisibility(View.GONE);
             isEditViewOpened = false;
+            mWhoGoView.setVisibility(View.GONE);
+            isWhoOpened = false;
         }
         is_opened = !is_opened;
     }

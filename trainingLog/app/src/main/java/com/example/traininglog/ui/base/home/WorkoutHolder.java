@@ -53,6 +53,7 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
     private boolean is_opened = false;
     private Boolean is_attend;
     private boolean isWhoOpened = false;
+    private boolean whoGoesClick = false;
 
     public WorkoutHolder(View itemView) {
         super(itemView);
@@ -102,6 +103,7 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(item.getStart_time());
         calendar.add(Calendar.HOUR, -3);
+        if (presences==null&&!whoGoesClick)
         item.setStart_time(calendar.getTime());
         if(item.getClub().getName().length()>15) {
             mName.setText(String.format("%s...", item.getClub().getName().substring(0, 15)));
@@ -157,6 +159,7 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
             mWhoGoView.setVisibility(View.VISIBLE);
             isWhoOpened = true;
         }
+        whoGoesClick = false;
         SimpleDateFormat simpleDateFormat1  = new SimpleDateFormat("dd.MM.yy HH:mm");
         mDatetime.setText(simpleDateFormat1.format(item.getStart_time().getTime()));
         mTypeView.setBackgroundColor(mHallString.getColor(bindColor(item.getType())));
@@ -184,6 +187,7 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
                     mWhoGoView.setVisibility(View.GONE);
                     onItemClickListener.removePresences(item.getId());
                     isWhoOpened=false;
+                    whoGoesClick=true;
                 }
             });
             mSendReason.setOnClickListener(v -> {
