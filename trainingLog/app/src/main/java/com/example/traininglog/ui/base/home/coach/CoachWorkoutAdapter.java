@@ -12,6 +12,7 @@ import com.example.traininglog.data.model.Club;
 import com.example.traininglog.data.model.Coach;
 import com.example.traininglog.data.model.Hall;
 import com.example.traininglog.data.model.Workout;
+import com.example.traininglog.data.model.WorkoutForEdit;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,6 +24,12 @@ public class CoachWorkoutAdapter extends RecyclerView.Adapter<CoachWorkoutHolder
     private final List<Club> mClubs = new ArrayList<>();
     private final List<Coach> mCoaches = new ArrayList<>();
     private final List<Hall> mHalls = new ArrayList<>();
+    private final OnItemClickListener onItemClickListener;
+
+    public CoachWorkoutAdapter(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
     @NonNull
     @Override
     public CoachWorkoutHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -37,7 +44,7 @@ public class CoachWorkoutAdapter extends RecyclerView.Adapter<CoachWorkoutHolder
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
         holder.bind(workout, position == 0 || !simpleDateFormat.format(workout.getStart_time())
                 .equals(simpleDateFormat.format(mWorkouts.get(position - 1).getStart_time())),
-                mCoaches, mHalls, mClubs);
+                mCoaches, mHalls, mClubs, onItemClickListener);
     }
 
     @Override
@@ -58,5 +65,9 @@ public class CoachWorkoutAdapter extends RecyclerView.Adapter<CoachWorkoutHolder
         if(isRefreshed) mWorkouts.clear();
         mWorkouts.addAll(workouts);
         notifyDataSetChanged();
+    }
+
+    public interface OnItemClickListener {
+        void editWorkout(WorkoutForEdit workout);
     }
 }

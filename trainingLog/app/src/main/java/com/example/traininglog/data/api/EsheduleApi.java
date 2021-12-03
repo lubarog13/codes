@@ -23,6 +23,7 @@ import com.example.traininglog.data.model.SignUpResponse;
 import com.example.traininglog.data.model.TypesResponse;
 import com.example.traininglog.data.model.User;
 import com.example.traininglog.data.model.UserResponse;
+import com.example.traininglog.data.model.WorkoutForEdit;
 import com.example.traininglog.data.model.WorkoutResponse;
 
 import java.util.List;
@@ -137,5 +138,8 @@ public interface EsheduleApi {
 
     @GET("coach/{coach_id}/week_workouts/")
     Single<WorkoutResponse> getWorkoutsForCoach(@Path("coach_id") int coach_id);
+
+    @PUT("workout/{id}/update/")
+    Completable updateWorkout(@Path("id") int id, @Body WorkoutForEdit workout);
 
 }

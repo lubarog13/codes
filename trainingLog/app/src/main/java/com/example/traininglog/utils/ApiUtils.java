@@ -4,6 +4,7 @@ import com.example.traininglog.BuildConfig;
 import com.example.traininglog.data.api.APIKeyInterceptor;
 import com.example.traininglog.data.api.EsheduleApi;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -67,6 +68,21 @@ public class ApiUtils {
         }
         return sApi;
     }
-    
+
+    public static EsheduleApi getsApiServiceForEditWithNulls() {
+        return getCustomRetrofit().create(EsheduleApi.class);
+    }
+
+    private static Retrofit getCustomRetrofit() {
+        Gson gson = new GsonBuilder().serializeNulls().create();
+
+        return new Retrofit.Builder()
+                .baseUrl(BuildConfig.API_URL)
+                // need for interceptors
+                .client(getClient())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build();
+    }
 
 }

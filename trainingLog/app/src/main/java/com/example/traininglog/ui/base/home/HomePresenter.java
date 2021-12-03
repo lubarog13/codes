@@ -1,11 +1,14 @@
 package com.example.traininglog.ui.base.home;
 
+import android.util.Log;
+
 import com.arellomobile.mvp.InjectViewState;
 import com.example.traininglog.common.BasePresenter;
 import com.example.traininglog.data.Storage;
 import com.example.traininglog.data.model.Coach;
 import com.example.traininglog.data.model.Hall;
 import com.example.traininglog.data.model.Presence;
+import com.example.traininglog.data.model.WorkoutForEdit;
 import com.example.traininglog.ui.HomeActivity;
 import com.example.traininglog.utils.ApiUtils;
 
@@ -58,6 +61,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
                                 hasError = false;
                             })
                             .onErrorReturn(throwable -> {
+                                Log.e("throwable", throwable!=null? throwable.getMessage(): "");
                                 hasError = true;
                                 return save_data ? mStorage.getWeekWorkout() : null;
                             })
@@ -71,6 +75,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             );
         }
         if(hasError) getViewState().showNetworkError();
+        hasError = false;
     }
 
     public void setPresence(int workout_id) {
@@ -168,6 +173,20 @@ public class HomePresenter extends BasePresenter<HomeView> {
                         clubResponse -> getViewState().showValues(halls, coaches, clubResponse.getClubs()),
                         getViewState()::showError
                 )
+        );
+    }
+
+    public void updateWorkout(WorkoutForEdit workout) {
+        mCompositeDisposable.add(
+                ApiUtils.getsApiServiceForEditWithNulls().updateWorkout(workout.getId(), workout)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnSubscribe(disposable -> getViewState().showRefresh())
+                        .doFinally(getViewState()::hideRefresh)
+                        .subscribe(
+                                getViewState()::updateComplete,
+                                getViewState()::showError
+                        )
         );
     }
 

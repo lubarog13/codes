@@ -14,11 +14,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
@@ -30,9 +28,9 @@ import com.example.traininglog.data.Storage;
 import com.example.traininglog.data.model.Club;
 import com.example.traininglog.data.model.Coach;
 import com.example.traininglog.data.model.Hall;
-import com.example.traininglog.data.model.Presence;
 import com.example.traininglog.data.model.Presence_W_N;
 import com.example.traininglog.data.model.Workout;
+import com.example.traininglog.data.model.WorkoutForEdit;
 import com.example.traininglog.ui.HomeActivity;
 import com.example.traininglog.ui.base.hall.HallViewFragment;
 import com.example.traininglog.ui.base.home.coach.CoachWorkoutAdapter;
@@ -42,7 +40,7 @@ import java.io.InputStream;
 import java.util.List;
 
 
-public class HomeFragment extends PresenterFragment implements HomeView, Refreshable, WorkoutAdapter.OnItemClickListener {
+public class HomeFragment extends PresenterFragment implements HomeView, Refreshable, WorkoutAdapter.OnItemClickListener, CoachWorkoutAdapter.OnItemClickListener {
     @InjectPresenter
     HomePresenter mPresenter;
     private CoachWorkoutAdapter mCoachWorkoutAdapter;
@@ -95,7 +93,7 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         is_coach = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE).getBoolean("is_coach", false);
-        mCoachWorkoutAdapter = new CoachWorkoutAdapter();
+        mCoachWorkoutAdapter = new CoachWorkoutAdapter(this);
         mWorkoutAdapter = new WorkoutAdapter(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
@@ -190,6 +188,11 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
     }
 
     @Override
+    public void updateComplete() {
+        onRefreshData();
+    }
+
+    @Override
     public void onItemClick(int workout_id, boolean is_attend) {
         if (is_attend) {
             mPresenter.setPresence(workout_id);
@@ -224,4 +227,8 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
         super.onDetach();
     }
 
+    @Override
+    public void editWorkout(WorkoutForEdit workout) {
+        mPresenter.updateWorkout(workout);
+    }
 }

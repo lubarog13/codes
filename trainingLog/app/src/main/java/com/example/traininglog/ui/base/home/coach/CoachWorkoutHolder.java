@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,13 +19,16 @@ import com.example.traininglog.data.model.Club;
 import com.example.traininglog.data.model.Coach;
 import com.example.traininglog.data.model.Hall;
 import com.example.traininglog.data.model.Workout;
+import com.example.traininglog.data.model.WorkoutForEdit;
 
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
@@ -100,7 +104,7 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
         mTypeView = itemView.findViewById(R.id.workout_info_type);
     }
 
-    public void bind(Workout item, boolean newDay, List<Coach> coaches, List<Hall> halls, List<Club> clubs) {
+    public void bind(Workout item, boolean newDay, List<Coach> coaches, List<Hall> halls, List<Club> clubs, CoachWorkoutAdapter.OnItemClickListener onItemClickListener) {
         this.coaches = coaches;
         this.halls = halls;
         this.clubs =clubs;
@@ -173,27 +177,27 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
         types.add("другое");
         ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(mEditView.getContext(), R.layout.text_for_edit_spinner, types);
         mTypeSpinner.setAdapter(adapter3);
-        mSaveButton.setOnClickListener(v -> {
-            Calendar calendar1 = Calendar.getInstance();
-            calendar1.setTime(item.getStart_time());
-            calendar1.set(calendar1.get(Calendar.YEAR), calendar1.get(Calendar.MONTH),
-                    calendar1.get(Calendar.DAY_OF_MONTH), Integer.parseInt(mStartTime.getText().toString().split(":")[0]),
-                    calendar1.get(Calendar.DAY_OF_MONTH), Integer.parseInt(mStartTime.getText().toString().split(":")[1])
-                    );
-            Date start_time = calendar1.getTime();
-            calendar1.set(calendar1.get(Calendar.YEAR), calendar1.get(Calendar.MONTH),
-                    calendar1.get(Calendar.DAY_OF_MONTH), Integer.parseInt(mEndTime.getText().toString().split(":")[0]),
-                    calendar1.get(Calendar.DAY_OF_MONTH), Integer.parseInt(mEndTime.getText().toString().split(":")[1])
-            );
-            Date end_time = calendar1.getTime();
-            String outher_type = mTypeText.getText().length()!=0? mTypeText.getText().toString() : null;
-            Workout workout = new Workout(item.getId(), start_time,
-                    end_time, mTypeSpinner.getSelectedItem().toString(), outher_type, false,
-                    coaches.get(mCoachSpinner.getSelectedItemPosition()),
-                    halls.get(mHallSpinner.getSelectedItemPosition()),
-                    clubs.get(mGroupSpinner.getSelectedItemPosition())
-                    );
-            Log.e("workout", workout.toString());
+        if(onItemClickListener!=null){
+            mSaveButton.setOnClickListener(v -> {
+                onItemClickListener.editWorkout(editWorkout(item));
+            });
+            mEditView.setVisibility(View.GONE);
+            isEditViewOpened = false;
+        }
+        mTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(types.get(position).equals("другое")) {
+                    mTypeText.setVisibility(View.VISIBLE);
+                } else {
+                    mTypeText.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
         });
         initEdit(item);
         mResetButton.setOnClickListener(v -> initEdit(item));
@@ -241,6 +245,38 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
             mTypeText.setText(item.getOther_type());
         }
     }
+
+    private WorkoutForEdit editWorkout(Workout item) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(item.getStart_time());
+        Pattern pattern = Pattern.compile("^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$");
+        if(!pattern.matcher(mStartTime.getText().toString()).matches()) {
+            mStartTime.setError("Не верно написано время, формат HH:mm");
+            return null;
+        }
+        if(!pattern.matcher(mEndTime.getText().toString()).matches()) {
+            mEndTime.setError("Не верно написано время, формат HH:mm");
+            return null;
+        }
+        if(mTypeSpinner.getSelectedItem().equals("другое") && mTypeText.getText().length()==0) {
+            mTypeText.setError("Введите текст");
+        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String outher_type = mTypeText.getText().length()!=0? mTypeText.getText().toString() : null;
+        Integer coach;
+        if(coaches.get(mCoachSpinner.getSelectedItemPosition()).getId()==item.getClub().getCoach().getId())
+            coach = null;
+        else coach = coaches.get(mCoachSpinner.getSelectedItemPosition()).getId();
+        WorkoutForEdit workout = new WorkoutForEdit(item.getId(), simpleDateFormat.format(calendar.getTime()) + "T" + mStartTime.getText().toString(),
+                simpleDateFormat.format(calendar.getTime()) + "T" + mEndTime.getText().toString(), mTypeSpinner.getSelectedItem().toString(), outher_type, false,
+                coach,
+                halls.get(mHallSpinner.getSelectedItemPosition()).getId(),
+                clubs.get(mGroupSpinner.getSelectedItemPosition()).getId()
+        );
+        Log.e("workout", workout.toString());
+        return workout;
+    }
+
     private void OnItemClick() {
         if(!is_opened) {
             mInfoView.setVisibility(View.VISIBLE);

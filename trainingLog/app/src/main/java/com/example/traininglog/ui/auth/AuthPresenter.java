@@ -44,7 +44,7 @@ public class AuthPresenter extends BasePresenter<AuthView> {
     }
 
     public void getUser() {
-        if(!ApiUtils.token.equals("")){
+        if(!(ApiUtils.user_id==0)){
             getViewState().navigateHome();
         }
         mCompositeDisposable.add(

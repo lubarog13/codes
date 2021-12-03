@@ -15,4 +15,5 @@ public interface HomeView extends BaseView {
     void showPresences(List<Presence_W_N> presences);
     void showNetworkError();
     void showValues(List<Hall> halls, List<Coach> coaches, List<Club> clubs);
+    void updateComplete();
 }

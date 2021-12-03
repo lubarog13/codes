@@ -38,10 +38,10 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
 
     private void resetUser() {
         SharedPreferences.Editor editor = sp.edit();
-        editor.clear().commit();
+        editor.clear().apply();
         ApiUtils.token = null;
         ApiUtils.user_id = 0;
-        editor.apply();
+        ApiUtils.coach_id = -1;
         getViewState().goToAuth();
     }
 }
