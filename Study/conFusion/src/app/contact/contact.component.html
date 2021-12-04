@@ -37,9 +37,21 @@
   </div>
   <div fxFlex fxFlexOffset="20px" class="form-size">
     <h3>Send us your Feedback</h3>
-    <p>{{ feedbackForm.value | json }} {{ feedbackForm.status | json }}</p>
-
-    <form novalidate [formGroup]="feedbackForm" #fform="ngForm" (ngSubmit)="onSubmit()">
+    <div *ngIf="feedback">
+      <h3>Your Submission</h3>
+      <p>First Name: {{feedback.firstname}}</p>
+      <p>Last Name: {{feedback.lastname}}</p>
+      <p>Tel. Number: {{feedback.telnum}}</p>
+      <p>Email: {{feedback.email}}</p>
+      <p>Contact You?: {{feedback.agree}}</p>
+      <p>How?: {{feedback.contacttype}}</p>
+      <p>Feedback: {{feedback.message}}</p>
+    </div> 
+    <div *ngIf="isLoading">
+      <h3>Submitting...</h3>
+      <mat-spinner></mat-spinner>
+    </div>
+    <form *ngIf="!isLoading && !feedback" novalidate [formGroup]="feedbackForm" #fform="ngForm" (ngSubmit)="onSubmit()">
       <p>
         <mat-form-field class="half-width">
           <input matInput formControlName="firstname" placeholder="First Name" type="text" required>
@@ -59,6 +71,20 @@
           <input matInput formControlName="email" placeholder="Email" type="email" email required>
           <mat-error *ngIf="formErrors.email">{{formErrors.email}}</mat-error>
         </mat-form-field>
+      </p>
+      <p>
+        <mat-slide-toggle
+          class="half-width"
+          formControlName="agree">
+        May we contact you?
+      </mat-slide-toggle>
+      <mat-form-field aclass="half-width">
+        <mat-label>How?</mat-label>
+        <select matNativeControl required={{feedbackForm.value.agree}} formControlName="contacttype">
+          <option value="email">Email</option>
+          <option value="tel. num">Tel, number</option>
+        </select>
+      </mat-form-field>
       </p>
         <mat-form-field class="full-width">
           <textarea matInput formControlName="message" placeholder="Your Feedback" rows=12></textarea>

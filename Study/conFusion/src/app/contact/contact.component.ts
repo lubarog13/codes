@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Feedback, ContactType } from '../shared/feedback';
 import { flyInOut, expand } from '../animations/app.animations';
+import { FeedbackService } from '../services/feedback.service';
 
 @Component({
   selector: 'app-contact',
@@ -21,10 +22,13 @@ import { flyInOut, expand } from '../animations/app.animations';
 export class ContactComponent implements OnInit {
   feedbackForm: FormGroup;
   feedback: Feedback;
+  isLoading: boolean;
+  errMess: string;
   contactType = ContactType;
   @ViewChild('fform') feedbackFormDirective;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private feedbackservice: FeedbackService) {
+    this.isLoading = false;
     this.createForm();
   }
 
@@ -76,8 +80,13 @@ export class ContactComponent implements OnInit {
   }
 
   onSubmit() {
-    this.feedback = this.feedbackForm.value;
-    console.log(this.feedback);
+    this.isLoading = true;
+    this.feedbackservice.submitFeedback(this.feedbackForm.value).subscribe((feedback) => {
+      this.feedback = feedback
+      this.isLoading = false;
+    }, errmess => this.errMess = errmess)
+    setTimeout(()=>{this.feedback=null}, 5000)
+    console.log(this.feedback)
     this.feedbackForm.reset({
       firstname: '',
       lastname: '',

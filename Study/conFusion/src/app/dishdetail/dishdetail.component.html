@@ -26,7 +26,7 @@
         <button mat-button [routerLink]="['/dishdetail', next]"><span class="fa fa-chevron-right fa-lg"></span></button>
     </mat-card-actions>
     </mat-card>
-<mat-card fxFlex="40" *ngIf="dish" [@visibility]="visibility">
+<mat-card fxFlex="40" *ngIf="dish" [@visibility]="visibility" [@expand]>
 <mat-card-title><h3>Comments</h3></mat-card-title>
 <mat-card-content >
   <div fxLayout="column">
@@ -36,11 +36,13 @@
   <p matLine>{{comment.rating}} stars</p>
   <p matLine>-- {{comment.author}} {{comment.date|date}}</p>
 </mat-list-item>
-<mat-list-item *ngIf="commentForm.value.comment!='' && commentForm.value.author!=''">
-  <p matLine>{{commentForm.value.comment}}</p>
-  <p matLine>{{commentForm.value.rating}} stars</p>
-  <p matLine>-- {{commentForm.value.author}}</p>  
-</mat-list-item >
+</mat-list>
+<mat-list>
+  <mat-list-item *ngIf="commentForm.valid">
+    <p matLine>{{commentForm.value.comment}}</p>
+    <p matLine>{{commentForm.value.rating}} stars</p>
+    <p matLine>-- {{commentForm.value.author}}</p>  
+  </mat-list-item >
 </mat-list>
 <div fxFlex class="form-size">
 <form novalidate [formGroup]="commentForm" #cform="ngForm" (ngSubmit)="onSubmit()">
@@ -59,7 +61,7 @@
       <mat-error *ngIf="formErrors.comment">{{formErrors.comment}}</mat-error>
     </mat-form-field>
   </p>
-  <button type="submit" mat-button class="background-primary text-floral-white">Submit</button>
+  <button type="submit" [disabled]="!commentForm.valid" mat-button class="background-primary text-floral-white">Submit</button>
 </form>
 </div>
 </div>

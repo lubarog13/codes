@@ -91,7 +91,7 @@ export class DishdetailComponent implements OnInit {
     }
 
     onSubmit() {
-      this.commentForm.value['date'] = Date.now();
+      this.commentForm.value['date'] = (new Date).toISOString();
       this.commentNew = this.commentForm.value;
       this.dishcopy.comments.push(this.commentNew);
       this.dishservice.putDish(this.dishcopy)

@@ -37,6 +37,7 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { LoginComponent } from './login/login.component';
 import { HighlightDirective } from './directives/highlight.directive';
+import { FeedbackService } from './services/feedback.service';
 
 @NgModule({
   imports: [
@@ -65,6 +66,7 @@ import { HighlightDirective } from './directives/highlight.directive';
     LeaderService, 
     PromotionService,  
     ProcessHTTPMsgService,
+    FeedbackService,
     {provide: 'BaseURL', useValue: baseURL},
   ],
   declarations: [
