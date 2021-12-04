@@ -9,6 +9,7 @@ import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
 
 import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Date;
 
 @Entity(foreignKeys =  {@ForeignKey(
@@ -284,5 +285,11 @@ public class Workout {
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
                 '}';
+    }
+
+    public boolean isInDay(Calendar calendar) {
+        Calendar calendar1 = Calendar.getInstance();
+        calendar1.setTime(this.start_time);
+        return calendar.get(Calendar.DATE) == calendar1.get(Calendar.DATE);
     }
 }

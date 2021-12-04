@@ -142,4 +142,6 @@ public interface EsheduleApi {
     @PUT("workout/{id}/update/")
     Completable updateWorkout(@Path("id") int id, @Body WorkoutForEdit workout);
 
+    @GET("coach/{coach_id}/workouts/{month}/{year}")
+    Single<WorkoutResponse> getWorkoutsForMonth(@Path("coach_id") int coach_id, @Path("month") int month, @Path("year") int year);
 }

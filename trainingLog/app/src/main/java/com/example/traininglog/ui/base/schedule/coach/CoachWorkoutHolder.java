@@ -1,4 +1,4 @@
-package com.example.traininglog.ui.base.home.coach;
+package com.example.traininglog.ui.base.schedule.coach;
 
 import android.content.res.Resources;
 import android.text.Html;
@@ -21,9 +21,8 @@ import com.example.traininglog.data.model.Hall;
 import com.example.traininglog.data.model.Presence_W_N;
 import com.example.traininglog.data.model.Workout;
 import com.example.traininglog.data.model.WorkoutForEdit;
-import com.example.traininglog.ui.base.home.WorkoutAdapter;
+import com.example.traininglog.ui.base.schedule.WorkoutAdapter;
 
-import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -232,12 +231,14 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
         initEdit(item);
         mResetButton.setOnClickListener(v -> initEdit(item));
         mEditButton.setOnClickListener(v -> {
-            if(isEditViewOpened){
-                mEditView.setVisibility(View.GONE);
-            } else {
-                mEditView.setVisibility(View.VISIBLE);
+            if(item.getStart_time().compareTo(new Date())>0) {
+                if (isEditViewOpened) {
+                    mEditView.setVisibility(View.GONE);
+                } else {
+                    mEditView.setVisibility(View.VISIBLE);
+                }
+                isEditViewOpened = !isEditViewOpened;
             }
-            isEditViewOpened = !isEditViewOpened;
         });
         if(onClick!=null) {
             mWhoButton.setOnClickListener(v -> {
@@ -250,9 +251,18 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
                     whoGoesClick = true;
                 }
             });
-            mHallName.setOnClickListener(v -> onClick.onHallClick(item.getHall().getId()));
+            mHallName.setOnClickListener(v -> onClick.HallClick(item.getHall().getId()));
         }
-        mMainView.setOnClickListener(v -> OnItemClick());
+        mInfoView.setVisibility(View.VISIBLE);
+        mButtonView.setVisibility(View.VISIBLE);
+        mDatetime.setVisibility(View.VISIBLE);
+        mCountOn.setVisibility(View.GONE);
+        mCountNotOn.setVisibility(View.GONE);
+        mCountDN.setVisibility(View.GONE);
+        mTime.setVisibility(View.GONE);
+        mType.setVisibility(View.GONE);
+        mTypeView.setVisibility(View.VISIBLE);
+        mName.setText(clubName);
     }
     private int bindColor(String type) {
         switch (type){
@@ -320,35 +330,4 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
         return workout;
     }
 
-    private void OnItemClick() {
-        if(!is_opened) {
-            mInfoView.setVisibility(View.VISIBLE);
-            mButtonView.setVisibility(View.VISIBLE);
-            mDatetime.setVisibility(View.VISIBLE);
-            mCountOn.setVisibility(View.GONE);
-            mCountNotOn.setVisibility(View.GONE);
-            mCountDN.setVisibility(View.GONE);
-            mTime.setVisibility(View.GONE);
-            mType.setVisibility(View.GONE);
-            mTypeView.setVisibility(View.VISIBLE);
-            mName.setText(clubName);
-            mWhoGoView.setVisibility(View.GONE);
-            isWhoOpened = false;
-        } else {
-            mInfoView.setVisibility(View.GONE);
-            mButtonView.setVisibility(View.GONE);
-            mDatetime.setVisibility(View.GONE);
-            mCountOn.setVisibility(View.VISIBLE);
-            mCountNotOn.setVisibility(View.VISIBLE);
-            mCountDN.setVisibility(View.VISIBLE);
-            mTime.setVisibility(View.VISIBLE);
-            mType.setVisibility(View.VISIBLE);
-            mTypeView.setVisibility(View.GONE);
-            mEditView.setVisibility(View.GONE);
-            isEditViewOpened = false;
-            mWhoGoView.setVisibility(View.GONE);
-            isWhoOpened = false;
-        }
-        is_opened = !is_opened;
-    }
 }

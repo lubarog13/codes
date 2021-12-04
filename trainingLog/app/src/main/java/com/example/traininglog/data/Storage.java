@@ -76,6 +76,25 @@ public class Storage {
         return new WorkoutResponse(workouts);
     }
 
+    public WorkoutResponse getMonthWorkout(int month) {
+        List<Workout> workouts = mDao.selectWorkouts();
+        workouts.removeIf(workout -> {
+           Calendar calendar =  Calendar.getInstance();
+           calendar.setTime(workout.getStart_time());
+           return calendar.get(Calendar.MONTH)!=month;
+        });
+        for(Workout workout: workouts){
+            workout.setStart_time(DateUtils.FromTimestamp(workout.getStartTime()));
+            workout.setEnd_time(DateUtils.FromTimestamp(workout.getEndTime()));
+            workout.setHall(mDao.selectHall(workout.getHall_id()));
+            Coach coach = mDao.selectCoach(workout.getCoach_id());
+            coach.setUser(mDao.selectUser(coach.getUserId()));
+            workout.setCoach(coach);
+            workout.setClub(mDao.selectClub(workout.getClub_id()));
+        }
+        return new WorkoutResponse(workouts);
+    }
+
 
 
     public void insertMonthPresences(PresencesResponse response) {
