@@ -22,6 +22,7 @@ import com.example.traininglog.ui.base.schedule.ScheduleFragment;
 import com.example.traininglog.ui.base.home.HomeFragment;
 import com.example.traininglog.ui.base.profile.ProfileFragment;
 import com.example.traininglog.ui.base.settings.SettingsFragment;
+import com.example.traininglog.ui.base.traininglog.LogFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
@@ -49,7 +50,7 @@ public class HomeActivity extends AppCompatActivity implements Storage.StorageOw
                     changeFragment(HomeFragment.newInstance());
                     break;
                 case R.id.navigation_shedule:
-                    changeFragment(ScheduleFragment.newInstance());
+                    changeFragment(LogFragment.newInstance());
                     break;
                 case R.id.navigation_log:
                     changeFragment(ScheduleFragment.newInstance());

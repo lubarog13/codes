@@ -12,11 +12,12 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="410dp">
+
         <ImageView
+            android:id="@+id/schedule_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:id="@+id/schedule_image"/>
+            android:scaleType="centerCrop" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

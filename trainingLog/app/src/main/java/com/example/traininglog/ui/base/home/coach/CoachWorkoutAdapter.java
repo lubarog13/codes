@@ -3,6 +3,8 @@ package com.example.traininglog.ui.base.home.coach;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,6 +32,7 @@ public class CoachWorkoutAdapter extends RecyclerView.Adapter<CoachWorkoutHolder
     private final List<Hall> mHalls = new ArrayList<>();
     private final OnItemClickListener onItemClickListener;
     private final WorkoutAdapter.OnItemClickListener onClick;
+    private int lastPosition = -1;
     private final Map<Integer, List<Presence_W_N>> mPresences = new HashMap<>();
 
     public CoachWorkoutAdapter(OnItemClickListener onItemClickListener, WorkoutAdapter.OnItemClickListener onClick) {
@@ -52,6 +55,7 @@ public class CoachWorkoutAdapter extends RecyclerView.Adapter<CoachWorkoutHolder
         holder.bind(workout, position == 0 || !simpleDateFormat.format(workout.getStart_time())
                         .equals(simpleDateFormat.format(mWorkouts.get(position - 1).getStart_time())),
                 mCoaches, mHalls, mClubs, onItemClickListener, onClick, mPresences.getOrDefault(workout.getId(), null));
+        setAnimation(holder.itemView, position);
     }
 
     @Override
@@ -88,5 +92,22 @@ public class CoachWorkoutAdapter extends RecyclerView.Adapter<CoachWorkoutHolder
     public void removePresence(int workout_id) {
         mPresences.remove(workout_id);
         notifyDataSetChanged();
+    }
+
+    private void setAnimation(View viewToAnimate, int position)
+    {
+        // If the bound view wasn't previously displayed on screen, it's animated
+        if (position > lastPosition)
+        {
+            Animation animation = AnimationUtils.loadAnimation(viewToAnimate.getContext(), android.R.anim.slide_in_left);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
+        }
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(@NonNull CoachWorkoutHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        holder.clearAnimation();
     }
 }

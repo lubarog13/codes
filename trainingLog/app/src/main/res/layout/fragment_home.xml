@@ -38,7 +38,7 @@
         android:paddingTop="100dp"
         android:text="Главная"
         android:textColor="@android:color/white"
-        android:textSize="36sp"></TextView>
+        android:textSize="36sp"/>
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="500dp"

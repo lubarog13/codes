@@ -5,8 +5,14 @@
       <map>
         <entry key="app/src/main/res/layout/coach_home_workout.xml" value="0.20104166666666667" />
         <entry key="app/src/main/res/layout/edit_workout_layout.xml" value="0.20104166666666667" />
+        <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_log.xml" value="0.20104166666666667" />
+        <entry key="app/src/main/res/layout/log_item_layout.xml" value="0.19479166666666667" />
+        <entry key="app/src/main/res/layout/log_itrm_layout.xml" value="0.20104166666666667" />
         <entry key="app/src/main/res/layout/text_for_edit_spinner.xml" value="0.20104166666666667" />
         <entry key="app/src/main/res/layout/text_for_spinner.xml" value="0.20104166666666667" />
+        <entry key="app/src/main/res/layout/who_attend_layout.xml" value="0.1" />
       </map>
     </option>
   </component>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@android:color/black"
+        android:layout_height="410dp">
+
+        <ImageView
+            android:id="@+id/schedule_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Журнал"
+            android:textSize="24sp"
+            android:fontFamily="@font/stalinist_one"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:layout_marginTop="20dp"/>
+
+        <com.applandeo.materialcalendarview.CalendarView
+            android:id="@+id/calendarView"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_centerInParent="true"
+            android:paddingTop="40dp"
+            app:abbreviationsBarColor="#303F9F"
+            app:abbreviationsLabelsColor="@android:color/white"
+            app:daysLabelsColor="@android:color/white"
+            app:disabledDaysLabelsColor="@android:color/transparent"
+            app:eventsEnabled="true"
+            app:headerColor="#1A237E"
+            app:pagesColor="#3F51B5"
+            app:todayLabelColor="@android:color/white" />
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rect_lay"
+        android:orientation="vertical"
+        android:layout_marginTop="-40dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text=""
+            android:gravity="center"
+            android:fontFamily="@font/roboto_bold"
+            android:textColor="@android:color/black"
+            android:id="@+id/heading"
+            android:textSize="18sp"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="@color/colorDivider"/>
+        <include
+            layout="@layout/error_view"
+            android:layout_marginTop="-200dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:paddingBottom="90dp"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:id="@+id/log_recycler"/>
+    </LinearLayout>
+</LinearLayout>
+</androidx.core.widget.NestedScrollView>

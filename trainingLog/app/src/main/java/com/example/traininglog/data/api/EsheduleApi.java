@@ -144,4 +144,7 @@ public interface EsheduleApi {
 
     @GET("coach/{coach_id}/workouts/{month}/{year}")
     Single<WorkoutResponse> getWorkoutsForMonth(@Path("coach_id") int coach_id, @Path("month") int month, @Path("year") int year);
+
+    @GET("coach/{coach_id}/presences/{day}/{month}/{year}/")
+    Single<PresencesResponse> getPresencesForDay(@Path("coach_id") int coach_id, @Path("day") int day, @Path("month") int month, @Path("year") int year);
 }

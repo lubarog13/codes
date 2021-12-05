@@ -50,6 +50,7 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
     private Button mSendReason;
     private String clubName;
     private View mTypeView;
+    private final View mRootLayout;
     private boolean is_opened = false;
     private Boolean is_attend;
     private boolean isWhoOpened = false;
@@ -57,6 +58,7 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
 
     public WorkoutHolder(View itemView) {
         super(itemView);
+        mRootLayout = itemView;
         long startTime = System.currentTimeMillis();
         mType = itemView.findViewById(R.id.workout_week_type);
         mName = itemView.findViewById(R.id.workout_week_name);
@@ -262,4 +264,7 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
         is_opened = !is_opened;
     }
 
+    public void clearAnimation() {
+        mRootLayout.clearAnimation();
+    }
 }

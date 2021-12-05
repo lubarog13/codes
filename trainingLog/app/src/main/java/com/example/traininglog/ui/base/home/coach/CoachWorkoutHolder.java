@@ -2,6 +2,7 @@ package com.example.traininglog.ui.base.home.coach;
 
 import android.content.res.Resources;
 import android.text.Html;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -77,8 +78,10 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
     private boolean isEditViewOpened = false;
     private boolean isWhoOpened = false;
     private boolean whoGoesClick = false;
+    private View mRootLayout;
     public CoachWorkoutHolder(@NonNull View itemView) {
         super(itemView);
+        mRootLayout = itemView;
         mType = itemView.findViewById(R.id.workout_week_type);
         mName = itemView.findViewById(R.id.workout_week_name);
         mCountOn = itemView.findViewById(R.id.workout_week_on_train);
@@ -350,5 +353,10 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
             isWhoOpened = false;
         }
         is_opened = !is_opened;
+    }
+
+    public void clearAnimation()
+    {
+        mRootLayout.clearAnimation();
     }
 }

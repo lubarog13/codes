@@ -29,4 +29,6 @@ public class CoachHolder extends RecyclerView.ViewHolder {
         mPost.setText(item.getPost());
     }
 
+
+
 }
