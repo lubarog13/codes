@@ -18,8 +18,11 @@ public class LogHolder extends RecyclerView.ViewHolder
     private ImageView mAttend;
     private ImageView mNotAttend;
     private ImageView mDelay;
+    private TextView mReason;
+    private TextView mReasonText;
     private ImageView mEarlyRet;
     private View mHeading1;
+    private int clickCount = 0;
     private View mHeading2;
     public LogHolder(@NonNull View itemView) {
         super(itemView);
@@ -31,10 +34,14 @@ public class LogHolder extends RecyclerView.ViewHolder
         mEarlyRet = itemView.findViewById(R.id.early_ret);
         mHeading1 = itemView.findViewById(R.id.group);
         mHeading2 = itemView.findViewById(R.id.head);
+        mReason = itemView.findViewById(R.id.reason);
+        mReasonText = itemView.findViewById(R.id.reason_text);
     }
 
     public void bind(Presence item, boolean isNewGroup, LogAdapter.OnItemClickListener onItemClickListener) {
         if (item==null) return;
+        mReasonText.setVisibility(View.GONE);
+        mReason.setVisibility(View.GONE);
         if(isNewGroup) {
             mHeading1.setVisibility(View.VISIBLE);
             mHeading2.setVisibility(View.VISIBLE);
@@ -80,6 +87,18 @@ public class LogHolder extends RecyclerView.ViewHolder
                     mNotAttend.setImageDrawable(itemView.getResources().getDrawable(R.drawable.ic_vectorno));
                     mAttend.setImageDrawable(null);
                     onItemClickListener.updatePresence(item);
+                } else {
+                    if(clickCount%2==0) {
+                        mReason.setVisibility(View.VISIBLE);
+                        if (item.getReason() != null)
+                            mReasonText.setText(item.getReason());
+                        else mReasonText.setText("отсутствует");
+                        mReasonText.setVisibility(View.VISIBLE);
+                    } else {
+                        mReason.setVisibility(View.GONE);
+                        mReasonText.setVisibility(View.GONE);
+                    }
+                    clickCount++;
                 }
             });
             mDelay.setOnClickListener(v -> {

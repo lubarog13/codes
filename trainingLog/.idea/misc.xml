@@ -3,11 +3,23 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/iten_button_background_blue.xml" value="0.225" />
+        <entry key="app/src/main/res/drawable/outlined_rect.xml" value="0.225" />
+        <entry key="app/src/main/res/layout/analysis_item_layout.xml" value="0.21829710144927536" />
         <entry key="app/src/main/res/layout/coach_home_workout.xml" value="0.20104166666666667" />
         <entry key="app/src/main/res/layout/edit_workout_layout.xml" value="0.20104166666666667" />
+        <entry key="app/src/main/res/layout/fragment_all_clubs.xml" value="0.17502532928064843" />
+        <entry key="app/src/main/res/layout/fragment_analysis.xml" value="0.17502532928064843" />
+        <entry key="app/src/main/res/layout/fragment_buttons.xml" value="0.21829710144927536" />
+        <entry key="app/src/main/res/layout/fragment_buttons_fragment.xml" value="0.22509057971014493" />
+        <entry key="app/src/main/res/layout/fragment_clubs.xml" value="0.17502532928064843" />
+        <entry key="app/src/main/res/layout/fragment_coach_analysis.xml" value="0.22509057971014493" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_group_analysis.xml" value="0.21829710144927536" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_log.xml" value="0.20104166666666667" />
+        <entry key="app/src/main/res/layout/fragment_messages.xml" value="0.17502532928064843" />
+        <entry key="app/src/main/res/layout/item_button_layout.xml" value="0.17502532928064843" />
         <entry key="app/src/main/res/layout/log_item_layout.xml" value="0.19479166666666667" />
         <entry key="app/src/main/res/layout/log_itrm_layout.xml" value="0.20104166666666667" />
         <entry key="app/src/main/res/layout/text_for_edit_spinner.xml" value="0.20104166666666667" />

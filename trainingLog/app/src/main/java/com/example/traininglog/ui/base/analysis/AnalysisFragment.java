@@ -29,6 +29,9 @@ import com.example.traininglog.common.RefreshOwner;
 import com.example.traininglog.common.Refreshable;
 import com.example.traininglog.data.model.MonthsResponse;
 import com.example.traininglog.data.model.TypesResponse;
+import com.example.traininglog.ui.HomeActivity;
+import com.example.traininglog.ui.base.analysis.coach.CoachAnalysisFragment;
+import com.example.traininglog.utils.ApiUtils;
 
 import org.eazegraph.lib.charts.PieChart;
 import org.eazegraph.lib.charts.ValueLineChart;
@@ -136,6 +139,10 @@ public class AnalysisFragment extends PresenterFragment implements Refreshable, 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        if(ApiUtils.coach_id!=-1){
+            ((HomeActivity) getActivity()).changeFragment(CoachAnalysisFragment.newInstance());
+            return;
+        }
         TextView textView = getActivity().findViewById(R.id.analysis_title);
         Typeface typeFace=Typeface.createFromAsset(getActivity().getAssets(),"fonts/BalsamiqSans-Bold.ttf");
         textView.setTypeface(typeFace);
