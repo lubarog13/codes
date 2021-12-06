@@ -2,6 +2,7 @@ package com.example.traininglog.ui.base.traininglog;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.example.traininglog.common.BasePresenter;
+import com.example.traininglog.data.model.SimplePresence;
 import com.example.traininglog.utils.ApiUtils;
 
 import java.util.Calendar;
@@ -36,6 +37,20 @@ public class LogPresenter extends BasePresenter<LogView> {
                 .doFinally(getViewState()::hideRefresh)
                 .subscribe(
                         response -> getViewState().showPresences(response.getPresences()),
+                        getViewState()::showError
+                )
+        );
+    }
+
+    void updatePresence(SimplePresence presence) {
+        mCompositeDisposable.add(
+                ApiUtils.getsApiServiceForEditWithNulls().updatePresence(presence.getId(), presence)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> getViewState().showRefresh())
+                .doFinally(getViewState()::hideRefresh)
+                .subscribe(
+                        () -> {},
                         getViewState()::showError
                 )
         );

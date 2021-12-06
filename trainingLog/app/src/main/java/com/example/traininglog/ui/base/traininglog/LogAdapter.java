@@ -9,17 +9,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.traininglog.R;
 import com.example.traininglog.data.model.Presence;
-import com.example.traininglog.ui.base.profile.coaches.CoachHolder;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
     private final Map<String, List<Presence>> mPresencesMap = new HashMap<>();
-    
+    private final OnItemClickListener onItemClickListener;
+
+    public LogAdapter(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
     @NonNull
     @Override
     public LogHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -48,7 +51,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
                 }
             }
         }
-        holder.bind(presence, isNewGroup);
+        holder.bind(presence, isNewGroup, onItemClickListener);
     }
 
     @Override
@@ -69,5 +72,9 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
             mPresencesMap.get(presence.getWorkout().getClub().getGroup()).add(presence);
         }
         notifyDataSetChanged();
+    }
+
+    public interface OnItemClickListener {
+        void updatePresence(Presence presence);
     }
 }

@@ -33,7 +33,7 @@ public class LogHolder extends RecyclerView.ViewHolder
         mHeading2 = itemView.findViewById(R.id.head);
     }
 
-    public void bind(Presence item, boolean isNewGroup) {
+    public void bind(Presence item, boolean isNewGroup, LogAdapter.OnItemClickListener onItemClickListener) {
         if (item==null) return;
         if(isNewGroup) {
             mHeading1.setVisibility(View.VISIBLE);
@@ -47,8 +47,11 @@ public class LogHolder extends RecyclerView.ViewHolder
             mAttend.setImageDrawable(itemView.getResources().getDrawable(R.drawable.ic_vectorok));
             mNotAttend.setImageDrawable(null);
         }
-        else {
+        else if(item.getIs_attend()==false){
             mNotAttend.setImageDrawable(itemView.getResources().getDrawable(R.drawable.ic_vectorno));
+            mAttend.setImageDrawable(null);
+        } else {
+            mNotAttend.setImageDrawable(null);
             mAttend.setImageDrawable(null);
         }
         if(item.isEarly_ret()) {
@@ -62,5 +65,46 @@ public class LogHolder extends RecyclerView.ViewHolder
             mDelay.setImageDrawable(null);
         }
         mName.setText(String.format("%s %s %s", item.getUser().getLast_name(), item.getUser().getFirst_name(), item.getUser().getSecond_name()));
+        if(onItemClickListener!=null) {
+            mAttend.setOnClickListener(v -> {
+                if(item.getIs_attend()==null || item.getIs_attend()==false ) {
+                    item.setIs_attend(true);
+                    mAttend.setImageDrawable(itemView.getResources().getDrawable(R.drawable.ic_vectorok));
+                    mNotAttend.setImageDrawable(null);
+                    onItemClickListener.updatePresence(item);
+                }
+            });
+            mNotAttend.setOnClickListener(v -> {
+                if(item.getIs_attend()==null || item.getIs_attend()==true ) {
+                    item.setIs_attend(false);
+                    mNotAttend.setImageDrawable(itemView.getResources().getDrawable(R.drawable.ic_vectorno));
+                    mAttend.setImageDrawable(null);
+                    onItemClickListener.updatePresence(item);
+                }
+            });
+            mDelay.setOnClickListener(v -> {
+                if(!item.isDelay()){
+                    item.setDelay(true);
+                    mDelay.setImageDrawable(itemView.getResources().getDrawable(R.drawable.ic_vectorno));
+                }
+                else {
+                    item.setDelay(false);
+                    mDelay.setImageDrawable(null);
+                }
+                onItemClickListener.updatePresence(item);
+            });
+            mEarlyRet.setOnClickListener(v -> {
+                if(!item.isEarly_ret()){
+                    item.setEarly_ret(true);
+                    mEarlyRet.setImageDrawable(itemView.getResources().getDrawable(R.drawable.ic_vectorno));
+                }
+                else {
+                    item.setEarly_ret(false);
+                    mEarlyRet.setImageDrawable(null);
+                }
+                onItemClickListener.updatePresence(item);
+            });
+        }
+
     }
 }

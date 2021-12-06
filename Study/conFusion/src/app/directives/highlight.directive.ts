@@ -5,7 +5,7 @@ import { Directive, ElementRef, Renderer2, HostListener  } from '@angular/core';
 })
 export class HighlightDirective {
 
-  constructor(private el: ElementRef,
+/*  constructor(private el: ElementRef,
     private renderer: Renderer2) { }
 
   @HostListener('mouseenter') onMouseEnter() {
@@ -14,6 +14,6 @@ export class HighlightDirective {
 
   @HostListener('mouseleave') onMouseLeave() {
     this.renderer.removeClass(this.el.nativeElement, 'highlight');
-  }
-
+  } */
+  constructor() { }
 }

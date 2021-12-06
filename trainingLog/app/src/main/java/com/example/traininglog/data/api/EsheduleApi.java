@@ -20,6 +20,7 @@ import com.example.traininglog.data.model.PresencesResponse;
 import com.example.traininglog.data.model.SignUp;
 import com.example.traininglog.data.model.SignUpForCreate;
 import com.example.traininglog.data.model.SignUpResponse;
+import com.example.traininglog.data.model.SimplePresence;
 import com.example.traininglog.data.model.TypesResponse;
 import com.example.traininglog.data.model.User;
 import com.example.traininglog.data.model.UserResponse;
@@ -147,4 +148,7 @@ public interface EsheduleApi {
 
     @GET("coach/{coach_id}/presences/{day}/{month}/{year}/")
     Single<PresencesResponse> getPresencesForDay(@Path("coach_id") int coach_id, @Path("day") int day, @Path("month") int month, @Path("year") int year);
+
+    @PUT("presence/{id}/update/")
+    Completable updatePresence(@Path("id") int id, @Body SimplePresence presence);
 }

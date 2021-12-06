@@ -6,7 +6,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,22 +21,21 @@ import com.applandeo.materialcalendarview.EventDay;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.example.traininglog.R;
-import com.example.traininglog.common.BasePresenter;
 import com.example.traininglog.common.PresenterFragment;
 import com.example.traininglog.common.RefreshOwner;
 import com.example.traininglog.common.Refreshable;
 import com.example.traininglog.data.model.Presence;
+import com.example.traininglog.data.model.SimplePresence;
 import com.example.traininglog.data.model.Workout;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 
-public class LogFragment extends PresenterFragment implements LogView, Refreshable {
+public class LogFragment extends PresenterFragment implements LogView, Refreshable, LogAdapter.OnItemClickListener {
 
     private CalendarView mCalendar;
     private View mErrorView;
@@ -104,7 +102,7 @@ public class LogFragment extends PresenterFragment implements LogView, Refreshab
         {
 
         }
-        mAdapter = new LogAdapter();
+        mAdapter = new LogAdapter(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setHasFixedSize(false);
         mRecyclerView.setAdapter(mAdapter);
@@ -182,5 +180,11 @@ public class LogFragment extends PresenterFragment implements LogView, Refreshab
     @Override
     protected LogPresenter getPresenter() {
         return mPresenter;
+    }
+
+    @Override
+    public void updatePresence(Presence presence) {
+        mPresenter.updatePresence(new SimplePresence(presence.getId(), presence.getUser().getId(),
+                presence.getWorkout().getId(), presence.getIs_attend(),  presence.getReason(), presence.isDelay(), presence.isEarly_ret()));
     }
 }
