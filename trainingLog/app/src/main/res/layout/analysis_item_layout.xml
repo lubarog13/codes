@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:orientation="horizontal">
+    <androidx.cardview.widget.CardView
+        android:layout_width="150dp"
+        android:layout_height="match_parent"
+        app:cardElevation="10dp"
+        android:layout_gravity="center"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/roboto_bold"
+            android:gravity="center"
+            android:text="Всего:"
+            android:id="@+id/typeText"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
+    </androidx.cardview.widget.CardView>
+    <LinearLayout
+        android:layout_width="130dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="84"
+            android:textSize="60sp"
+            android:gravity="center_horizontal"
+            android:id="@+id/total_count"
+            android:fontFamily="@font/roboto_bold"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="тренировки"
+            android:id="@+id/trainings"
+            android:fontFamily="@font/roboto_bold"
+            android:textSize="14sp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:text="25 общих"
+            android:gravity="center"
+            android:textColor="@color/colorRed"
+            android:fontFamily="@font/roboto_bold"
+            android:textSize="14sp"
+            android:id="@+id/all_workout"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:text="8 кардио"
+            android:gravity="center"
+            android:textColor="@color/colorOrange"
+            android:fontFamily="@font/roboto_bold"
+            android:textSize="14sp"
+            android:id="@+id/cardio_workout"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:text="8 других"
+            android:gravity="center"
+            android:textColor="@color/colorYellow"
+            android:fontFamily="@font/roboto_bold"
+            android:textSize="14sp"
+            android:id="@+id/other_workout"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:text="9 силовых"
+            android:gravity="center"
+            android:textColor="@color/colorGreen"
+            android:fontFamily="@font/roboto_bold"
+            android:textSize="14sp"
+            android:id="@+id/strong_workout"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:text="34 на технику"
+            android:gravity="center"
+            android:textColor="@color/colorPrimaryDark"
+            android:fontFamily="@font/roboto_bold"
+            android:textSize="14sp"
+            android:id="@+id/technic_workout"/>
+</LinearLayout>

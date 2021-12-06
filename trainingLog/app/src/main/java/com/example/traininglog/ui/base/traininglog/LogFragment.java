@@ -27,6 +27,7 @@ import com.example.traininglog.common.Refreshable;
 import com.example.traininglog.data.model.Presence;
 import com.example.traininglog.data.model.SimplePresence;
 import com.example.traininglog.data.model.Workout;
+import com.example.traininglog.utils.ApiUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,6 +44,7 @@ public class LogFragment extends PresenterFragment implements LogView, Refreshab
     private RefreshOwner mRefreshOwner;
     private TextView mHeading;
     private LogAdapter mAdapter;
+    private ImageView mNoGo;
     private final List<Workout> mWorkouts = new ArrayList<>();
     private Calendar calendar;
     @InjectPresenter
@@ -83,6 +85,7 @@ public class LogFragment extends PresenterFragment implements LogView, Refreshab
         mErrorView = view.findViewById(R.id.errorView);
         mRecyclerView = view.findViewById(R.id.log_recycler);
         mHeading = view.findViewById(R.id.heading);
+        mNoGo = view.findViewById(R.id.not_go);
     }
 
     @Override
@@ -123,6 +126,12 @@ public class LogFragment extends PresenterFragment implements LogView, Refreshab
             calendar.setTime(eventDay.getCalendar().getTime());
             currentDataPresences();
         });
+        if(ApiUtils.coach_id==-1) {
+            mNoGo.setVisibility(View.VISIBLE);
+            mHeading.setText("Эта часть для тренера");
+        } else {
+            mNoGo.setVisibility(View.GONE);
+        }
         onRefreshData();
     }
 

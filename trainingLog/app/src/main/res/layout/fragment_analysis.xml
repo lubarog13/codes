@@ -287,8 +287,6 @@
     </LinearLayout>
     </LinearLayout>
 
-    <!-- TODO: Update blank fragment layout -->
-
 
 </LinearLayout>
 </androidx.core.widget.NestedScrollView>
