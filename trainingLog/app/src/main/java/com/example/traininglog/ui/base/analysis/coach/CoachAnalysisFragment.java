@@ -23,6 +23,7 @@ import com.example.traininglog.common.RefreshOwner;
 import com.example.traininglog.common.Refreshable;
 import com.example.traininglog.ui.base.analysis.coach.base.ButtonsFragment;
 import com.example.traininglog.ui.base.analysis.coach.group.GroupAnalysisFragment;
+import com.example.traininglog.ui.base.analysis.coach.trainings.WorkoutAnalysisFragment;
 import com.example.traininglog.ui.base.analysis.coach.users.UserAnalysisButtonFragment;
 
 import java.io.IOException;
@@ -104,7 +105,9 @@ public class CoachAnalysisFragment extends Fragment implements BaseView, Refresh
     }
 
     public void onTrainingButtonClick() {
-        Toast.makeText(getActivity(), "Training buttons", Toast.LENGTH_SHORT).show();
+        mChildFragment = WorkoutAnalysisFragment.newInstance();
+        changeFragment(mChildFragment);
+        textView.setText("Для тренировок");
     }
 
     @Override

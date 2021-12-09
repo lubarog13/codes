@@ -1,24 +1,23 @@
-package com.example.traininglog.ui.base.analysis;
+package com.example.traininglog.ui.base.analysis.coach.trainings;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
-import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
@@ -27,35 +26,26 @@ import com.example.traininglog.common.BasePresenter;
 import com.example.traininglog.common.PresenterFragment;
 import com.example.traininglog.common.RefreshOwner;
 import com.example.traininglog.common.Refreshable;
-import com.example.traininglog.data.model.MonthsResponse;
+import com.example.traininglog.data.model.GroupAnalysis;
 import com.example.traininglog.data.model.TypesResponse;
-import com.example.traininglog.ui.HomeActivity;
-import com.example.traininglog.ui.base.analysis.coach.CoachAnalysisFragment;
-import com.example.traininglog.ui.base.profile.halls.HallFragment;
-import com.example.traininglog.utils.ApiUtils;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 
+import org.eazegraph.lib.charts.BarChart;
 import org.eazegraph.lib.charts.PieChart;
 import org.eazegraph.lib.charts.ValueLineChart;
+import org.eazegraph.lib.models.BarModel;
 import org.eazegraph.lib.models.PieModel;
-import org.eazegraph.lib.models.ValueLinePoint;
-import org.eazegraph.lib.models.ValueLineSeries;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
+import java.util.Comparator;
+import java.util.List;
 
-public class AnalysisFragment extends PresenterFragment implements Refreshable, AnalysisView {
 
-    private static final String  ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class WorkoutAnalysisFragment extends PresenterFragment implements WorkoutAnalysisView, Refreshable {
     private TextView mTotalCount;
     private PieChart pieChart;
     private View mErrorView;
     private View mView;
     private View mHideView;
-    private ValueLineChart mCubicValueLineChart;
     private RefreshOwner mRefreshOwner;
     private TextView mCardioCount;
     private TextView mStrengthCount;
@@ -65,51 +55,33 @@ public class AnalysisFragment extends PresenterFragment implements Refreshable, 
     private TextView mTotalCountText;
     private Button mAllTrainButton;
     private TextView mTypeText;
-    private int mUserId;
-    private String mUserName;
+    private MaterialSpinner mSpinner;
+    private BarChart mChart;
+    private String month = "Всего";
     @InjectPresenter
-    AnalysisPresenter mPresenter;
+    WorkoutAnalysisPresenter mPresenter;
     @ProvidePresenter
-    AnalysisPresenter providePresenter() {return new AnalysisPresenter();}
-
-    public AnalysisFragment() {
-        // Required empty public constructor
-    }
-
-    public static AnalysisFragment newInstance() {
-        return new AnalysisFragment();
-    }
-
-    public static AnalysisFragment newInstance(int param1, String param2) {
-        AnalysisFragment fragment = new AnalysisFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mUserId = getArguments().getInt(ARG_PARAM1);
-            mUserName = getArguments().getString(ARG_PARAM2);
-        }
+    WorkoutAnalysisPresenter providePresenter(){return new WorkoutAnalysisPresenter();}
+    public static WorkoutAnalysisFragment newInstance() {
+        return new WorkoutAnalysisFragment();
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof RefreshOwner)
-            mRefreshOwner = (RefreshOwner) context;
+        if(context instanceof RefreshOwner) mRefreshOwner = (RefreshOwner) context;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_analysis, container, false);
+        return inflater.inflate(R.layout.fragment_workout_analysis, container, false);
     }
 
     @Override
@@ -119,11 +91,9 @@ public class AnalysisFragment extends PresenterFragment implements Refreshable, 
         mView = view.findViewById(R.id.analysis_content);
         mTypeText = view.findViewById(R.id.typeText);
         mHideView = view.findViewById(R.id.hide_view);
-         pieChart = view.findViewById(R.id.piechart);
-         mAllTrainButton = view.findViewById(R.id.all_train_button);
-         mAllTrainButton.setOnClickListener(v -> mPresenter.getAnalysisForTypes(mUserId));
-         mCubicValueLineChart = (ValueLineChart) view.findViewById(R.id.cubiclinechart);
-        mCubicValueLineChart.setOnPointFocusedListener(_PointPos -> mPresenter.getAnalysisForMonthsForTypes(mUserId, _PointPos));
+        pieChart = view.findViewById(R.id.piechart);
+        mAllTrainButton = view.findViewById(R.id.all_train_button);
+        mAllTrainButton.setOnClickListener(v -> mPresenter.getWorkoutCount());
         mTotalCount = view.findViewById(R.id.total_count);
         Shader textShader = new LinearGradient(0, 0,0, mTotalCount.getTextSize(),
                 new int[]{
@@ -151,74 +121,28 @@ public class AnalysisFragment extends PresenterFragment implements Refreshable, 
         mForTechCount = view.findViewById(R.id.technic_workout);
         mStrengthCount = view.findViewById(R.id.strong_workout);
         mAnotherCount = view.findViewById(R.id.other_workout);
+        mSpinner = view.findViewById(R.id.month_spinner);
+        mChart = view.findViewById(R.id.barchart);
     }
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if(ApiUtils.coach_id!=-1 && mUserName==null){
-            ((HomeActivity) getActivity()).changeFragment(CoachAnalysisFragment.newInstance());
-            return;
-        }
-        TextView textView = getActivity().findViewById(R.id.analysis_title);
-        Typeface typeFace=Typeface.createFromAsset(getActivity().getAssets(),"fonts/BalsamiqSans-Bold.ttf");
-        textView.setTypeface(typeFace);
-        ImageView imageView = getActivity().findViewById(R.id.analysis_image);
-        try
-        {
-            // get input stream
-            InputStream ims = getActivity().getAssets().open("Group 60.png");
-            // load image as Drawable
-            Drawable d = Drawable.createFromStream(ims, null);
-            // set image to ImageView
-            imageView.setImageDrawable(d);
-            ims .close();
-        }
-        catch(IOException ex)
-        {
-            return;
-        }
-        if(mUserName!=null){
-            textView.setText(mUserName);
-        } else {
-            mUserId = ApiUtils.user_id;
-        }
-        if(getActivity().getSharedPreferences("user", Context.MODE_PRIVATE).getBoolean("show_analysis", true))
-        onRefreshData();
-        else {
-            mHideView.setVisibility(View.VISIBLE);
-            mView.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    public void showRefresh() {
-        mRefreshOwner.setRefreshState(true);
-    }
-
-    @Override
-    public void hideRefresh() {
-        mRefreshOwner.setRefreshState(false);
-    }
-
-    @Override
-    public void showError(Throwable throwable) {
-        mErrorView.setVisibility(View.VISIBLE);
-        mView.setVisibility(View.GONE);
-        if(throwable!= null) Log.e("err", throwable.getMessage());
-    }
-
-    @Override
-    public void onRefreshData() {
-        if(!getActivity().getSharedPreferences("user", Context.MODE_PRIVATE).getBoolean("show_analysis", true)) {
-            hideRefresh();
-            return;
-        }
-        mPresenter.getAnalysisForTypes(mUserId);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.months, R.layout.text_for_spinner);
+        mSpinner.setAdapter(adapter);
+        mSpinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+                month = item.toString();
+                onRefreshData();
+            }
+        });
     }
 
     @Override
     public void showAnalysisForTypes(TypesResponse typesResponse, int month) {
+        mErrorView.setVisibility(View.GONE);
         if(month==-1){
             mAllTrainButton.setVisibility(View.GONE);
             mTypeText.setText("Всего:");
@@ -244,34 +168,58 @@ public class AnalysisFragment extends PresenterFragment implements Refreshable, 
         mForAllCount.setText(String.format("%s общих", String.valueOf(typesResponse.getFor_all())));
         mAnotherCount.setText(String.format("%s других", String.valueOf(typesResponse.getAnother())));
         mForTechCount.setText(String.format("%s на технику", String.valueOf(typesResponse.getFor_tech())));
+        mPresenter.getWorkoutForTypes(setMonth(this.month));
     }
 
     @Override
-    public void showAnalysisForMonths(MonthsResponse monthsResponse) {
-        ValueLineSeries series = new ValueLineSeries();
-        series.setColor(getResources().getColor(R.color.lightBlue));
-        series.addPoint(new ValueLinePoint("янв", monthsResponse.getJan()));
-        series.addPoint(new ValueLinePoint("фев", monthsResponse.getFeb()));
-        series.addPoint(new ValueLinePoint("мар", monthsResponse.getMar()));
-        series.addPoint(new ValueLinePoint("апр", monthsResponse.getApr()));
-        series.addPoint(new ValueLinePoint("май", monthsResponse.getMay()));
-        series.addPoint(new ValueLinePoint("июн", monthsResponse.getJun()));
-        series.addPoint(new ValueLinePoint("июл", monthsResponse.getJul()));
-        series.addPoint(new ValueLinePoint("авг", monthsResponse.getAug()));
-        series.addPoint(new ValueLinePoint("сен", monthsResponse.getSep()));
-        series.addPoint(new ValueLinePoint("окт", monthsResponse.getOct()));
-        series.addPoint(new ValueLinePoint("ноя", monthsResponse.getNov()));
-        series.addPoint(new ValueLinePoint("дек", monthsResponse.getDec()));
-        mCubicValueLineChart.clearChart();
-        mCubicValueLineChart.addSeries(series);
-        mCubicValueLineChart.startAnimation();
+    public void showWorkoutAnalysis(List<GroupAnalysis.GroupAnalysisItem> workouts, List<GroupAnalysis.GroupAnalysisItem> presences) {
+        mChart.clearChart();
+        Log.e("presences", presences.toString());
+        Log.e("workouts", workouts.toString());
+        workouts.sort(new Comparator<GroupAnalysis.GroupAnalysisItem>() {
+            @Override
+            public int compare(GroupAnalysis.GroupAnalysisItem o1, GroupAnalysis.GroupAnalysisItem o2) {
+                return o1.getClubGroup().compareTo(o2.getClubGroup());
+            }
+        });
+        presences.sort(new Comparator<GroupAnalysis.GroupAnalysisItem>() {
+            @Override
+            public int compare(GroupAnalysis.GroupAnalysisItem o1, GroupAnalysis.GroupAnalysisItem o2) {
+                return o1.getGroup().compareTo(o2.getGroup());
+            }
+        });
+        for (int i=0; i<workouts.size(); i++) {
+            for(int j=0; j<presences.size(); j++) {
+                if(presences.get(j).getGroup().equals(workouts.get(i).getClubGroup())) {
+                    float pplCount = 0;
+                    if (presences.get(j).getPresenceCount() != 0) {
+                        pplCount = (float) presences.get(j).getPresenceCount() / workouts.get(i).getWcount();
+                    }
+                    String name = workouts.get(i).getClubGroup() + String.valueOf(pplCount);
+                    Log.e("name", name);
+                    mChart.addBar(new BarModel(name, pplCount,  getResources().getColor(R.color.colorPrimaryDark)));
+                    break;
+                }
+            }
+        }
+        mChart.startAnimation();
     }
 
     @Override
-    protected AnalysisPresenter getPresenter() {
-        return mPresenter;
+    public void showRefresh() {
+        mRefreshOwner.setRefreshState(true);
     }
 
+    @Override
+    public void hideRefresh() {
+        mRefreshOwner.setRefreshState(false);
+    }
+
+    @Override
+    public void showError(Throwable throwable) {
+        if(throwable!=null) Log.e("err", throwable.getMessage());
+        mErrorView.setVisibility(View.VISIBLE);
+    }
     private String getTotalCountText(int totalCount) {
         String totalCountText = "тренировки";
         if(totalCount==1) return "тренировка";
@@ -310,5 +258,49 @@ public class AnalysisFragment extends PresenterFragment implements Refreshable, 
                 return "Декабрь:";
         }
         return "";
+    }
+
+    private String setMonth(String month){
+        switch (month) {
+            case "Всего":
+                return "all";
+            case "Январь":
+                return "1";
+            case "Февраль":
+                return "2";
+            case "Март":
+                return "3";
+            case "Апрель":
+                return "4";
+            case "Май":
+                return "5";
+            case "Июнь":
+                return "6";
+            case "Июль":
+                return "7";
+            case "Август":
+                return "8";
+            case "Сентябрь":
+                return "9";
+            case "Октябрь":
+                return "10";
+            case "Ноябрь":
+                return "11";
+            case "Декабрь":
+                return "12";
+        }
+        return "all";
+    }
+
+
+
+    @Override
+    public void onRefreshData() {
+        mPresenter.getWorkoutCount();
+    }
+
+    @Override
+    protected WorkoutAnalysisPresenter getPresenter() {
+        return mPresenter;
     }
 }

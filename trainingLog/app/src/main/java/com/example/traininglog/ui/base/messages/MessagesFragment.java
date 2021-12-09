@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.traininglog.R;
+import com.example.traininglog.common.Refreshable;
 import com.example.traininglog.ui.base.messages.create.CreateMessageFragment;
 import com.example.traininglog.ui.base.messages.create.CreateMessageFragment$$PresentersBinder;
 import com.example.traininglog.ui.base.messages.incoming.IncomingMessagesFragment;
@@ -23,11 +24,12 @@ import com.example.traininglog.ui.base.messages.update.UpdateMessageFragment;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class MessagesFragment extends Fragment {
+public class MessagesFragment extends Fragment implements Refreshable {
     private static final  String ARG_PARAM1 = "param1";
     private String mClubName;
     private Button mInButton;
     private Button mOutButton;
+    private Fragment mChildFragment;
 
     public MessagesFragment() {
         // Required empty public constructor
@@ -89,7 +91,7 @@ public class MessagesFragment extends Fragment {
             return;
         }
         mInButton.setOnClickListener(v -> {
-            changeFragment(IncomingMessagesFragment.newInstance());
+            changeFragment(IncomingMessagesFragment.newInstance() );
             changeColors(true);
         });
         mOutButton.setOnClickListener(v -> {
@@ -99,6 +101,7 @@ public class MessagesFragment extends Fragment {
     }
 
     public void changeFragment(Fragment fragment) {
+        mChildFragment = fragment;
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction()
                 .replace(R.id.child_fragment_container, fragment);
         transaction.addToBackStack(fragment.getClass().getSimpleName());
@@ -111,6 +114,13 @@ public class MessagesFragment extends Fragment {
         } else {
             mOutButton.setBackgroundColor(getActivity().getResources().getColor(R.color.colorWhite));
             mInButton.setBackgroundColor(getActivity().getResources().getColor(R.color.colorDivider));
+        }
+    }
+
+    @Override
+    public void onRefreshData() {
+        if(mChildFragment!=null && mChildFragment instanceof Refreshable) {
+            ((Refreshable) mChildFragment).onRefreshData();
         }
     }
 }

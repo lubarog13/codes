@@ -54,7 +54,6 @@ public class HallFragment extends PresenterFragment implements Refreshable, Hall
         return new HallPresenter(mStorage);
     }
 
-    // TODO: Rename and change types of parameters
     private String mBuildingName;
     private int mBuildingId;
     private Storage mStorage;

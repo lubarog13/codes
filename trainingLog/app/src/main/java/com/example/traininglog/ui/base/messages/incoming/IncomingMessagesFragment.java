@@ -106,7 +106,7 @@ public class IncomingMessagesFragment extends PresenterFragment implements Incom
     public void showMessages(List<Message> messages) {
         mRecycler.setVisibility(View.VISIBLE);
         mErrorView.setVisibility(View.GONE);
-        mAdapter.addData(messages, false);
+        mAdapter.addData(messages, true);
     }
 
     @Override

@@ -158,4 +158,10 @@ public interface EsheduleApi {
 
     @GET("coach/{coach_id}/analysis/club/{club_id}/workouts/")
     Single<TypesResponse> getCountForTypesForGroup(@Path("coach_id") int coach_id, @Path("club_id") int club_id);
+
+    @POST("coach/{coach_id}/analysis/groups/month/")
+    Single<GroupAnalysis> getWorkoutCountForMonth(@Path("coach_id") int coach_id, @Body GroupAnalysis.DayType type);
+
+    @POST("coach/{coach_id}/analysis/groups/presences/month/")
+    Single<GroupAnalysis> getPresenceCountForMonth(@Path("coach_id") int coach_id, @Body GroupAnalysis.DayType type);
 }

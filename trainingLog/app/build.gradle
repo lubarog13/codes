@@ -13,7 +13,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField "String", "API_URL", '"https://0d8c-77-234-203-154.ngrok.io/"'
+        buildConfigField "String", "API_URL", '"https://b8e7-178-66-130-219.ngrok.io/"'
     }
 
     buildTypes {
@@ -84,4 +84,5 @@ dependencies {
     implementation 'jp.wasabeef:picasso-transformations:2.2.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.10"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.10"
+    implementation 'com.jaredrummler:material-spinner:1.3.1'
 }

@@ -11,13 +11,13 @@ import io.reactivex.schedulers.Schedulers;
 
 @InjectViewState
 public class AnalysisPresenter extends BasePresenter<AnalysisView> {
-    public void getAnalysisForTypes() {
+    public void getAnalysisForTypes(int user_id) {
         mCompositeDisposable.add(
-        ApiUtils.getApiService().getCountForTypes(ApiUtils.user_id)
+        ApiUtils.getApiService().getCountForTypes(user_id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable ->  getViewState().showRefresh())
-                .doFinally(this::getAnalysisForMonths)
+                .doFinally(() -> this.getAnalysisForMonths(user_id))
                 .subscribe(
                         typesResponse ->  getViewState().showAnalysisForTypes(typesResponse, -1),
                         getViewState()::showError
@@ -25,11 +25,11 @@ public class AnalysisPresenter extends BasePresenter<AnalysisView> {
         );
     }
 
-    public void getAnalysisForMonths() {
+    public void getAnalysisForMonths(int user_id) {
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         mCompositeDisposable.add(
-                ApiUtils.getApiService().getCountForMonth(ApiUtils.user_id, year)
+                ApiUtils.getApiService().getCountForMonth(user_id, year)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnSubscribe(disposable -> getViewState().showRefresh())
@@ -41,9 +41,9 @@ public class AnalysisPresenter extends BasePresenter<AnalysisView> {
         );
     }
 
-    public void getAnalysisForMonthsForTypes(int month) {
+    public void getAnalysisForMonthsForTypes(int user_id, int month) {
         mCompositeDisposable.add(
-                ApiUtils.getApiService().getCountForTypesInMonth(ApiUtils.user_id, month+1)
+                ApiUtils.getApiService().getCountForTypesInMonth(user_id, month+1)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> getViewState().showRefresh())

@@ -23,7 +23,13 @@ import com.example.traininglog.common.PresenterFragment;
 import com.example.traininglog.common.RefreshOwner;
 import com.example.traininglog.common.Refreshable;
 import com.example.traininglog.data.model.Club;
+import com.example.traininglog.data.model.TypesResponse;
 import com.example.traininglog.data.model.User;
+import com.example.traininglog.ui.HomeActivity;
+import com.example.traininglog.ui.auth.AuthFragment;
+import com.example.traininglog.ui.base.analysis.AnalysisFragment;
+
+import org.eazegraph.lib.models.PieModel;
 
 import java.util.List;
 
@@ -99,7 +105,10 @@ public class UserAnalysisButtonFragment extends PresenterFragment implements Ref
 
     @Override
     public void selectUser(User user) {
-
+        Log.e("select", "select");
+        String name = String.format("%s %s.%s.", user.getLast_name(), user.getFirst_name().charAt(0), user.getSecond_name().charAt(0));
+        if(getActivity()!=null)
+        ((HomeActivity) getActivity()).changeFragment(AnalysisFragment.newInstance(user.getId(), name));
     }
 
     public void hideUsers() {
