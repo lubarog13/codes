@@ -14,6 +14,12 @@
         android:layout_marginTop="20dp"
         android:background="@drawable/triangle"
         android:spinnerMode="dropdown" />
+    <include
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        layout="@layout/error_view"
+        android:visibility="gone"
+        android:layout_marginTop="-200dp"/>
     <org.eazegraph.lib.charts.BarChart
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/barchart"
