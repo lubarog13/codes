@@ -8,6 +8,7 @@ import com.example.traininglog.data.model.Club;
 import com.example.traininglog.data.model.ClubResponse;
 import com.example.traininglog.data.model.Coach;
 import com.example.traininglog.data.model.CoachResponse;
+import com.example.traininglog.data.model.GroupAnalysis;
 import com.example.traininglog.data.model.Hall;
 import com.example.traininglog.data.model.HallsResponse;
 import com.example.traininglog.data.model.Message;
@@ -151,4 +152,10 @@ public interface EsheduleApi {
 
     @PUT("presence/{id}/update/")
     Completable updatePresence(@Path("id") int id, @Body SimplePresence presence);
+
+    @POST("coach/{coach_id}/analysis/groups/presences/")
+    Single<GroupAnalysis> getGroupPresence(@Path("coach_id") int coach_id, @Body GroupAnalysis.DayType type);
+
+    @GET("coach/{coach_id}/analysis/club/{club_id}/workouts/")
+    Single<TypesResponse> getCountForTypesForGroup(@Path("coach_id") int coach_id, @Path("club_id") int club_id);
 }
