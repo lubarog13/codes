@@ -1,9 +1,11 @@
 package com.example.traininglog.ui.base.analysis.coach;
 
+import android.content.Context;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -16,14 +18,27 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.traininglog.R;
+import com.example.traininglog.common.BaseView;
+import com.example.traininglog.common.RefreshOwner;
+import com.example.traininglog.common.Refreshable;
 import com.example.traininglog.ui.base.analysis.coach.base.ButtonsFragment;
 import com.example.traininglog.ui.base.analysis.coach.group.GroupAnalysisFragment;
+import com.example.traininglog.ui.base.analysis.coach.users.UserAnalysisButtonFragment;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-public class CoachAnalysisFragment extends Fragment {
+public class CoachAnalysisFragment extends Fragment implements BaseView, Refreshable
+{
     private TextView textView;
+    private RefreshOwner mRefreshOwner;
+    private Fragment mChildFragment;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if(context instanceof RefreshOwner) mRefreshOwner = (RefreshOwner) context;
+    }
 
     public CoachAnalysisFragment() {
         // Required empty public constructor
@@ -77,16 +92,38 @@ public class CoachAnalysisFragment extends Fragment {
     }
 
     public void onGroupButtonClick() {
-        changeFragment(GroupAnalysisFragment.newInstance());
+        mChildFragment = GroupAnalysisFragment.newInstance();
+        changeFragment(mChildFragment);
         textView.setText("Для групп");
     }
 
     public void onUserButtonClick() {
-        Toast.makeText(getActivity(), "Users buttons", Toast.LENGTH_SHORT).show();
+        mChildFragment = UserAnalysisButtonFragment.newInstance();
+        changeFragment(mChildFragment);
+        textView.setText("Для занимающихся");
     }
 
     public void onTrainingButtonClick() {
         Toast.makeText(getActivity(), "Training buttons", Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void showRefresh() {
+        mRefreshOwner.setRefreshState(true);
+    }
+
+    @Override
+    public void hideRefresh() {
+        mRefreshOwner.setRefreshState(false);
+    }
+
+    @Override
+    public void showError(Throwable throwable) {
+
+    }
+
+    @Override
+    public void onRefreshData() {
+        if(mChildFragment!=null && mChildFragment instanceof Refreshable) ((Refreshable) mChildFragment).onRefreshData();
+    }
 }

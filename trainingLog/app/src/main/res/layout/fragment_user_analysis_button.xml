@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:paddingBottom="50dp"
+    >
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        layout="@layout/error_view"/>
+    <Button
+        android:layout_width="317dp"
+        android:id="@+id/group_button"
+        android:layout_height="36dp"
+        android:visibility="gone"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginVertical="20dp"
+        android:background="@drawable/iten_button_background_blue"
+        android:textAllCaps="false"
+        android:textColor="@color/colorPrimaryDark"
+        android:fontFamily="@font/roboto_bold"
+        android:textSize="16sp"
+        android:text="Анализ для групп"
+        />
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:nestedScrollingEnabled="false"
+        android:id="@+id/analysis_recycler_users"
+        />
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:nestedScrollingEnabled="false"
+        android:id="@+id/analysis_recycler_clubs"
+        android:paddingBottom="50dp">
+    </androidx.recyclerview.widget.RecyclerView>
+</LinearLayout>
