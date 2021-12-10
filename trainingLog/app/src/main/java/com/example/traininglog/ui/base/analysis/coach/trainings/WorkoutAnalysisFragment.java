@@ -28,6 +28,7 @@ import com.example.traininglog.common.RefreshOwner;
 import com.example.traininglog.common.Refreshable;
 import com.example.traininglog.data.model.GroupAnalysis;
 import com.example.traininglog.data.model.TypesResponse;
+import com.example.traininglog.utils.ApiUtils;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import org.eazegraph.lib.charts.BarChart;
@@ -138,6 +139,7 @@ public class WorkoutAnalysisFragment extends PresenterFragment implements Workou
                 onRefreshData();
             }
         });
+        onRefreshData();
     }
 
     @Override
@@ -195,7 +197,7 @@ public class WorkoutAnalysisFragment extends PresenterFragment implements Workou
                     if (presences.get(j).getPresenceCount() != 0) {
                         pplCount = (float) presences.get(j).getPresenceCount() / workouts.get(i).getWcount();
                     }
-                    String name = workouts.get(i).getClubGroup() + String.valueOf(pplCount);
+                    String name = workouts.get(i).getClubGroup();
                     Log.e("name", name);
                     mChart.addBar(new BarModel(name, pplCount,  getResources().getColor(R.color.colorPrimaryDark)));
                     break;
@@ -231,7 +233,7 @@ public class WorkoutAnalysisFragment extends PresenterFragment implements Workou
         return "тренировок";
     }
     private String getMonth(int month) {
-        switch (month){
+        switch (month-1){
             case 0:
                 return "Январь:";
             case 1:
@@ -296,7 +298,9 @@ public class WorkoutAnalysisFragment extends PresenterFragment implements Workou
 
     @Override
     public void onRefreshData() {
+        if(month.equals("Всего"))
         mPresenter.getWorkoutCount();
+        else mPresenter.getAnalysisForMonthsForTypes(ApiUtils.user_id, Integer.parseInt(setMonth(month)));
     }
 
     @Override

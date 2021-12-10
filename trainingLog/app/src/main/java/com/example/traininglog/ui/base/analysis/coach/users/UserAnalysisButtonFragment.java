@@ -116,6 +116,7 @@ public class UserAnalysisButtonFragment extends PresenterFragment implements Ref
         mUsersRecycler.setVisibility(View.GONE);
         mRecycler.setVisibility(View.GONE);
         mGroup.setVisibility(View.GONE);
+        mGroupAdapter.startAnimation();
         onRefreshData();
     }
 

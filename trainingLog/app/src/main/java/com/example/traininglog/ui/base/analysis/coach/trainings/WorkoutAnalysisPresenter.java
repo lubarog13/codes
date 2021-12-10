@@ -54,4 +54,18 @@ public class WorkoutAnalysisPresenter extends BasePresenter<WorkoutAnalysisView>
                         )
         );
     }
+
+    public void getAnalysisForMonthsForTypes(int user_id, int month) {
+        mCompositeDisposable.add(
+                ApiUtils.getApiService().getCountForTypesInMonth(user_id, month)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnSubscribe(disposable -> getViewState().showRefresh())
+                        .doFinally(getViewState()::hideRefresh)
+                        .subscribe(
+                                typesResponse -> getViewState().showAnalysisForTypes(typesResponse, month),
+                                getViewState()::showError
+                        )
+        );
+    }
 }

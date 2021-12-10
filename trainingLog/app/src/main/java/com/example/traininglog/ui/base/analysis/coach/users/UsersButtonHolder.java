@@ -22,6 +22,7 @@ public class UsersButtonHolder extends RecyclerView.ViewHolder {
         String name = "";
         if(club!=null){
             mButton.setBackground(itemView.getResources().getDrawable(R.drawable.iten_button_background_blue));
+            mButton.setTextColor(itemView.getResources().getColor(R.color.colorPrimaryDark));
             name = club.getGroup();
             if(onItemClickListener!=null){
                 mButton.setOnClickListener(v -> onItemClickListener.getUsersForClub(club));
