@@ -5,6 +5,7 @@ package com.example.traininglog.data.api;
 import com.example.traininglog.data.model.AuthUser;
 import com.example.traininglog.data.model.Building;
 import com.example.traininglog.data.model.Club;
+import com.example.traininglog.data.model.ClubCreate;
 import com.example.traininglog.data.model.ClubResponse;
 import com.example.traininglog.data.model.Coach;
 import com.example.traininglog.data.model.CoachResponse;
@@ -164,4 +165,7 @@ public interface EsheduleApi {
 
     @POST("coach/{coach_id}/analysis/groups/presences/month/")
     Single<GroupAnalysis> getPresenceCountForMonth(@Path("coach_id") int coach_id, @Body GroupAnalysis.DayType type);
+
+    @POST("club/create/")
+    Completable createClub(@Body ClubCreate clubCreate);
 }

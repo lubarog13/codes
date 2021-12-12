@@ -104,4 +104,15 @@ public class Club {
         this.building = building;
     }
 
+    @Override
+    public String toString() {
+        return "Club{" +
+                "id=" + id +
+                ", identifier='" + identifier + '\'' +
+                ", name='" + name + '\'' +
+                ", group='" + group + '\'' +
+                ", coach=" + coach +
+                ", building=" + building +
+                '}';
+    }
 }

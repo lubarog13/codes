@@ -7,6 +7,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -31,6 +33,7 @@ import com.example.traininglog.common.PresenterFragment;
 import com.example.traininglog.common.RefreshOwner;
 import com.example.traininglog.common.Refreshable;
 import com.example.traininglog.data.Storage;
+import com.example.traininglog.data.model.Club;
 import com.example.traininglog.data.model.SignUp;
 import com.example.traininglog.data.model.User;
 import com.example.traininglog.ui.HomeActivity;
@@ -38,6 +41,9 @@ import com.example.traininglog.ui.base.home.WorkoutAdapter;
 import com.example.traininglog.ui.base.profile.ProfilePresenter;
 import com.example.traininglog.ui.base.profile.clubs.all_clubs.AllClubsAdapter;
 import com.example.traininglog.ui.base.profile.clubs.all_clubs.AllClubsFragment;
+import com.example.traininglog.ui.base.profile.clubs.coach.ClubCreateFragment;
+import com.example.traininglog.ui.base.profile.coaches.CoachAdapter;
+import com.example.traininglog.utils.ApiUtils;
 
 import java.util.List;
 
@@ -46,7 +52,7 @@ import java.util.List;
  * Use the {@link ClubsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ClubsFragment extends PresenterFragment implements  Refreshable,  ClubsView, ClubAdapter.onItemClickListener {
+public class ClubsFragment extends PresenterFragment implements  Refreshable,  ClubsView, ClubAdapter.onItemClickListener, com.example.traininglog.ui.base.profile.clubs.coach.ClubAdapter.onItemClickListener {
 
     private RecyclerView mRecyclerView;
     private View mErrorView;
@@ -56,10 +62,14 @@ public class ClubsFragment extends PresenterFragment implements  Refreshable,  C
     private boolean m_checked = true;
     private String category = "all";
     private EditText mIdentifier;
+    private Button mCreateButton;
+    private View mFragmentView;
     private RefreshOwner mRefreshOwner;
+    private Fragment mChildFragment;
     @InjectPresenter
     ClubsPresenter mPresenter;
     private ClubAdapter mAdapter;
+    private com.example.traininglog.ui.base.profile.clubs.coach.ClubAdapter mCoachAdapter;
 
 
     @ProvidePresenter
@@ -71,15 +81,6 @@ public class ClubsFragment extends PresenterFragment implements  Refreshable,  C
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ClubsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static ClubsFragment newInstance(String param1, String param2) {
         return new ClubsFragment();
     }
@@ -113,15 +114,39 @@ public class ClubsFragment extends PresenterFragment implements  Refreshable,  C
         mIdentifier = view.findViewById(R.id.identifier);
         mMyCategory = view.findViewById(R.id.my);
         mAllCategory = view.findViewById(R.id.all);
+        mFragmentView = view.findViewById(R.id.club_container);
+        mCreateButton = view.findViewById(R.id.create_club_button);
+    }
+
+    public void changeFragment(Fragment fragment) {
+        mChildFragment = fragment;
+        mRecyclerView.setVisibility(View.GONE);
+        mCreateButton.setVisibility(View.GONE);
+        mErrorView.setVisibility(View.GONE);
+        mFragmentView.setVisibility(View.VISIBLE);
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction()
+                .replace(R.id.club_container, fragment);
+        transaction.addToBackStack(fragment.getClass().getSimpleName());
+        transaction.commit();
+    }
+
+    public void hideFragment(Fragment fragment) {
+        mCreateButton.setVisibility(View.VISIBLE);
+        getChildFragmentManager().popBackStack(fragment.getClass().getSimpleName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.remove(fragment).commit();
+        mFragmentView.setVisibility(View.GONE);
+        mRecyclerView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mAdapter = new ClubAdapter(this);
+        mCoachAdapter = new com.example.traininglog.ui.base.profile.clubs.coach.ClubAdapter(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setNestedScrollingEnabled(false);
-        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setAdapter(ApiUtils.coach_id!=-1? mCoachAdapter: mAdapter);
         mRecyclerView.setHasFixedSize(false);
         Typeface typeFace=Typeface.createFromAsset(getActivity().getAssets(),"fonts/BalsamiqSans-Bold.ttf");
         mMyCategory.setTypeface(typeFace);
@@ -144,6 +169,11 @@ public class ClubsFragment extends PresenterFragment implements  Refreshable,  C
                     }
                 }
         );
+        if(ApiUtils.coach_id!=-1){
+            mAddView.setVisibility(View.GONE);
+            mCreateButton.setVisibility(View.VISIBLE);
+            mCreateButton.setOnClickListener(v -> changeFragment(ClubCreateFragment.newInstance()));
+        }
         onRefreshData();
     }
 
@@ -178,12 +208,20 @@ public class ClubsFragment extends PresenterFragment implements  Refreshable,  C
         mAdapter.addData(signUps, true);
         mErrorView.setVisibility(View.GONE);
         mRecyclerView.setVisibility(View.VISIBLE);
+        if(ApiUtils.coach_id==-1)
         mAddView.setVisibility(View.VISIBLE);
     }
 
     @Override
+    public void setClubs(List<Club> clubs) {
+        mCoachAdapter.addData(clubs, true);
+    }
+
+    @Override
     public void setUsers(List<User> users, int signup_id) {
+        if(ApiUtils.coach_id==-1)
         mAdapter.addUsers(signup_id, users);
+        else mCoachAdapter.addUsers(signup_id, users);
     }
 
     @Override
@@ -204,7 +242,9 @@ public class ClubsFragment extends PresenterFragment implements  Refreshable,  C
 
     @Override
     public void onRefreshData() {
+        if(ApiUtils.coach_id==-1)
         mPresenter.getSignUps();
+        else mPresenter.getClubs();
     }
 
     @Override
@@ -213,8 +253,25 @@ public class ClubsFragment extends PresenterFragment implements  Refreshable,  C
     }
 
     @Override
+    public void onUsersClick(int club_id) {
+        mPresenter.getUsersForClub(club_id, club_id);
+    }
+
+    @Override
     public void hideUser(int signup_id) {
+        if(ApiUtils.coach_id==-1)
         mAdapter.removeUsers(signup_id);
+        else mCoachAdapter.removeUsers(signup_id);
+    }
+
+    @Override
+    public void addWorkout(int club_id) {
+
+    }
+
+    @Override
+    public void addSignup(int club_id) {
+
     }
 
     @Override

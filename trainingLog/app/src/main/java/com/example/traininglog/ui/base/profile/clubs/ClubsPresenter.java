@@ -31,6 +31,21 @@ public class ClubsPresenter extends BasePresenter<ClubsView> {
         );
     }
 
+    public void getClubs() {
+        mCompositeDisposable.add(
+                ApiUtils.getApiService().getClubsForCoach(ApiUtils.coach_id)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnSubscribe(disposable ->  getViewState().showRefresh())
+                        .doFinally(getViewState()::hideRefresh)
+                        .subscribe(
+                                clubResponse -> getViewState().setClubs(clubResponse.getClubs()),
+                                throwable -> getViewState().showError(throwable)
+                        )
+
+        );
+    }
+
     public void getUsersForClub(int club_id, int signup_id) {
         mCompositeDisposable.add(
                 ApiUtils.getApiService().getUsersForClub(club_id)

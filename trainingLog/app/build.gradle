@@ -13,7 +13,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField "String", "API_URL", '"https://29f6-77-234-203-154.ngrok.io/"'
+        buildConfigField "String", "API_URL", '"https://ff58-178-66-130-219.ngrok.io/"'
     }
 
     buildTypes {
@@ -29,6 +29,8 @@ android {
 }
 
 dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
