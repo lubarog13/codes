@@ -168,4 +168,8 @@ public interface EsheduleApi {
 
     @POST("club/create/")
     Completable createClub(@Body ClubCreate clubCreate);
+
+
+    @POST("workout/create/")
+    Completable createWorkout(@Body WorkoutForEdit workout);
 }

@@ -24,9 +24,11 @@
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_log.xml" value="0.20104166666666667" />
         <entry key="app/src/main/res/layout/fragment_messages.xml" value="0.17502532928064843" />
+        <entry key="app/src/main/res/layout/fragment_registration.xml" value="0.12364130434782608" />
         <entry key="app/src/main/res/layout/fragment_update_message.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_user_analysis_button.xml" value="0.19166666666666668" />
         <entry key="app/src/main/res/layout/fragment_workout_analysis.xml" value="0.19701086956521738" />
+        <entry key="app/src/main/res/layout/fragment_workout_create.xml" value="0.33" />
         <entry key="app/src/main/res/layout/free_day_view.xml" value="0.1" />
         <entry key="app/src/main/res/layout/is_not_attend_layout.xml" value="0.125" />
         <entry key="app/src/main/res/layout/item_blue_button_layout.xml" value="0.19166666666666668" />

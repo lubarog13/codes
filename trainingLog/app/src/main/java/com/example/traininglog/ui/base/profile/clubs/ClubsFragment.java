@@ -42,6 +42,7 @@ import com.example.traininglog.ui.base.profile.ProfilePresenter;
 import com.example.traininglog.ui.base.profile.clubs.all_clubs.AllClubsAdapter;
 import com.example.traininglog.ui.base.profile.clubs.all_clubs.AllClubsFragment;
 import com.example.traininglog.ui.base.profile.clubs.coach.ClubCreateFragment;
+import com.example.traininglog.ui.base.profile.clubs.coach.WorkoutCreateFragment;
 import com.example.traininglog.ui.base.profile.coaches.CoachAdapter;
 import com.example.traininglog.utils.ApiUtils;
 
@@ -266,7 +267,7 @@ public class ClubsFragment extends PresenterFragment implements  Refreshable,  C
 
     @Override
     public void addWorkout(int club_id) {
-
+        changeFragment(WorkoutCreateFragment.newInstance(club_id));
     }
 
     @Override

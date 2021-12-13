@@ -158,7 +158,7 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
         mTime.setText(simpleDateFormat.format(item.getStart_time().getTime()));
         if(newDay) {
-            SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("EEEE", Locale.getDefault());
+            SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("EEEE", new Locale("ru"));
             SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("dd.MM", Locale.getDefault());
             String week_day = simpleDateFormat1.format(item.getStart_time().getTime());
             mWeekDay.setText(String.format("%s  %s%s", simpleDateFormat2.format(item.getStart_time()), week_day.substring(0, 1).toUpperCase(), week_day.substring(1)));

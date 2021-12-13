@@ -50,17 +50,19 @@ public class LogHolder extends RecyclerView.ViewHolder
             mHeading1.setVisibility(View.GONE);
             mHeading2.setVisibility(View.GONE);
         }
-        if (item.getIs_attend()){
-            mAttend.setImageDrawable(itemView.getResources().getDrawable(R.drawable.ic_vectorok));
-            mNotAttend.setImageDrawable(null);
-        }
-        else if(item.getIs_attend()==false){
-            mNotAttend.setImageDrawable(itemView.getResources().getDrawable(R.drawable.ic_vectorno));
-            mAttend.setImageDrawable(null);
+        if(item.getIs_attend()!=null) {
+            if (item.getIs_attend()) {
+                mAttend.setImageDrawable(itemView.getResources().getDrawable(R.drawable.ic_vectorok));
+                mNotAttend.setImageDrawable(null);
+            } else if (!item.getIs_attend()) {
+                mNotAttend.setImageDrawable(itemView.getResources().getDrawable(R.drawable.ic_vectorno));
+                mAttend.setImageDrawable(null);
+            }
         } else {
             mNotAttend.setImageDrawable(null);
             mAttend.setImageDrawable(null);
         }
+
         if(item.isEarly_ret()) {
             mEarlyRet.setImageDrawable(itemView.getResources().getDrawable(R.drawable.ic_vectorno));
         } else {
