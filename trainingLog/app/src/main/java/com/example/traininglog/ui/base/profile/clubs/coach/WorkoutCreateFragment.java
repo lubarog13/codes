@@ -93,6 +93,8 @@ public class WorkoutCreateFragment extends PresenterFragment implements WorkoutC
     private Club club = new Club();
     private String type = "на технику";
     private int mClubId;
+    private int defClub;
+    private int defCoach;
     private RefreshOwner mRefreshOwner;
     @InjectPresenter
     WorkoutCreatePresenter mPresenter;
@@ -180,6 +182,7 @@ public class WorkoutCreateFragment extends PresenterFragment implements WorkoutC
         TextView textView = getActivity().findViewById(R.id.create_title);
         Typeface typeFace=Typeface.createFromAsset(getActivity().getAssets(),"fonts/BalsamiqSans-Bold.ttf");
         textView.setTypeface(typeFace);
+        mClearButton.setOnClickListener(v -> clear());
         mPresenter.getValues();
     }
 
@@ -344,6 +347,7 @@ public class WorkoutCreateFragment extends PresenterFragment implements WorkoutC
         }
         mGroup.setItems(groups);
         club = clubs.stream().filter(club1 -> club1.getId()==mClubId).collect(Collectors.toList()).get(0);
+        defClub= clubs.indexOf(club);
         mGroup.setSelectedIndex(clubs.indexOf(club));
         mGroup.setOnItemSelectedListener((view, position, id, item) -> club = clubs.get(position));
         List<String> names = new ArrayList<>();
@@ -351,6 +355,7 @@ public class WorkoutCreateFragment extends PresenterFragment implements WorkoutC
             names.add(String.format("%s %s. %s.", coach.getUser().getLast_name(), coach.getUser().getFirst_name().charAt(0), coach.getUser().getSecond_name().charAt(0)));
         }
         coach = coaches.stream().filter(coach1 -> coach1.getId()==club.getCoach().getId()).collect(Collectors.toList()).get(0);
+        defCoach=coaches.indexOf(coach);
         mCoach.setItems(names);
         mCoach.setSelectedIndex(coaches.indexOf(coach));
         mCoach.setOnItemSelectedListener((view, position, id, item) -> coach = coaches.get(position));
@@ -387,6 +392,32 @@ public class WorkoutCreateFragment extends PresenterFragment implements WorkoutC
             Toast.makeText(getActivity(), "Успешно создано!", Toast.LENGTH_SHORT).show();
         }
     }
+
+    private void clear() {
+        mGroup.setSelectedIndex(defClub);
+        mCoach.setSelectedIndex(defCoach);
+        mStartHour.setText("");
+        mStartYear.setText("");
+        mStartMinutes.setText("");
+        mStartMonth.setText("");
+        mStartDay.setText("");
+        mEndDay.setText("");
+        mEndMinutes.setText("");
+        mEndMonth.setText("");
+        mEndYear.setText("");
+        mEndHour.setText("");
+        mOneDay.setText("");
+        mOneMonth.setText("");
+        mOneYear.setText("");
+        mPn.setChecked(false);
+        mVs.setChecked(false);
+        mVt.setChecked(false);
+        mSr.setChecked(false);
+        mCh.setChecked(false);
+        mPt.setChecked(false);
+        mSb.setChecked(false);
+    }
+
 
     @Override
     protected WorkoutCreatePresenter getPresenter() {

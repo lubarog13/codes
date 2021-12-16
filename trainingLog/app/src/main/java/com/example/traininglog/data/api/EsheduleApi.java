@@ -20,6 +20,7 @@ import com.example.traininglog.data.model.Presence;
 import com.example.traininglog.data.model.PresenceResponse;
 import com.example.traininglog.data.model.PresencesResponse;
 import com.example.traininglog.data.model.SignUp;
+import com.example.traininglog.data.model.SignUpForCoachCreate;
 import com.example.traininglog.data.model.SignUpForCreate;
 import com.example.traininglog.data.model.SignUpResponse;
 import com.example.traininglog.data.model.SimplePresence;
@@ -172,4 +173,7 @@ public interface EsheduleApi {
 
     @POST("workout/create/")
     Completable createWorkout(@Body WorkoutForEdit workout);
+
+    @POST("coach/signup/create/")
+    Completable createCoachSignup(@Body SignUpForCoachCreate signUpForCoachCreate);
 }
