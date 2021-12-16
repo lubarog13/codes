@@ -1,5 +1,6 @@
 package com.example.traininglog.ui.base.traininglog;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +43,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogHolder> {
             } else {
                 int k=0;
                 for (Presence presence1 : presences) {
-                    if(k==0) isNewGroup = true;
+                    if(i==position && k==0) isNewGroup = true;
                     if (i==position) {
                         presence = presence1;
                     }
