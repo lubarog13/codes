@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "245973559795",
+    "project_id": "traininglog-22569",
+    "storage_bucket": "traininglog-22569.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:245973559795:android:7940b340e0f5e9d254ca86",
+        "android_client_info": {
+          "package_name": "com.example.traininglog"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "245973559795-nsji5bbkrl03haqt41t2lkabhmtnrs77.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkwPhNIZrXQU2Ne5GMbL6YWZMxZ8LELjg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "245973559795-nsji5bbkrl03haqt41t2lkabhmtnrs77.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

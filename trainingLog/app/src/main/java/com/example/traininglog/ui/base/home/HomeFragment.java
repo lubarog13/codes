@@ -34,6 +34,9 @@ import com.example.traininglog.data.model.WorkoutForEdit;
 import com.example.traininglog.ui.HomeActivity;
 import com.example.traininglog.ui.base.hall.HallViewFragment;
 import com.example.traininglog.ui.base.home.coach.CoachWorkoutAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -100,6 +103,20 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
         mRecyclerView.setAdapter(is_coach? mCoachWorkoutAdapter: mWorkoutAdapter);
         mRecyclerView.setNestedScrollingEnabled(false);
         mRecyclerView.setHasFixedSize(false);
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+
+                        // Get new FCM registration token
+                        String token = task.getResult();
+                        Log.d("token", token);
+                    }
+                });
         TextView textView = getActivity().findViewById(R.id.week_workouts);
         Typeface typeFace=Typeface.createFromAsset(getActivity().getAssets(),"fonts/BalsamiqSans-Bold.ttf");
         textView.setTypeface(typeFace);
