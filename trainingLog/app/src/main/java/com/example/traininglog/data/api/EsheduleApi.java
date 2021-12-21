@@ -9,6 +9,7 @@ import com.example.traininglog.data.model.ClubCreate;
 import com.example.traininglog.data.model.ClubResponse;
 import com.example.traininglog.data.model.Coach;
 import com.example.traininglog.data.model.CoachResponse;
+import com.example.traininglog.data.model.FCMDevice;
 import com.example.traininglog.data.model.GroupAnalysis;
 import com.example.traininglog.data.model.Hall;
 import com.example.traininglog.data.model.HallsResponse;
@@ -176,4 +177,13 @@ public interface EsheduleApi {
 
     @POST("coach/signup/create/")
     Completable createCoachSignup(@Body SignUpForCoachCreate signUpForCoachCreate);
+
+    @POST("fcmdevice/create/")
+    Single<FCMDevice> createFCMDevice(@Body FCMDevice fcmDevice);
+
+    @PATCH("fcmdevice/{id}/update/")
+    Completable updateDevice(@Path("id") int id, @Body FCMDevice fcmDevice);
+
+    @GET("user/{user_id}/fcmdevices/")
+    Single<FCMDevice.DeviceResponse> getDevicesForUser(@Path("user_id") int user_id);
 }

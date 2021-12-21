@@ -6,12 +6,15 @@ import com.arellomobile.mvp.InjectViewState;
 import com.example.traininglog.common.BasePresenter;
 import com.example.traininglog.data.Storage;
 import com.example.traininglog.data.model.Coach;
+import com.example.traininglog.data.model.FCMDevice;
 import com.example.traininglog.data.model.Hall;
 import com.example.traininglog.data.model.Presence;
 import com.example.traininglog.data.model.WorkoutForEdit;
 import com.example.traininglog.ui.HomeActivity;
 import com.example.traininglog.utils.ApiUtils;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -187,6 +190,28 @@ public class HomePresenter extends BasePresenter<HomeView> {
                                 getViewState()::updateComplete,
                                 getViewState()::showError
                         )
+        );
+    }
+
+    public void createDevice(String token, String name, boolean saveData) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+        mCompositeDisposable.add(
+                ApiUtils.getApiService().createFCMDevice(new FCMDevice(name, true, format.format(new Date()), token, "android", ApiUtils.user_id))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(()-> {
+                    if(ApiUtils.coach_id!=-1){
+                        this.getData();
+                    } else {
+                        this.getWorkouts(saveData);
+                    }
+                })
+                .subscribe(
+                        getViewState()::saveDevice,
+                        throwable -> {
+                            Log.e("err", throwable.getMessage());
+                        }
+                )
         );
     }
 

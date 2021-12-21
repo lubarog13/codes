@@ -1,8 +1,10 @@
 package com.example.traininglog.ui.base.home;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,6 +30,7 @@ import com.example.traininglog.common.Refreshable;
 import com.example.traininglog.data.Storage;
 import com.example.traininglog.data.model.Club;
 import com.example.traininglog.data.model.Coach;
+import com.example.traininglog.data.model.FCMDevice;
 import com.example.traininglog.data.model.Hall;
 import com.example.traininglog.data.model.Presence_W_N;
 import com.example.traininglog.data.model.Workout;
@@ -34,6 +38,7 @@ import com.example.traininglog.data.model.WorkoutForEdit;
 import com.example.traininglog.ui.HomeActivity;
 import com.example.traininglog.ui.base.hall.HallViewFragment;
 import com.example.traininglog.ui.base.home.coach.CoachWorkoutAdapter;
+import com.example.traininglog.utils.ApiUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -114,9 +119,11 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
 
                         // Get new FCM registration token
                         String token = task.getResult();
+                        ApiUtils.fcmToken = token;
                         Log.d("token", token);
                     }
                 });
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("fcmDevice", Context.MODE_PRIVATE);
         TextView textView = getActivity().findViewById(R.id.week_workouts);
         Typeface typeFace=Typeface.createFromAsset(getActivity().getAssets(),"fonts/BalsamiqSans-Bold.ttf");
         textView.setTypeface(typeFace);
@@ -137,7 +144,10 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
         {
             return;
         }
-        if(is_coach){
+        if(sharedPreferences.getString("fcmToken", null)==null){
+            mPresenter.createDevice(ApiUtils.token, getActivity().getSharedPreferences("user", Context.MODE_PRIVATE).getString("username", "") + Build.MODEL, showData);
+        }
+        else if(is_coach){
             mPresenter.getData();
         }
         else onRefreshData();
@@ -208,6 +218,18 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
     @Override
     public void updateComplete() {
         onRefreshData();
+    }
+
+    @Override
+    public void saveDevice(FCMDevice fcmDevice) {
+        SharedPreferences sp = getActivity().getSharedPreferences("fcmDevice", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt("Id", fcmDevice.getId());
+        editor.putString("name", fcmDevice.getName());
+        editor.putString("dateCreated", fcmDevice.getDate_created());
+        editor.putString("fcmToken", fcmDevice.getRegistration_id());
+        editor.apply();
+        Log.d("device", fcmDevice.toString());
     }
 
     @Override

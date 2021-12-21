@@ -22,6 +22,7 @@ public class ApiUtils {
     public static String token;
     public static int user_id;
     public static int coach_id;
+    public static String fcmToken;
 
     public static final List<Class<?>> NETWORK_EXCEPTIONS = Arrays.asList(
             UnknownHostException.class,
