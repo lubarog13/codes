@@ -121,6 +121,7 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
                         String token = task.getResult();
                         ApiUtils.fcmToken = token;
                         Log.d("token", token);
+                        updateToken();
                     }
                 });
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("fcmDevice", Context.MODE_PRIVATE);
@@ -144,7 +145,8 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
         {
             return;
         }
-        if(sharedPreferences.getString("fcmToken", null)==null){
+        String fcmToken = sharedPreferences.getString("fcmToken", null);
+        if(fcmToken==null){
             mPresenter.createDevice(ApiUtils.token, getActivity().getSharedPreferences("user", Context.MODE_PRIVATE).getString("username", "") + Build.MODEL, showData);
         }
         else if(is_coach){
@@ -156,6 +158,13 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
     @Override
     protected HomePresenter getPresenter() {
         return mPresenter;
+    }
+
+    private void updateToken() {
+        String token = getActivity().getSharedPreferences("fcmDevice", Context.MODE_PRIVATE).getString("fcmToken", null);
+        if(!ApiUtils.fcmToken.equals(token) && token!=null){
+            mPresenter.updateDevice(token, getActivity().getSharedPreferences("fcmDevice", Context.MODE_PRIVATE).getInt("Id", 0));
+        }
     }
 
     @Override
@@ -195,7 +204,6 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
 
     @Override
     public void updatePresence(boolean is_attend) {
-
     }
 
     @Override
@@ -270,6 +278,8 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
 
     @Override
     public void editWorkout(WorkoutForEdit workout) {
-        mPresenter.updateWorkout(workout);
+        if(workout!=null) {
+            mPresenter.updateWorkout(workout);
+        }
     }
 }

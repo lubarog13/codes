@@ -214,5 +214,22 @@ public class HomePresenter extends BasePresenter<HomeView> {
                 )
         );
     }
+    public void updateDevice(String token, int deviceId) {
+        FCMDevice fcmDevice = new FCMDevice();
+        fcmDevice.setRegistration_id(token);
+        mCompositeDisposable.add(
+                ApiUtils.getApiService().updateDevice(deviceId, fcmDevice)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doFinally(()-> {
+                        })
+                        .subscribe(
+                                getViewState()::saveDevice,
+                                throwable -> {
+                                    Log.e("err", throwable.getMessage());
+                                }
+                        )
+        );
+    }
 
 }

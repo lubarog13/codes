@@ -182,7 +182,7 @@ public interface EsheduleApi {
     Single<FCMDevice> createFCMDevice(@Body FCMDevice fcmDevice);
 
     @PATCH("fcmdevice/{id}/update/")
-    Completable updateDevice(@Path("id") int id, @Body FCMDevice fcmDevice);
+    Single<FCMDevice> updateDevice(@Path("id") int id, @Body FCMDevice fcmDevice);
 
     @GET("user/{user_id}/fcmdevices/")
     Single<FCMDevice.DeviceResponse> getDevicesForUser(@Path("user_id") int user_id);

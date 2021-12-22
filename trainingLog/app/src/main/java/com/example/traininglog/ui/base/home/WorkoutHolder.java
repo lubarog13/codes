@@ -17,6 +17,7 @@ import com.example.traininglog.data.model.Workout;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -166,22 +167,24 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
         mDatetime.setText(simpleDateFormat1.format(item.getStart_time().getTime()));
         mTypeView.setBackgroundColor(mHallString.getColor(bindColor(item.getType())));
         if (onItemClickListener != null) {
-            mOkButton.setOnClickListener(view -> {
-                onItemClickListener.onItemClick(item.getId(), true);
-                mOkView.setVisibility(View.VISIBLE);
-                mNoView.setVisibility(View.GONE);
-                mReasonView.setVisibility(View.GONE);
-                is_attend=true;
-                setPresence();
-            });
-            mNoButton.setOnClickListener(view -> {
-                onItemClickListener.onItemClick(item.getId(), false);
-                mNoView.setVisibility(View.VISIBLE);
-                mOkView.setVisibility(View.GONE);
-                mReasonView.setVisibility(View.VISIBLE);
-                is_attend=false;
-                resetPresence();
-            });
+            if(item.getStart_time().compareTo(new Date())>0) {
+                mOkButton.setOnClickListener(view -> {
+                    onItemClickListener.onItemClick(item.getId(), true);
+                    mOkView.setVisibility(View.VISIBLE);
+                    mNoView.setVisibility(View.GONE);
+                    mReasonView.setVisibility(View.GONE);
+                    is_attend = true;
+                    setPresence();
+                });
+                mNoButton.setOnClickListener(view -> {
+                    onItemClickListener.onItemClick(item.getId(), false);
+                    mNoView.setVisibility(View.VISIBLE);
+                    mOkView.setVisibility(View.GONE);
+                    mReasonView.setVisibility(View.VISIBLE);
+                    is_attend = false;
+                    resetPresence();
+                });
+            }
             mWhoButton.setOnClickListener(view -> {
                 if (!isWhoOpened) {
                     onItemClickListener.onPresencesClick(item.getId());

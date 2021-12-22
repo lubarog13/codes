@@ -214,8 +214,6 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
             mSaveButton.setOnClickListener(v -> {
                 onItemClickListener.editWorkout(editWorkout(item));
             });
-            mEditView.setVisibility(View.GONE);
-            isEditViewOpened = false;
         }
         mTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -235,12 +233,14 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
         initEdit(item);
         mResetButton.setOnClickListener(v -> initEdit(item));
         mEditButton.setOnClickListener(v -> {
-            if(isEditViewOpened){
-                mEditView.setVisibility(View.GONE);
-            } else {
-                mEditView.setVisibility(View.VISIBLE);
+            if(item.getStart_time().compareTo(new Date())>0) {
+                if (isEditViewOpened) {
+                    mEditView.setVisibility(View.GONE);
+                } else {
+                    mEditView.setVisibility(View.VISIBLE);
+                }
+                isEditViewOpened = !isEditViewOpened;
             }
-            isEditViewOpened = !isEditViewOpened;
         });
         if(onClick!=null) {
             mWhoButton.setOnClickListener(v -> {
@@ -320,6 +320,8 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
                 clubs.get(mGroupSpinner.getSelectedItemPosition()).getId()
         );
         Log.e("workout", workout.toString());
+        mEditView.setVisibility(View.GONE);
+        isEditViewOpened = false;
         return workout;
     }
 
