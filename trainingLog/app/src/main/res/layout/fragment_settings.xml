@@ -41,7 +41,7 @@
             android:layout_row="0"
             android:textSize="14sp"/>
         <TextView
-            android:layout_width="70dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:text="Пол:"
             android:gravity="end"
@@ -116,13 +116,13 @@
             android:layout_row="3"
             android:textSize="14sp"/>
         <LinearLayout
-            android:layout_width="200dp"
+            android:layout_width="0dp"
             android:layout_marginStart="40dp"
             android:layout_row="3"
-            android:paddingStart="20dp"
             android:orientation="horizontal"
             android:layout_column="1"
             android:layout_columnSpan="2"
+            android:layout_columnWeight="1"
             android:layout_height="wrap_content"
             >
             <TextView
@@ -177,14 +177,11 @@
             android:layout_row="4"
             android:textSize="14sp"/>
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="165dp"
             android:layout_marginStart="10dp"
             android:layout_row="4"
             android:layout_column="1"
             android:id="@+id/email"
-            android:layout_columnSpan="3"
-            android:layout_columnWeight="3"
-            android:layout_marginEnd="30dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_bold"
             android:textColor="@android:color/black"
@@ -213,9 +210,10 @@
             android:textSize="14sp"
             />
         <Button
-            android:layout_width="118dp"
+            android:layout_width="wrap_content"
             android:layout_height="31dp"
             android:layout_column="2"
+            android:layout_columnWeight="1"
             android:layout_columnSpan="2"
             android:layout_gravity="center_horizontal"
             android:background="@drawable/blue_button_2"

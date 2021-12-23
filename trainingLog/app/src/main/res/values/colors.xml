@@ -17,4 +17,5 @@
     <color name="colorRedDark">#F8000D</color>
     <color name="lightBlue">#A5C3FF</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="lightRed">#95FF0000</color>
 </resources>

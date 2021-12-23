@@ -82,7 +82,7 @@
         <Button
             android:layout_width="198dp"
             android:layout_height="31dp"
-            android:layout_marginStart="30dp"
+            android:layout_marginStart="20dp"
             android:background="@drawable/blue_button_2"
             android:text="Создать сообщение"
             android:textAllCaps="false"
@@ -93,7 +93,7 @@
         <Button
             android:layout_width="128dp"
             android:layout_height="31dp"
-            android:layout_marginStart="30dp"
+            android:layout_marginStart="20dp"
             android:background="@drawable/button_red"
             android:text="Очистить"
             android:textAllCaps="false"

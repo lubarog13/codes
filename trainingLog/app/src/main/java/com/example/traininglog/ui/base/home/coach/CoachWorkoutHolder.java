@@ -121,6 +121,9 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
         this.coaches = coaches;
         this.halls = halls;
         this.clubs =clubs;
+        if (item.isIs_carried_out()) {
+            mMainView.setBackgroundColor(mRootLayout.getContext().getResources().getColor(R.color.lightRed));
+        }
         mType.setBackgroundColor(mHallString.getColor(bindColor(item.getType())));
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(item.getStart_time());
@@ -214,7 +217,7 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
             mSaveButton.setOnClickListener(v -> {
                 onItemClickListener.editWorkout(editWorkout(item));
             });
-            if(item.getStart_time().compareTo(new Date())>0){
+            if(item.getStart_time().compareTo(new Date())>0 && !item.isIs_carried_out()){
                 mNoButton.setOnClickListener(view -> onItemClickListener.cancelWorkout(item));
             }
         }
