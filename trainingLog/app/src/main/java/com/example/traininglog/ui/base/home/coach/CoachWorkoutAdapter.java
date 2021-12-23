@@ -80,6 +80,7 @@ public class CoachWorkoutAdapter extends RecyclerView.Adapter<CoachWorkoutHolder
 
     public interface OnItemClickListener {
         void editWorkout(WorkoutForEdit workout);
+        void cancelWorkout(Workout workout);
     }
 
     public void addPresences(List<Presence_W_N> presences) {

@@ -97,7 +97,7 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
         mTypeName  = itemView.findViewById(R.id.type_name);
         mButtonView = itemView.findViewById(R.id.go_buttons);
         mEditButton = itemView.findViewById(R.id.edit_workout);
-        mNoButton = itemView.findViewById(R.id.i_am_not);
+        mNoButton = itemView.findViewById(R.id.delete_carried_out);
         mWhoButton = itemView.findViewById(R.id.who_go);
         mHallString = itemView.getResources();
         mEditView = itemView.findViewById(R.id.edit_workout_view);
@@ -214,6 +214,9 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
             mSaveButton.setOnClickListener(v -> {
                 onItemClickListener.editWorkout(editWorkout(item));
             });
+            if(item.getStart_time().compareTo(new Date())>0){
+                mNoButton.setOnClickListener(view -> onItemClickListener.cancelWorkout(item));
+            }
         }
         mTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -230,18 +233,20 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
 
             }
         });
-        initEdit(item);
-        mResetButton.setOnClickListener(v -> initEdit(item));
-        mEditButton.setOnClickListener(v -> {
-            if(item.getStart_time().compareTo(new Date())>0) {
-                if (isEditViewOpened) {
-                    mEditView.setVisibility(View.GONE);
-                } else {
-                    mEditView.setVisibility(View.VISIBLE);
+        if(clubs.size()!=0 && coaches.size()!=0 && halls.size()!=0) {
+            initEdit(item);
+            mResetButton.setOnClickListener(v -> initEdit(item));
+            mEditButton.setOnClickListener(v -> {
+                if (item.getStart_time().compareTo(new Date()) > 0) {
+                    if (isEditViewOpened) {
+                        mEditView.setVisibility(View.GONE);
+                    } else {
+                        mEditView.setVisibility(View.VISIBLE);
+                    }
+                    isEditViewOpened = !isEditViewOpened;
                 }
-                isEditViewOpened = !isEditViewOpened;
-            }
-        });
+            });
+        }
         if(onClick!=null) {
             mWhoButton.setOnClickListener(v -> {
                 if (!isWhoOpened) {

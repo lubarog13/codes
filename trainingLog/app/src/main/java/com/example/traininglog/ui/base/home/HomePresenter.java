@@ -7,6 +7,7 @@ import com.example.traininglog.common.BasePresenter;
 import com.example.traininglog.data.Storage;
 import com.example.traininglog.data.model.Coach;
 import com.example.traininglog.data.model.FCMDevice;
+import com.example.traininglog.data.model.FCMMessage;
 import com.example.traininglog.data.model.Hall;
 import com.example.traininglog.data.model.Presence;
 import com.example.traininglog.data.model.WorkoutForEdit;
@@ -146,7 +147,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
                 .doOnSubscribe(disposable ->  getViewState().showRefresh())
                 .subscribe(
                         this::getCoaches,
-                        getViewState()::showError
+                        throwable -> getViewState().showCoachNetworkError()
                 )
         );
     }
@@ -159,7 +160,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
                 .doOnSubscribe(disposable -> getViewState().showRefresh())
                 .subscribe(
                         coaches -> this.getClubs(halls, coaches),
-                        getViewState()::showError
+                        throwable -> getViewState().showCoachNetworkError()
                 )
         );
     }
@@ -174,7 +175,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
                 .doFinally(getViewState()::hideRefresh)
                 .subscribe(
                         clubResponse -> getViewState().showValues(halls, coaches, clubResponse.getClubs()),
-                        getViewState()::showError
+                        throwable ->  getViewState().showCoachNetworkError()
                 )
         );
     }
@@ -229,6 +230,18 @@ public class HomePresenter extends BasePresenter<HomeView> {
                                     Log.e("err", throwable.getMessage());
                                 }
                         )
+        );
+    }
+
+    public void sendMessage(FCMMessage message){
+        mCompositeDisposable.add(
+                ApiUtils.getApiService().sendMessage(message)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        getViewState()::messageSent,
+                        throwable -> getViewState().showNetworkError()
+                )
         );
     }
 

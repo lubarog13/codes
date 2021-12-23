@@ -17,6 +17,7 @@ import io.reactivex.schedulers.Schedulers;
 public class AuthPresenter extends BasePresenter<AuthView> {
     Observable<String> login;
     Observable<String> password;
+    private String passwordFL;
     private SharedPreferences sp;
 
     public AuthPresenter() {
@@ -24,23 +25,35 @@ public class AuthPresenter extends BasePresenter<AuthView> {
 
     public void logIn() {
         if(sp.contains("id")){
-            ApiUtils.user_id = sp.getInt("id", 0);
-            ApiUtils.token = sp.getString("token", "");
-            ApiUtils.coach_id = sp.getInt("coach_id", -1);
-            getViewState().showSuccess(new AuthUser(ApiUtils.token));
-            return;
+            passwordFL = sp.getString("password", null);
+            ApiUtils.user_id=sp.getInt("id", 0);
+            ApiUtils.coach_id=sp.getInt("coach_id", -1);
+            mCompositeDisposable.add(
+                    ApiUtils.getApiService().auth(new AuthUser(sp.getString("username", null), passwordFL))
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .doOnSubscribe(disposable -> getViewState().showRefresh())
+                            .doFinally(getViewState()::hideRefresh)
+                            .subscribe(
+                                    getViewState()::showSuccess,
+                                    throwable -> getViewState().showLogError(throwable)
+                            )
+            );
         }
-         mCompositeDisposable.add(
-            ApiUtils.getApiService().auth(new AuthUser(login.blockingFirst(), password.blockingFirst()))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe(disposable -> getViewState().showRefresh())
-                    .doFinally(getViewState()::hideRefresh)
-                .subscribe(
-                        getViewState()::showSuccess,
-                        throwable -> getViewState().showError(throwable)
-                )
-        );
+        else {
+            passwordFL = password.blockingFirst();
+            mCompositeDisposable.add(
+                    ApiUtils.getApiService().auth(new AuthUser(login.blockingFirst(), passwordFL))
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .doOnSubscribe(disposable -> getViewState().showRefresh())
+                            .doFinally(getViewState()::hideRefresh)
+                            .subscribe(
+                                    getViewState()::showSuccess,
+                                    throwable -> getViewState().showError(throwable)
+                            )
+            );
+        }
     }
 
     public void getUser() {
@@ -91,6 +104,7 @@ public class AuthPresenter extends BasePresenter<AuthView> {
         editor.putBoolean("is_coach", user.getIs_coach());
         editor.putInt("coach_id", coach_id);
         editor.putString("token", ApiUtils.token);
+        editor.putString("password", passwordFL);
         ApiUtils.user_id = user.getId();
         ApiUtils.coach_id = coach_id;
         editor.apply();

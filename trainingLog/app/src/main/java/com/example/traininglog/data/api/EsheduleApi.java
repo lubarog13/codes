@@ -10,6 +10,7 @@ import com.example.traininglog.data.model.ClubResponse;
 import com.example.traininglog.data.model.Coach;
 import com.example.traininglog.data.model.CoachResponse;
 import com.example.traininglog.data.model.FCMDevice;
+import com.example.traininglog.data.model.FCMMessage;
 import com.example.traininglog.data.model.GroupAnalysis;
 import com.example.traininglog.data.model.Hall;
 import com.example.traininglog.data.model.HallsResponse;
@@ -186,4 +187,7 @@ public interface EsheduleApi {
 
     @GET("user/{user_id}/fcmdevices/")
     Single<FCMDevice.DeviceResponse> getDevicesForUser(@Path("user_id") int user_id);
+
+    @POST("send_message/")
+    Completable sendMessage(@Body FCMMessage fcmMessage);
 }

@@ -18,4 +18,6 @@ public interface HomeView extends BaseView {
     void showValues(List<Hall> halls, List<Coach> coaches, List<Club> clubs);
     void updateComplete();
     void saveDevice(FCMDevice fcmDevice);
+    void showCoachNetworkError();
+    void messageSent();
 }

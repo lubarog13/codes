@@ -160,6 +160,12 @@ public class AuthFragment extends PresenterFragment implements AuthView, Refresh
     }
 
     @Override
+    public void showLogError(Throwable throwable) {
+        ApiUtils.token=sp.getString("token", null);
+        navigateHome();
+    }
+
+    @Override
     public void showError(Throwable throwable) {
         this.mErrorText.setVisibility(View.VISIBLE);
         if (Objects.requireNonNull(throwable.getMessage()).contains("400"))

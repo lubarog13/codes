@@ -31,6 +31,7 @@ import com.example.traininglog.data.Storage;
 import com.example.traininglog.data.model.Club;
 import com.example.traininglog.data.model.Coach;
 import com.example.traininglog.data.model.FCMDevice;
+import com.example.traininglog.data.model.FCMMessage;
 import com.example.traininglog.data.model.Hall;
 import com.example.traininglog.data.model.Presence_W_N;
 import com.example.traininglog.data.model.Workout;
@@ -45,6 +46,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 
@@ -60,6 +62,8 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
     private boolean showData = true;
     private RefreshOwner mRefreshOwner;
     private boolean is_coach;
+    private boolean needSendMessage=false;
+    private Workout workout;
 
     public static HomeFragment newInstance() {return new HomeFragment();}
 
@@ -118,9 +122,9 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
                         }
 
                         // Get new FCM registration token
-                        String token = task.getResult();
-                        ApiUtils.fcmToken = token;
-                        Log.d("token", token);
+                        String token1 = task.getResult();
+                        ApiUtils.fcmToken = token1;
+                        Log.d("token", token1);
                         updateToken();
                     }
                 });
@@ -147,7 +151,7 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
         }
         String fcmToken = sharedPreferences.getString("fcmToken", null);
         if(fcmToken==null){
-            mPresenter.createDevice(ApiUtils.token, getActivity().getSharedPreferences("user", Context.MODE_PRIVATE).getString("username", "") + Build.MODEL, showData);
+            mPresenter.createDevice(ApiUtils.fcmToken, getActivity().getSharedPreferences("user", Context.MODE_PRIVATE).getString("username", "") + Build.MODEL, showData);
         }
         else if(is_coach){
             mPresenter.getData();
@@ -163,7 +167,7 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
     private void updateToken() {
         String token = getActivity().getSharedPreferences("fcmDevice", Context.MODE_PRIVATE).getString("fcmToken", null);
         if(!ApiUtils.fcmToken.equals(token) && token!=null){
-            mPresenter.updateDevice(token, getActivity().getSharedPreferences("fcmDevice", Context.MODE_PRIVATE).getInt("Id", 0));
+            mPresenter.updateDevice(ApiUtils.fcmToken, getActivity().getSharedPreferences("fcmDevice", Context.MODE_PRIVATE).getInt("Id", 0));
         }
     }
 
@@ -225,7 +229,15 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
 
     @Override
     public void updateComplete() {
-        onRefreshData();
+
+        if(needSendMessage) {
+            String title = "Тренировка " + new SimpleDateFormat("dd.MM").format(workout.getStart_time())
+                    + " в "+new SimpleDateFormat("HH:mm").format(workout.getStart_time()) +
+                    " отменена";
+            String message = "Занятие для группы " + workout.getClub().getGroup() + " " + workout.getClub().getName() + " отменено.";
+            mPresenter.sendMessage(new FCMMessage(workout.getClub().getId(), title, message));
+        }
+        else onRefreshData();
     }
 
     @Override
@@ -238,6 +250,17 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
         editor.putString("fcmToken", fcmDevice.getRegistration_id());
         editor.apply();
         Log.d("device", fcmDevice.toString());
+    }
+
+    @Override
+    public void showCoachNetworkError() {
+        showNetworkError();
+        onRefreshData();
+    }
+
+    @Override
+    public void messageSent() {
+        Toast.makeText(getActivity(), "Отмена успешно выполнена", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -281,5 +304,17 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
         if(workout!=null) {
             mPresenter.updateWorkout(workout);
         }
+    }
+
+    @Override
+    public void cancelWorkout(Workout workout) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+
+        WorkoutForEdit workoutForEdit = new WorkoutForEdit(workout.getId(), format.format(workout.getStart_time()),
+                format.format(workout.getEnd_time()), workout.getType(), workout.getOther_type(),
+                true, workout.getCoach()==null? null: workout.getCoach().getId(), workout.getHall().getId(), workout.getClub().getId());
+        needSendMessage=true;
+        this.workout=workout;
+        mPresenter.updateWorkout(workoutForEdit);
     }
 }
