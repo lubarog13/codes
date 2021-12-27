@@ -72,6 +72,9 @@ public class AuthUser {
         this.is_coach = is_coach;
     }
 
+
+
+
     public String getRe_password() {
         return re_password;
     }

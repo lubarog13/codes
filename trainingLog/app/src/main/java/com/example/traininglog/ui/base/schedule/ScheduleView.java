@@ -18,4 +18,6 @@ public interface ScheduleView extends BaseView {
     void showWorkouts(List<Workout> workouts);
     void updateComplete();
     void showValues(List<Hall> halls, List<Coach> coaches, List<Club> clubs);
+    void showCoachNetworkError();
+    void messageSent();
 }

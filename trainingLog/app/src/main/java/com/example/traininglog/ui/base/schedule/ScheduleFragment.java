@@ -30,6 +30,7 @@ import com.example.traininglog.common.Refreshable;
 import com.example.traininglog.data.Storage;
 import com.example.traininglog.data.model.Club;
 import com.example.traininglog.data.model.Coach;
+import com.example.traininglog.data.model.FCMMessage;
 import com.example.traininglog.data.model.Hall;
 import com.example.traininglog.data.model.Presence;
 import com.example.traininglog.data.model.Presence_W_N;
@@ -43,6 +44,7 @@ import com.example.traininglog.utils.ApiUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -69,6 +71,8 @@ public class ScheduleFragment extends PresenterFragment implements Refreshable, 
 
     @InjectPresenter
     SchedulePresenter mPresenter;
+    private boolean needSendMessage;
+    private Workout workout;
 
     @ProvidePresenter
     SchedulePresenter providePresenter() {
@@ -273,13 +277,32 @@ public class ScheduleFragment extends PresenterFragment implements Refreshable, 
 
     @Override
     public void updateComplete() {
-        onRefreshData();
+        if(needSendMessage) {
+            String title = "Тренировка " + new SimpleDateFormat("dd.MM").format(workout.getStart_time())
+                    + " в "+new SimpleDateFormat("HH:mm").format(workout.getStart_time()) +
+                    " отменена";
+            String message = "Занятие для группы " + workout.getClub().getGroup() + " " + workout.getClub().getName() + " отменено.";
+            mPresenter.sendMessage(new FCMMessage(workout.getClub().getId(), title, message));
+            needSendMessage=false;
+        }
+        else onRefreshData();
     }
 
     @Override
     public void showValues(List<Hall> halls, List<Coach> coaches, List<Club> clubs) {
         mCoachAdapter.addValues(coaches, halls, clubs);
         onRefreshData();
+    }
+
+    @Override
+    public void showCoachNetworkError() {
+        showNetworkError();
+        onRefreshData();
+    }
+
+    @Override
+    public void messageSent() {
+
     }
 
     @Override
@@ -320,6 +343,19 @@ public class ScheduleFragment extends PresenterFragment implements Refreshable, 
 
     @Override
     public void editWorkout(WorkoutForEdit workout) {
+        if(workout!=null)
         mPresenter.updateWorkout(workout);
+    }
+
+    @Override
+    public void cancelWorkout(Workout workout) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+
+        WorkoutForEdit workoutForEdit = new WorkoutForEdit(workout.getId(), format.format(workout.getStart_time()),
+                format.format(workout.getEnd_time()), workout.getType(), workout.getOther_type(),
+                true, workout.getCoach()==null? null: workout.getCoach().getId(), workout.getHall().getId(), workout.getClub().getId());
+        needSendMessage=true;
+        this.workout=workout;
+        mPresenter.updateWorkout(workoutForEdit);
     }
 }

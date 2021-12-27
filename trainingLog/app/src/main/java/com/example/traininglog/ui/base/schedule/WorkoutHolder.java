@@ -44,6 +44,7 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
     private TextView mIsAttend;
     private TextView mNotAttend;
     private TextView mDatetime;
+    private View mMainLayout;
     private View mTypeView;
     private View mReasonView;
     private EditText mReasonEditText;
@@ -70,6 +71,7 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
         mOkButton = itemView.findViewById(R.id.i_am_go);
         mNoButton = itemView.findViewById(R.id.i_am_not);
         mReasonView = itemView.findViewById(R.id.reason);
+        mMainLayout = itemView.findViewById(R.id.home_main_view);
         mReasonEditText = itemView.findViewById(R.id.reason_text);
         mSendReason = itemView.findViewById(R.id.send_reason);
         mWhoButton = itemView.findViewById(R.id.who_go);
@@ -92,6 +94,9 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(item.getStart_time());
         calendar.add(Calendar.HOUR, -3);
+        if (item.isIs_carried_out()) {
+            mMainLayout.setBackgroundColor(itemView.getContext().getResources().getColor(R.color.lightRed));
+        }
         item.setStart_time(calendar.getTime());
         mName.setText(item.getClub().getName());
         is_attend = item.Is_on();

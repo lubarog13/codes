@@ -103,6 +103,9 @@ public class WorkoutHolder extends RecyclerView.ViewHolder {
     public void bind(Workout item, boolean newDay, WorkoutAdapter.OnItemClickListener onItemClickListener, List<Presence_W_N> presences){
         long startTime =  System.currentTimeMillis();
         mType.setBackgroundColor(mHallString.getColor(bindColor(item.getType())));
+        if (item.isIs_carried_out()) {
+            mMainView.setBackgroundColor(mRootLayout.getContext().getResources().getColor(R.color.lightRed));
+        }
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(item.getStart_time());
         calendar.add(Calendar.HOUR, -3);

@@ -190,4 +190,7 @@ public interface EsheduleApi {
 
     @POST("send_message/")
     Completable sendMessage(@Body FCMMessage fcmMessage);
+
+    @POST("auth/users/reset_password/")
+    Completable resetPassword(@Body AuthUser authUser);
 }

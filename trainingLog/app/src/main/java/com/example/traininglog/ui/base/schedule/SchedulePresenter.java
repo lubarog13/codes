@@ -6,6 +6,7 @@ import com.arellomobile.mvp.InjectViewState;
 import com.example.traininglog.common.BasePresenter;
 import com.example.traininglog.data.Storage;
 import com.example.traininglog.data.model.Coach;
+import com.example.traininglog.data.model.FCMMessage;
 import com.example.traininglog.data.model.Hall;
 import com.example.traininglog.data.model.Presence;
 import com.example.traininglog.data.model.WorkoutForEdit;
@@ -154,7 +155,7 @@ public class SchedulePresenter extends BasePresenter<ScheduleView> {
                         .doOnSubscribe(disposable ->  getViewState().showRefresh())
                         .subscribe(
                                 this::getCoaches,
-                                getViewState()::showError
+                                throwable -> getViewState().showCoachNetworkError()
                         )
         );
     }
@@ -167,7 +168,7 @@ public class SchedulePresenter extends BasePresenter<ScheduleView> {
                         .doOnSubscribe(disposable -> getViewState().showRefresh())
                         .subscribe(
                                 coaches -> this.getClubs(halls, coaches),
-                                getViewState()::showError
+                                throwable -> getViewState().showCoachNetworkError()
                         )
         );
     }
@@ -182,7 +183,18 @@ public class SchedulePresenter extends BasePresenter<ScheduleView> {
                         .doFinally(getViewState()::hideRefresh)
                         .subscribe(
                                 clubResponse -> getViewState().showValues(halls, coaches, clubResponse.getClubs()),
-                                getViewState()::showError
+                                throwable ->  getViewState().showCoachNetworkError()
+                        )
+        );
+    }
+    public void sendMessage(FCMMessage message){
+        mCompositeDisposable.add(
+                ApiUtils.getApiService().sendMessage(message)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                getViewState()::messageSent,
+                                throwable -> getViewState().showNetworkError()
                         )
         );
     }

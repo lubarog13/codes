@@ -236,6 +236,7 @@ public class HomeFragment extends PresenterFragment implements HomeView, Refresh
                     " отменена";
             String message = "Занятие для группы " + workout.getClub().getGroup() + " " + workout.getClub().getName() + " отменено.";
             mPresenter.sendMessage(new FCMMessage(workout.getClub().getId(), title, message));
+            needSendMessage=false;
         }
         else onRefreshData();
     }

@@ -93,7 +93,7 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
         mTypeName  = itemView.findViewById(R.id.type_name);
         mButtonView = itemView.findViewById(R.id.go_buttons);
         mEditButton = itemView.findViewById(R.id.edit_workout);
-        mNoButton = itemView.findViewById(R.id.i_am_not);
+        mNoButton = itemView.findViewById(R.id.delete_carried_out);
         mWhoButton = itemView.findViewById(R.id.who_go);
         mHallString = itemView.getResources();
         mEditView = itemView.findViewById(R.id.edit_workout_view);
@@ -121,6 +121,9 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(item.getStart_time());
         calendar.add(Calendar.HOUR, -3);
+        if (item.isIs_carried_out()) {
+            mMainView.setBackgroundColor(itemView.getContext().getResources().getColor(R.color.lightRed));
+        }
         if(presences==null&&!whoGoesClick)
         item.setStart_time(calendar.getTime());
         if(item.getClub().getName().length()>15) {
@@ -210,8 +213,6 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
             mSaveButton.setOnClickListener(v -> {
                 onItemClickListener.editWorkout(editWorkout(item));
             });
-            mEditView.setVisibility(View.GONE);
-            isEditViewOpened = false;
         }
         mTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -228,18 +229,23 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
 
             }
         });
-        initEdit(item);
-        mResetButton.setOnClickListener(v -> initEdit(item));
-        mEditButton.setOnClickListener(v -> {
-            if(item.getStart_time().compareTo(new Date())>0) {
-                if (isEditViewOpened) {
-                    mEditView.setVisibility(View.GONE);
-                } else {
-                    mEditView.setVisibility(View.VISIBLE);
+        if(clubs.size()!=0 && coaches.size()!=0 && halls.size()!=0){
+            initEdit(item);
+            mResetButton.setOnClickListener(v -> initEdit(item));
+            mEditButton.setOnClickListener(v -> {
+                if(item.getStart_time().compareTo(new Date())>0) {
+                    if (isEditViewOpened) {
+                        mEditView.setVisibility(View.GONE);
+                    } else {
+                        mEditView.setVisibility(View.VISIBLE);
+                    }
+                    isEditViewOpened = !isEditViewOpened;
                 }
-                isEditViewOpened = !isEditViewOpened;
+            });
+            if(item.getStart_time().compareTo(new Date())>0 && onItemClickListener!=null){
+                mNoButton.setOnClickListener(view -> onItemClickListener.cancelWorkout(item));
             }
-        });
+        }
         if(onClick!=null) {
             mWhoButton.setOnClickListener(v -> {
                 if (!isWhoOpened) {
@@ -327,6 +333,8 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
                 clubs.get(mGroupSpinner.getSelectedItemPosition()).getId()
         );
         Log.e("workout", workout.toString());
+        mEditView.setVisibility(View.GONE);
+        isEditViewOpened = false;
         return workout;
     }
 

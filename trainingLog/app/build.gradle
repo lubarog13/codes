@@ -14,7 +14,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField "String", "API_URL", '"https://6737-178-66-156-166.ngrok.io/"'
+        buildConfigField "String", "API_URL", '"https://8c67-178-66-156-166.ngrok.io/"'
     }
 
     buildTypes {
