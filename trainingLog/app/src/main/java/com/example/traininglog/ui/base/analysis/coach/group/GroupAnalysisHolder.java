@@ -61,6 +61,7 @@ public class GroupAnalysisHolder extends RecyclerView.ViewHolder {
         mAnotherCount.setText(String.format("%s других", String.valueOf(item.getAnother())));
         mForTechCount.setText(String.format("%s на технику", String.valueOf(item.getFor_tech())));
         int totalCount = item.getFor_all() + item.getFor_tech() + item.getAnother() + item.getCardio() + item.getStrength();
+        mTotalCount.setText(String.valueOf(totalCount));
         mTotalCountText.setText(getTotalCountText(totalCount));
     }
 

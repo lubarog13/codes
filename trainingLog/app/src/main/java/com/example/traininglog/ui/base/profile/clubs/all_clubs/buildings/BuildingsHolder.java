@@ -22,18 +22,7 @@ public class BuildingsHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(Building item, BuildingAdapter.OnItemClickListener onItemClickListener) {
-        String[] buildingNames = mResources.getStringArray(R.array.building_names);
-        String[] addresses = mResources.getStringArray(R.array.addresses);
-        String address = item.getAddress() + ", " + item.getNumber();
-        String name ="";
-        for(int i=0; i<addresses.length; i++){
-            if(addresses[i].equals(address)){
-                name = buildingNames[i];
-            }
-            else if((address + item.getLiter()).equals(addresses[i])){
-               name = buildingNames[i];
-            }
-        }
+        String name = item.getName();
         mButton.setText(name);
         String finalName = name;
         mButton.setOnClickListener(view -> onItemClickListener.onBuildingClick(item, finalName));

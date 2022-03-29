@@ -2,6 +2,7 @@ package com.example.traininglog.data.model;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
@@ -12,6 +13,9 @@ public class Building {
     @PrimaryKey
     @SerializedName("id")
     private int id;
+    @SerializedName("name")
+    @Ignore
+    private String name;
     @SerializedName("city")
     @ColumnInfo(name = "city")
     private String city;
@@ -85,5 +89,13 @@ public class Building {
 
     public void setLiter(String liter) {
         this.liter = liter;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

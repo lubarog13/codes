@@ -132,7 +132,7 @@
         <Button
             android:layout_width="100dp"
             android:layout_height="31dp"
-            android:layout_marginStart="30dp"
+            android:layout_marginStart="10dp"
             android:background="@drawable/blue_button_2"
             android:text="Добавить\n тренировки"
             android:textAllCaps="false"
@@ -154,7 +154,7 @@
         <Button
             android:layout_width="100dp"
             android:layout_height="31dp"
-            android:layout_marginStart="30dp"
+            android:layout_marginStart="20dp"
             android:background="@drawable/blue_button_2"
             android:text="Посмотреть\n занимающихся"
             android:textAllCaps="false"

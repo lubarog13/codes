@@ -168,15 +168,15 @@ public class RegistrationFragment extends PresenterFragment implements Registrat
         String lastname = mLastname.getText().toString();
         String email = mEmail.getText().toString();
         String sex = mMaleButton.isChecked()? "М" : "Ж";
-        int day =Integer.parseInt( mDay.getText().toString());
-        String month = mMonth.getText().toString();
-        int year = Integer.parseInt(mYear.getText().toString());
-        if(firstname.length()==0 || secondname.length()==0 || lastname.length()==0 || day==0 || month.length()==0 || year==0) {
+        if(firstname.length()==0 || secondname.length()==0 || lastname.length()==0 || mDay.getText().toString().length()==0 || mMonth.getText().toString().length()==0 || mYear.getText().length()==0) {
             mErrorText1.setText("Заполните все поля");
             mErrorText1.setVisibility(View.VISIBLE);
             return;
         }
-        if(Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        int day =Integer.parseInt( mDay.getText().toString());
+        String month = mMonth.getText().toString();
+        int year = Integer.parseInt(mYear.getText().toString());
+        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             mErrorText1.setText("Ошибка: неверный email");
             mErrorText1.setVisibility(View.VISIBLE);
             return;
