@@ -16,6 +16,8 @@ import com.example.traininglog.ui.base.home.coach.CoachWorkoutHolder;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -64,6 +66,12 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutHolder> {
 
     public void addData(List<Workout> data, boolean isRefreshed) {
         if(isRefreshed) mWorkouts.clear();
+        data.sort(new Comparator<Workout>() {
+            @Override
+            public int compare(Workout workout, Workout t1) {
+                return workout.getStart_time().compareTo(t1.getStart_time());
+            }
+        });
         mWorkouts.addAll(data);
         notifyDataSetChanged();
     }

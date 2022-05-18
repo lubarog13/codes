@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -128,8 +129,12 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(item.getStart_time());
         calendar.add(Calendar.HOUR, -3);
-        if(presences==null&&!whoGoesClick)
-        item.setStart_time(calendar.getTime());
+        if(presences==null&&!whoGoesClick) {
+            item.setStart_time(calendar.getTime());
+            calendar.setTime(item.getEnd_time());
+            calendar.add(Calendar.HOUR, -3);
+            item.setEnd_time(calendar.getTime());
+        }
         if(item.getClub().getName().length()>15) {
             mName.setText(String.format("%s...", item.getClub().getName().substring(0, 15)));
         } else {
@@ -291,10 +296,7 @@ public class CoachWorkoutHolder extends RecyclerView.ViewHolder {
         mHallSpinner.setSelection(halls.indexOf(hall));
         SimpleDateFormat format = new SimpleDateFormat("HH:mm");
         mStartTime.setText(format.format(item.getStart_time()));
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(item.getEnd_time());
-        calendar.add(Calendar.HOUR, -3);
-        mEndTime.setText(format.format(calendar.getTime()));
+        mEndTime.setText(format.format(item.getEnd_time()));
         if(item.getOther_type()!=null){
             mTypeText.setText(item.getOther_type());
         }

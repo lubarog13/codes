@@ -41,6 +41,7 @@
         <entry key="app/src/main/res/layout/fragment_workout_create.xml" value="0.33" />
         <entry key="app/src/main/res/layout/free_day_view.xml" value="0.1" />
         <entry key="app/src/main/res/layout/hall_item_layout.xml" value="0.15989583333333332" />
+        <entry key="app/src/main/res/layout/home_workout.xml" value="0.16691995947315097" />
         <entry key="app/src/main/res/layout/is_not_attend_layout.xml" value="0.125" />
         <entry key="app/src/main/res/layout/item_blue_button_layout.xml" value="0.19166666666666668" />
         <entry key="app/src/main/res/layout/item_button_layout.xml" value="0.17502532928064843" />
@@ -49,6 +50,7 @@
         <entry key="app/src/main/res/layout/text_for_edit_spinner.xml" value="0.20104166666666667" />
         <entry key="app/src/main/res/layout/text_for_spinner.xml" value="0.20104166666666667" />
         <entry key="app/src/main/res/layout/who_attend_layout.xml" value="0.1" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1195" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.2775" />
       </map>
     </option>
@@ -58,5 +60,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.16691995947315097" />
+      </ProjectState>
+    </option>
   </component>
 </project>
