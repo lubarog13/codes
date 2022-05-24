@@ -14,7 +14,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField "String", "API_URL", '"https://eddb-178-66-156-113.ngrok.io/"'
+        buildConfigField "String", "API_URL", '"https://lubarog13.pythonanywhere.com/"'
     }
 
     buildTypes {
