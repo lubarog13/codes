@@ -1,14 +1,16 @@
 #include <iostream>
+using namespace std;
 
-
-int main() {
-    int a, b;
-    int z;
-    std::cout<<"Введите первое число\n";
-    std::cin>>a;
-    std::cout<<"Введите второе число\n";
-    std::cin>>b;
-    z = a-b;
-    std::cout<<"Разница первого и второго числа = "<<z;
+int main()
+{
+    setlocale(LC_ALL, "Russian");
+    int a, b, r;
+    cout << "Введите первое целое число: ";
+    cin >> a;
+    cout << "Введите второе целое число: ";
+    cin >> b;
+    r = a - b;
+    cout << "Разность между первым и вторым числом: " << r << "\n";
     return 0;
+
 }
