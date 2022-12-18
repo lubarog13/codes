@@ -1,36 +1,59 @@
 #include <iostream>
 #include <math.h>
 
-int main() {
+using namespace std;
+
+int main()
+{
+    setlocale(LC_ALL, "Russian");
     double x, y, r, a, b, eps;
-    std::cout<<"Введите x: ";
-    std::cin>>x;
-    std::cout<<"Введите y: ";
-    std::cin>>y;
-    std::cout<<"Введите радиус окружности: ";
-    std::cin>>r;
-    if(r<=0) {
-        std::cout<<"Введите положительный радиус\n";
-        return 0;
+
+    cout << "Введите радиус окружности: ";
+    cin >> r;
+
+    if (r <= 0) {
+        cout << "Ошибка! Введите положительный радиус\n";
+        return 1;
     }
-    std::cout<<"Введите коэффицент a: ";
-    std::cin>>a;
-    std::cout<<"Введите коэффицент b: ";
-    std::cin>>b;
-    std::cout<<"Введите погрешность: ";
-    std::cin>>eps;
-    if(eps<=0 || eps>=1) {
-        std::cout<<"Неверно введена погрешность, требуется от 0 до 1\n";
+
+    cout << "Введите коэффицент a для прямой: ";
+    cin >> a;
+    cout << "Введите коэффицент b для прямой: ";
+    cin >> b;
+    if ((pow(2 * b * a, 2) - 4 * (1 + a * a) * (pow(b, 2) - pow(r, 2))) < 0)
+    //ошибается при а=2,3 и т.д. https://www.mathway.com/ru/Graph - проверка.
+    {
+        cout << "Прямая не пересекает окружность\n";
+        return 2;
     }
-    else if (y > 0 + eps) {
-        std::cout<<"Точка не входит в область\n";
-    } else if (a*x + b < y - eps ) {
-        std::cout<<"Точка не входит в область\n";
-    } else if (sqrt(pow(x, 2) + pow(y, 2)) > r+eps) {
-        std::cout<<"Точка не входит в область\n";
+
+    cout << "Введите погрешность: ";
+    cin >> eps;
+    if ((eps <= 0) || (eps >= 1)) {
+        cout << "Ошибка! Неверно введена погрешность, требуется от 0 до 1\n";
+        return 3;
     }
-    else {
-        std::cout<<"Точка входит в область\n";
+
+
+    cout << "Введите x точки: ";
+    cin >> x;
+    cout << "Введите y точки: ";
+    cin >> y;
+    if (((pow(x, 2) + pow(y, 2)) < pow(r, 2)) && (a * x + b > y) && (y < 0))
+    {
+        cout <<"Точка входит в область\n";
+    }
+    else
+    {
+        if ((abs((pow(x, 2) + pow(y, 2)) - (pow(r, 2))) <= eps) || ((abs((abs(a * x + b) - abs(y))) <= eps) || (abs(y) <= eps)))
+        {
+            cout << "Точка лежит на границе области\n";
+        }
+        else
+        {
+            cout << "Точка не входит в область\n";
+        }
+
     }
     return 0;
 }
