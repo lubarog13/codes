@@ -1,5 +1,5 @@
 public class Main {
     public static void main(String[] args) {
-        System.out.println(XO.getXO("oooxxXflflf"));
+        System.out.println(Persist.persistence(39));
     }
 }
