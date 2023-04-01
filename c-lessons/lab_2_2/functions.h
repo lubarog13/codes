@@ -1,3 +1,5 @@
+#include "header.h"
+
 void getSize(int *n);
 void getNumber(int *k);
 void assign(int *arr, int n);

@@ -1,6 +1,4 @@
-#include <iostream>
 #include "functions.h"
-using namespace std;
 
 void getSize(int *n) {
     cout << "Введите размер двумерного массива\n";
