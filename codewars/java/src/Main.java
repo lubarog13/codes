@@ -1,5 +1,5 @@
 public class Main {
     public static void main(String[] args) {
-        System.out.println(Persist.persistence(39));
+        System.out.println(SumDigPower.sumDigPow(90, 150));
     }
 }
