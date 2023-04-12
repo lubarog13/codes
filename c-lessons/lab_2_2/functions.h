@@ -1,7 +1,7 @@
 #include "header.h"
 
-void getSize(int *n);
-void getNumber(int *k);
+int inputInt(string message, int min, int max);
+int inputInt(string message);
 void assign(int *arr, int n);
 void output(int *arr, int n);
 void subArray(int *arr, int n, int k);
