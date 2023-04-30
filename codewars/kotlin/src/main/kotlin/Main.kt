@@ -11,6 +11,12 @@ fun invert(arr: IntArray): IntArray {
     return arr.map { it -> -1 * it }.toIntArray();
 }
 
+fun longest(s1:String, s2:String):String {
+    val st = s1.toList().toMutableSet()
+    st.addAll(s2.toList())
+    return st.toList().sorted().joinToString("")
+}
+
 fun babyCount(x: String): Int? {
     val searchMap = mutableMapOf<Char, Int>('b' to  0, 'a' to 0, 'y' to  0)
     for (a in x.lowercase()) {
@@ -23,5 +29,5 @@ fun babyCount(x: String): Int? {
 }
 
 fun main(args: Array<String>) {
-    println(babyCount("Happy babies boom ba by?"))
+    println(longest("aretheyhere", "yestheyarehere"))
 }
