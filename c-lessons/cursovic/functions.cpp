@@ -12,10 +12,23 @@ string inputString(string message) {
     return str;
 }
 
+char inputChar(string message) {
+    char ch;
+    cout << message << endl;
+   while (!(cin >> ch))
+      {
+         cout << "Неправильно введен символ" << endl;
+          cin.clear();
+          cin.ignore(numeric_limits<streamsize>::max(), '\n');;
+          cout << message;  
+      } 
+    return ch;
+}
+
 int inputInt(string message)
 {
     int n;
-      cout << message;    
+      cout << message << endl;    
       while (!(cin >> n))
       {
          cout << "Неправильно введено число" << endl;
