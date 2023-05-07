@@ -17,6 +17,17 @@ fun longest(s1:String, s2:String):String {
     return st.toList().sorted().joinToString("")
 }
 
+fun multiplicationTable(size: Int): Array<IntArray> {
+    val arr = Array<IntArray>(size) { IntArray(size) { (it+1) * 1 } };
+    for (i in 1 until size) {
+        arr[i][0] = arr[i-1][0] + 1;
+        for (j in 1 until  size) {
+           arr[i][j] = arr[i][0] * arr[0][j];
+        }
+    }
+    return arr;
+}
+
 fun babyCount(x: String): Int? {
     val searchMap = mutableMapOf<Char, Int>('b' to  0, 'a' to 0, 'y' to  0)
     for (a in x.lowercase()) {
@@ -29,5 +40,5 @@ fun babyCount(x: String): Int? {
 }
 
 fun main(args: Array<String>) {
-    println(longest("aretheyhere", "yestheyarehere"))
+    println(multiplicationTable(5).map { it.joinToString() }.joinToString())
 }
