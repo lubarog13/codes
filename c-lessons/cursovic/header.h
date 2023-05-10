@@ -4,6 +4,6 @@
 #include <limits>
 #include <fstream>
 
-const int N = 100;
+const int N = 10;
 
 using namespace std;
