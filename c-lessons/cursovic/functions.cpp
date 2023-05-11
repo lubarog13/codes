@@ -146,10 +146,10 @@ void cycleAdd(int start,int array_length, string* mass) {
     int under, count;
     string substring;
     char symbol;
-    under = inputInt("Введите 1, если хотите изменить ниже подстроки и 2, если выше", 1, 2);
+    under = inputInt("Введите 1, если хотите изменить ниже текущей строки и 2, если выше", 1, 2);
     substring = inputString("Введите подстроку:");
     symbol = inputChar("Введите символ:");
-    count = inputInt("Сколько символов заменить?");
+    count = inputInt("Сколько символов добавить?");
     if(under == 2) {
         cout<<"Новые строки:"<<endl;
         for (int i = 0; i<= start; i++) {

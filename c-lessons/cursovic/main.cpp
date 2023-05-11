@@ -4,13 +4,13 @@
 //Добавить цикл для замены(etc) по строкам
 int main() {
     setlocale(LC_ALL, "Russian");
-    string last_file[N];
+    string text_array[N];
     string full_string, substring, adding_string, replace, new_string, safe;
     int selected_index = 0;
     int array_length = 0;
     char ch;
     int number, a; 
-   readFile("Записано в файле", last_file, array_length);
+   readFile("Записано в файле", text_array, array_length);
     do
     {
         //Поменять команды меню: считать данные, сместиться, вывести, вставить, заменить, удалить, сохранить
@@ -19,7 +19,7 @@ int main() {
         {
             
             case 1:
-                readFile("Записано в файле", last_file, array_length);
+                readFile("Записано в файле", text_array, array_length);
                 break;
             case 2:
                 selected_index = switchLine(selected_index, array_length, false);
@@ -28,21 +28,21 @@ int main() {
                 selected_index = switchLine(selected_index, array_length, true);
                 break;
             case 4:
-                outContent(last_file, selected_index, array_length); // учесть кол-во строк
+                outContent(text_array, selected_index, array_length); // учесть кол-во строк
                 break;
             case 5:
-                cycleAdd(selected_index, array_length, last_file);
+                cycleAdd(selected_index, array_length, text_array);
                 break;
             case 6:
-                cycleRelace(selected_index, array_length, last_file);
+                cycleRelace(selected_index, array_length, text_array);
                 break;
             case 7:
-                cycleDelete(selected_index, array_length, last_file);
+                cycleDelete(selected_index, array_length, text_array);
                 break;   
             case 8:
             case 0:
             {
-                SafeFile(last_file, array_length);
+                SafeFile(text_array, array_length);
                 break;
             }
             default:
