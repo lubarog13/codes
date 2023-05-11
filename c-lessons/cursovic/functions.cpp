@@ -118,7 +118,7 @@ int inputInt(string message, int min, int max)
           cin.ignore(numeric_limits<streamsize>::max(), '\n');
       } 
     }
-    while (n <= min || n >= max);
+    while (n < min || n > max);
     // cin.clear();
     cin.ignore(numeric_limits<streamsize>::max(), '\n');;
     
@@ -142,21 +142,66 @@ int inputInt(string message)
     return n;
 }
 
+void cycleAdd(int start,int array_length, string* mass) {
+    int under, count;
+    string substring;
+    char symbol;
+    under = inputInt("Введите 1, если хотите изменить ниже подстроки и 2, если выше", 1, 2);
+    substring = inputString("Введите подстроку:");
+    symbol = inputChar("Введите символ:");
+    count = inputInt("Сколько символов заменить?");
+    if(under == 2) {
+        cout<<"Новые строки:"<<endl;
+        for (int i = 0; i<= start; i++) {
+            mass[i] = addSymbols(mass[i], substring, symbol, count);
+            cout<<mass[i]<<endl;
+        }
+    }
+    if (under == 1) {
+         cout<<"Новые строки:"<<endl;
+        for (int i = start; i< array_length; i++) {
+            mass[i] = addSymbols(mass[i], substring, symbol, count);
+            cout<<mass[i]<<endl;
+        }
+    }
+}
+
 string addSymbols(string input, string substring, char symbol, int count) {
     size_t i = input.find(substring);
     if (i==string::npos) {
-        cout << "Подстрока не найдена" << endl;
         return input;
     }
     input.insert(i, count, symbol);
     return input;
 }
 
+void cycleRelace(int start,int array_length, string* mass) {
+    int under, count;
+    string substring, replacement;
+    under = inputInt("Введите 1, если хотите изменить ниже подстроки и 2, если выше", 1, 2);
+    substring = inputString("Введите подстроку:");
+    replacement = inputString("Введите подстроку, на которую заменяем:");
+    count = inputInt("Сколько символов заменить?");
+    if(under == 2) {
+        cout<<"Новые строки:"<<endl;
+        for (int i = 0; i<= start; i++) {
+            mass[i] = replaceSymbols(mass[i], substring, replacement, count);
+            cout<<mass[i]<<endl;
+        }
+    }
+    if (under == 1) {
+         cout<<"Новые строки:"<<endl;
+        for (int i = start; i< array_length; i++) {
+            mass[i] = replaceSymbols(mass[i], substring, replacement, count);
+            cout<<mass[i]<<endl;
+        }
+    }
+}
+
 
 string replaceSymbols(string input, string substring, string replacement, int count) {
     size_t i = input.find(substring);
     if (i==string::npos) {
-        cout << "Подстрока не найдена" << endl;
         return input;
     }
     if (i < count) {
@@ -167,10 +212,31 @@ string replaceSymbols(string input, string substring, string replacement, int co
     return input;
 }
 
+void cycleDelete(int start, int array_length, string* mass) {
+    int under, count;
+    string substring;
+    under = inputInt("Введите 1, если хотите изменить ниже подстроки и 2, если выше", 1, 2);
+    substring = inputString("Введите подстроку:");
+    count = inputInt("Введите число символов для удаления:");
+    if(under == 2) {
+        cout<<"Новые строки:"<<endl;
+        for (int i = 0; i<= start; i++) {
+            mass[i] = deleteSymbols(mass[i], substring, count);
+            cout<<mass[i]<<endl;
+        }
+    }
+    if (under == 1) {
+         cout<<"Новые строки:"<<endl;
+        for (int i = start; i< array_length; i++) {
+            mass[i] = deleteSymbols(mass[i], substring, count);
+            cout<<mass[i]<<endl;
+        }
+    }
+}
+
 string deleteSymbols(string input, string substring, int count) {
     size_t i = input.find(substring);
     if (i==string::npos) {
-        cout << "Подстрока не найдена" << endl;
         return input;
     }
     if (i < count) {

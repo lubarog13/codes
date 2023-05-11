@@ -14,7 +14,7 @@ int main() {
     do
     {
         //Поменять команды меню: считать данные, сместиться, вывести, вставить, заменить, удалить, сохранить
-        a = inputInt(" 1 - Считать данные из файла \n  2 - Сместиться вверх\n 3 - Сместиться вниз\n4 - Вывести данные из файла \n 5 - Вставить символы \n 6 - Заменить символы \n 7 - Удалить символы  \n 8 - Сохранить \n 0 - Выход и сохранение \n", 0, 8);
+        a = inputInt("\n1 - Считать данные из файла \n2 - Сместиться вверх\n3 - Сместиться вниз\n4 - Вывести данные из файла \n5 - Вставить символы \n6 - Заменить символы \n7 - Удалить символы  \n8 - Сохранить \n0 - Выход и сохранение \n", 0, 8);
         switch (a)
         {
             
@@ -31,25 +31,13 @@ int main() {
                 outContent(last_file, selected_index, array_length); // учесть кол-во строк
                 break;
             case 5:
-                substring = inputString("Введите подстроку:");
-                ch = inputChar("Введите символ:");
-                number = inputInt("Сколько дублировать?");
-                *(last_file + selected_index) = addSymbols(full_string, substring, ch, number);
-                cout << "Новая строка: " << endl << *(last_file + selected_index) << endl;
+                cycleAdd(selected_index, array_length, last_file);
                 break;
             case 6:
-                substring = inputString("Введите подстроку:");
-               // ch = inputChar("Введите символ:");
-                number = inputInt("Где заменить?");
-               // adding_string = addSymbols(full_string, substring, ch, number);
-                *(last_file + selected_index) = replaceSymbols(full_string, substring, substring, number);
-                cout << "Новая строка: " << endl << *(last_file + selected_index) << endl;
+                cycleRelace(selected_index, array_length, last_file);
                 break;
-            case 7:      
-                substring = inputString("Введите подстроку:");
-                number = inputInt("Введите число:");
-                *(last_file + selected_index) = deleteSymbols(full_string, substring, number);
-                cout << "Новая строка: " << endl << *(last_file + selected_index) << endl;
+            case 7:
+                cycleDelete(selected_index, array_length, last_file);
                 break;   
             case 8:
             case 0:
