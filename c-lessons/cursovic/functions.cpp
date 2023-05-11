@@ -1,6 +1,4 @@
 #include "functions.h"
-#include <cstddef>
-#include <iostream>
 #include <string>
 
 string checkOpenInputFile(string message) {
@@ -8,7 +6,6 @@ string checkOpenInputFile(string message) {
     bool is_open = false;
     while (!is_open) {
         filename = inputString(message);
-        cout<<filename;
         ifstream fs(filename, ios::in);
         cout<<filename;
         if (!fs) // fs.is_open
@@ -49,20 +46,25 @@ string checkOpenOutputFile(string message) {
 
 void readFile (string message, string* mass, int& count) {
     string filename;
+    string temp;
     filename = checkOpenInputFile("Введите название файла для чтения:");
     ifstream fin(filename, ios::in);
 
     count = 0;
     while((!fin.eof()) && (count < N))
     {
-        getline(fin, mass[count]); //Считываем строки в массив
+        getline(fin, temp); //Считываем строки в массив
+        mass[count] = temp;
+        cout<<mass[count]<<endl;
         count++;
     }
     fin.close(); 
 }
 
 void outContent (string* mass, int start, int count) {
-    for (int i=start; i<count; i++) {
+    int lines_count;
+    lines_count = inputInt("Введите количество строк для вывода:", 0, count - start);
+    for (int i=start; i<(start + lines_count); i++) {
         cout << "Строка номер " << i + 1 << " = " << *(mass + i) << endl;
     }
 }
@@ -85,7 +87,6 @@ string inputString(string message) {
     while (str.empty()) {
         cout << message << endl;
         getline(cin, str, '\n');
-        cout<<"ok";
     }
     return str;
 }

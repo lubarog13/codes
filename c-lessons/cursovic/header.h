@@ -3,6 +3,8 @@
 #include <string>
 #include <limits>
 #include <fstream>
+#include <cstddef>
+
 
 const int N = 10;
 
