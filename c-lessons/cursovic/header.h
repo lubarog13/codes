@@ -5,7 +5,6 @@
 #include <fstream>
 #include <cstddef>
 
-
-const int N = 10;
-
 using namespace std;
+
+const int N = 100;
