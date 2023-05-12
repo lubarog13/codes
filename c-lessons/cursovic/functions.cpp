@@ -68,7 +68,7 @@ string checkOpenInputFile(string message) {
     while (!is_open) {
         filename = inputString(message);
         ifstream fs(filename, ios::in);
-        if (!fs) // fs.is_open()
+        if (!fs.is_open()) // fs.is_open()
         {
             cout << "Ошибка. Имя или путь к файлу неправильный.\n";
             is_open = false;
@@ -88,7 +88,7 @@ string checkOpenOutputFile(string message) {
         filename = inputString(message);
         ofstream fs(filename, ios::out);
 
-        if (!fs) // fs.is_open()
+        if (!fs.is_open()) // fs.is_open()
         {
             cout << "Ошибка. Имя или путь к файлу неправильный.\n";
             is_open = false;
