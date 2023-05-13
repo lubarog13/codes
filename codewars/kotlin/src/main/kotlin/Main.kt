@@ -28,6 +28,18 @@ fun multiplicationTable(size: Int): Array<IntArray> {
     return arr;
 }
 
+fun spinWords(sentence: String): String {
+    return sentence.split(' ').joinToString(" ") { it -> if (it.length >= 5) it.reversed() else it };
+}
+
+fun tribonacci(signature: DoubleArray, n: Int): DoubleArray {
+    var res = signature.clone()
+    for (i in signature.size until n) {
+        res += (res[i-3] + res[i-2] + res[i-1]);
+    }
+    return res;
+}
+
 fun babyCount(x: String): Int? {
     val searchMap = mutableMapOf<Char, Int>('b' to  0, 'a' to 0, 'y' to  0)
     for (a in x.lowercase()) {
@@ -40,5 +52,5 @@ fun babyCount(x: String): Int? {
 }
 
 fun main(args: Array<String>) {
-    println(multiplicationTable(5).map { it.joinToString() }.joinToString())
+    println(tribonacci(doubleArrayOf(1.0,1.0,1.0),10));
 }
