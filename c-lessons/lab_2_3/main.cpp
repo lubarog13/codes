@@ -1,11 +1,14 @@
 #include "functions.h"
 
 int main() {
-    string full_string, substring, adding_string, new_string;
+    string full_string, substring;
+    char input_char;
+    int count;
     full_string = inputString("Введите строку:");
-    substring = inputString("Введите подстроку:");
-    adding_string = inputString("Введите строку, которую будете добавлять:");
-    new_string = addSubstring(full_string, substring, adding_string);
-    cout << "Новая строка: "<<endl << new_string << endl;
+    substring = inputString("Введите контекст:");
+    input_char = inputChar("Введите символ, который вы собираетесь добавить:");
+    count = inputInt("Введите количество добавляемых символов:");
+    addSymbols(full_string, substring, input_char, count);
+    cout << "Новая строка: "<<endl << full_string << endl;
     return 0;
 }

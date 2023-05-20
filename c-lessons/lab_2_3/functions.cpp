@@ -5,24 +5,47 @@
 
 string inputString(string message) {
     string str = "";
-    while (str.empty()) {
-        cout << message << endl;
-        getline(cin, str);
-    }
+    cout << message << endl;
+    getline(cin, str, '\n');
     return str;
 }
 
-string addSubstring(string input, string substring, string adding) {
+void addSymbols(string &input, string substring, char symbol, int count) {
     size_t i = input.find(substring);
     if (i==string::npos) {
-        cout << "Подстрока не найдена" << endl;
-        return input;
+        return;
     }
-    i = input.find(substring, i+1);
-    if (i==string::npos) {
-        cout << "Подстрока найдена только один раз" << endl;
-        return input;
+    input.insert(i, count, symbol);
+    return;
+}
+
+int inputInt(string message)
+{
+    int n;
+    cout << message << endl;
+    while (!(cin >> n))
+    {
+        cout << "Неправильно введено число" << endl;
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');;
+        cout << message;
     }
-    input.insert(i + substring.length(), adding);
-    return input;
+    // cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');;
+
+    return n;
+}
+
+char inputChar(string message) {
+    char ch;
+    cout << message << endl;
+    while (!(cin >> ch))
+    {
+        cout << "Неправильно введен символ" << endl;
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << message << endl;
+    }
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    return ch;
 }
