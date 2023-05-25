@@ -1,8 +1,8 @@
 #include <iostream>
-#include <iomanip>
+//#include <iomanip>
 #include <string>
 #include <limits>
 
-const int N = 100;
-
 using namespace std;
+
+//const int N = 100;

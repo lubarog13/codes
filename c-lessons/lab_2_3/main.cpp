@@ -5,10 +5,10 @@ int main() {
     char input_char;
     int count;
     full_string = inputString("Введите строку:");
-    substring = inputString("Введите контекст:");
-    input_char = inputChar("Введите символ, который вы собираетесь добавить:");
-    count = inputInt("Введите количество добавляемых символов:");
+    substring = inputString("\nВведите контекст:");
+    input_char = inputChar("\nВведите символ, который вы собираетесь добавить:");
+    count = inputInt("\nВведите количество добавляемых символов:", 0);
     addSymbols(full_string, substring, input_char, count);
-    cout << "Новая строка: "<<endl << full_string << endl;
+    outputString("\nНовая строка: \n" + full_string);
     return 0;
 }
