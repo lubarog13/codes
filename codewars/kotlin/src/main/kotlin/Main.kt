@@ -51,6 +51,16 @@ fun babyCount(x: String): Int? {
     return if (min==0) null else min
 }
 
+fun solution(number: Int): Int {
+    return if(number<=0) 0 else IntArray(number) { it * 1 }.filter {it % 3 == 0 || it % 5 == 0 }.sum();
+}
+
+/*
+* fun solution(number: Int): Int =
+  (3 until number).filter { it % 3 == 0 || it % 5 == 0 }.sum()
+*
+* */
+
 fun main(args: Array<String>) {
-    println(tribonacci(doubleArrayOf(1.0,1.0,1.0),10));
+    println(solution(-10));
 }
