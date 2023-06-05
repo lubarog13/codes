@@ -1,3 +1,5 @@
+import 'dart:math';
+
 int calculate() {
   return 6 * 7;
 }
@@ -11,4 +13,13 @@ bool comp(List<int> a1, List<int> a2) {
     if (a2[i]!=a3[i]) return false;
   }
   return true;
+}
+
+int findNb(int m) {
+  int sum = 0, k=0;
+  while (sum<m) {
+    k++;
+    sum += pow(k, 3) as int;
+  }
+  return sum==m? k : -1;
 }
