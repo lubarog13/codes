@@ -23,3 +23,12 @@ int findNb(int m) {
   }
   return sum==m? k : -1;
 }
+
+int find(List integers) {
+  for (int i=0; i<integers.length; i++) {
+      var smallIndex = i==0? 2: i-1;
+      var bigIndex = i==integers.length-1? integers.length -3 : i + 1;
+      if ((integers[i]%2)!=(integers[smallIndex]%2) && (integers[i]%2)!=(integers[bigIndex]%2)) return integers[i];
+  }
+  return -1;
+}
