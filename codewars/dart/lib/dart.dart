@@ -32,3 +32,8 @@ int find(List integers) {
   }
   return -1;
 }
+
+String rgb(int r, int g, int b)
+{
+  return '${max(min(r, 255), 0).toRadixString(16).toString().padLeft(2, '0')}${max(min(g, 255), 0).toRadixString(16).toString().padLeft(2, '0')}${max(min(b, 255), 0).toRadixString(16).toString().padLeft(2, '0')}'.toUpperCase();
+}
