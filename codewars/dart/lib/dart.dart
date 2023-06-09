@@ -37,3 +37,7 @@ String rgb(int r, int g, int b)
 {
   return '${max(min(r, 255), 0).toRadixString(16).toString().padLeft(2, '0')}${max(min(g, 255), 0).toRadixString(16).toString().padLeft(2, '0')}${max(min(b, 255), 0).toRadixString(16).toString().padLeft(2, '0')}'.toUpperCase();
 }
+
+Map<String, int> hexToRGB(String hex) {
+ return {'r': int.parse(hex.substring(1, 3), radix: 16), 'g': int.parse(hex.substring(3, 5), radix: 16), 'b': int.parse(hex.substring(5, 7), radix: 16)};
+}
