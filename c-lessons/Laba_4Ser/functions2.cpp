@@ -97,7 +97,7 @@ void replaceSymbols(string &input, string substring, int count, string replaceme
 
 void ChangeSub(string* mass, int mass_length) 
 {
-    int under, count;
+    int count;
     string substring, replacement;
     substring = inputString("Введите подстроку:");
     count = inputInt("Сколько символов заменить?", 0);
