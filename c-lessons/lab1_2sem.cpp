@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include <iomanip>
+#include <limits>
 
 using namespace std;
 
@@ -18,6 +19,8 @@ int main()
     while ((n <= 0) || (n > N))
     {
         cout << "Ошибка! Размер квадратной матрица должен быть больше нуля\n";
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         cin >> n;
     }
     cout << endl;
