@@ -2,6 +2,6 @@ import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println(new Conversion().solution(1924));
+        System.out.println(Greed.greedy(new int[]{1,1,1,3,1}));
     }
 }
