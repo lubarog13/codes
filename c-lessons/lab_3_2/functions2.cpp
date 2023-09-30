@@ -77,9 +77,12 @@ string checkOpenOutputFile(string message) {
 
 //Замена**********************************************************************************************************
 
-void outContent (string* mass, int mass_length) {
-    for (int i=0; i<mass_length; i++) {
-        cout << *(mass + i) << endl;
+void outContent (int** mass, int rows, int columns) {
+    for (int i=0; i<rows; i++) {
+        for (int j=0; j<columns; j++) {
+            cout << *(mass[i] + j) << " ";
+        }
+        cout << endl;
     }
 }  
 
@@ -111,13 +114,17 @@ void ChangeSub(string* mass, int mass_length)
 }
 
 //Открытие и закрытие*********************************************
-void SaveFile(string* mass, int mass_length)
+void SaveFile(int** mass, int rows, int columns)
 {
     string filename;
         filename = checkOpenOutputFile("Введите название файла для сохранения:");
         ofstream fout(filename, ios::out);  
-        for (int i=0; i< mass_length; i++) {
-            fout << mass[i] << endl;
+        fout << rows << " " << columns;
+        for (int i=0; i< rows; i++) {
+            fout << endl;
+            for (int j=0; j< columns; j++) {
+                fout << *(mass[i] + j) << " ";
+            }
         }
         fout.close();
         cout << "Файл был сохранен."  << endl;
@@ -145,18 +152,19 @@ void readFile (int** mass, int& rows, int& columns) {
         return;
     }
     int buf = 0;
-    for (int i=0; i<columns && !fin.eof(); i++)
+    for (int i=0; i<rows && !fin.eof(); i++)
     {
-        mass[i] = new int[rows]{};
-        fin >> buf;
-        for (int j=0; j<columns && !fin.eof(); i++) {
+        mass[i] = new int[columns]{};
+        for (int j=0; j<columns && !fin.eof(); j++) {
+            fin >> buf;
             if(fin.fail()) {
                 inputString("Неверно считан массив");
                 fin.close();
                 return;
             }
-            mass[i][j] = buf;
+           *(mass[i]+j) = buf;
         }
+        cout<<endl;
         
     }
     fin.close(); 
