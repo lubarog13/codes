@@ -2,20 +2,37 @@
 #include <string>
 
 // Внесение****************************************************************************************************
-int inputInt(string message, int min)
+int inputInt(string message)
+{
+    int n;
+    cout << message << endl;
+    while (!(cin >> n))
+    {
+        cout << "Неправильно введено число" << endl;
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');;
+        cout << message;
+    }
+    // cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');;
+
+    return n;
+}
+
+int inputInt(string message, int min, int max)
 {
     int n;
     do
     {
-      cout << message;    
-      if ((!(cin >> n)) || (n < min))
+      cout << message << endl;    
+      if ((!(cin >> n)) || (n < min) || (n > max))
       {
-          cout << "Размер должен быть больше " << min << endl;
+          cout << "Размер должен быть больше " << min << " и меньше " << max << endl;
           cin.clear();
           cin.ignore(numeric_limits<streamsize>::max(), '\n');
       } 
     }
-    while (n < min);
+    while ((n < min) || (n > max));
     // cin.clear();
     cin.ignore(numeric_limits<streamsize>::max(), '\n');;
     
@@ -99,19 +116,25 @@ void replaceSymbols(string &input, string substring, int count, string replaceme
     return;
 }
 
-void ChangeSub(string* mass, int mass_length) 
+/*void ChangeArr(int** mass, int& rows, int &columns) 
 {
-    int count;
-    string substring, replacement;
-    substring = inputString("Введите подстроку:");
-    count = inputInt("Сколько символов заменить?", 0);
-    replacement = inputString("Введите подстроку, на которую заменяем:");
-        //cout<<"Новые строки:"<<endl;
-        for (int i = 0; i<= mass_length; i++) {
-            replaceSymbols(mass[i], substring, count, replacement);
-            //cout<<mass[i]<<endl;
-        }
-}
+    int cols, selected_row;
+    cols = inputInt("Введите размер массива для объединения:", 0, N);
+    int* temp_arr = new int[cols] {};
+    cout<<"Введите массив: "<<endl;
+    for (int i=0; i<cols; i++) {
+        temp_arr[i] = inputInt("Введите число #"+to_string(i+1));
+    }
+    selected_row = inputInt("Введите номер строки для объединения: ", 1, rows) - 1;
+    size_t newSize = columns + cols;
+    for (int i=0; i<rows; i++) {
+        int* newArr = new int[newSize];
+        memcpy(newArr, *(mass+i), columns * sizeof(int));
+        delete [] mass[i];
+        mass[i] = newArr;
+    }
+    columns = newSize;
+}*/
 
 //Открытие и закрытие*********************************************
 void SaveFile(int** mass, int rows, int columns)
@@ -128,6 +151,9 @@ void SaveFile(int** mass, int rows, int columns)
         }
         fout.close();
         cout << "Файл был сохранен."  << endl;
+        for (int i=0; i< rows; i++) {
+            delete mass[i];
+        }
 }
 
 void readFile (int** mass, int& rows, int& columns) {
