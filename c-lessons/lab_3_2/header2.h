@@ -4,6 +4,7 @@
 #include <limits>
 #include <fstream>
 #include <cstddef>
+#include <algorithm>
 //#include <Windows.h>
 
 using namespace std;

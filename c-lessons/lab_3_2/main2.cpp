@@ -2,21 +2,27 @@
 int main ()
 {
     int* int_mass[N];
-    int rows=0, columns=0;
-    int count=0;
+    int sizes[N];
+    int arr_len=0;
     setlocale(LC_ALL, "Russian");
     //SetConsoleOutputCP(CP_UTF8);
-    readFile(int_mass, rows, columns);
+    for (int i=0; i<2; i++){
+    readFile(int_mass, sizes, arr_len);
     cout << " \n";
-    cout << "Исходный массив: \n";
-    outContent (int_mass, rows, columns);
+    outContent (int_mass, sizes, arr_len);
     cout << " \n";
+    }
+    changeArr(int_mass, sizes, arr_len);
+    outContent(int_mass, sizes, arr_len);
     /* ChangeSub(int_mass, mass_length);
     cout << "Преобразованный массив: \n";
     outContent (int_mass, mass_length);
     cout << " \n";
     */
-    SaveFile(int_mass, rows, columns);
+    for (int i = 0; i<arr_len; i++) {
+        SaveFile(int_mass, i, sizes[i]);
+    }
     cout << " \n"; 
+    memoryFree(int_mass, arr_len);
     return 0;
 }

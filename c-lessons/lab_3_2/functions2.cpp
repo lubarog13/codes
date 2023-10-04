@@ -1,4 +1,5 @@
 #include "functions2.h"
+#include <iterator>
 #include <string>
 
 // Внесение****************************************************************************************************
@@ -94,9 +95,11 @@ string checkOpenOutputFile(string message) {
 
 //Замена**********************************************************************************************************
 
-void outContent (int** mass, int rows, int columns) {
-    for (int i=0; i<rows; i++) {
-        for (int j=0; j<columns; j++) {
+void outContent (int** mass, int* sizes, int arr_len) {
+    cout << "Список массивов:" <<endl;
+    for (int i=0; i<arr_len; i++) {
+        cout<<(i+1)<<". ";
+        for (int j=0; j<sizes[i]; j++) {
             cout << *(mass[i] + j) << " ";
         }
         cout << endl;
@@ -116,83 +119,81 @@ void replaceSymbols(string &input, string substring, int count, string replaceme
     return;
 }
 
-/*void ChangeArr(int** mass, int& rows, int &columns) 
+void copyElements(int* arr1, int* arr2, int count, int start = 0) {
+    int arr2_index = 0;
+    for(int i=start; arr2_index<count; i++) {
+        arr1[i] = arr2[arr2_index];
+        arr2_index++;
+    }
+}
+
+void changeArr(int** mass, int* sizes, int arr_len) 
 {
-    int cols, selected_row;
-    cols = inputInt("Введите размер массива для объединения:", 0, N);
-    int* temp_arr = new int[cols] {};
-    cout<<"Введите массив: "<<endl;
-    for (int i=0; i<cols; i++) {
-        temp_arr[i] = inputInt("Введите число #"+to_string(i+1));
-    }
-    selected_row = inputInt("Введите номер строки для объединения: ", 1, rows) - 1;
-    size_t newSize = columns + cols;
-    for (int i=0; i<rows; i++) {
-        int* newArr = new int[newSize];
-        memcpy(newArr, *(mass+i), columns * sizeof(int));
-        delete [] mass[i];
-        mass[i] = newArr;
-    }
-    columns = newSize;
-}*/
+    int selected_index1, selected_index2;
+    selected_index1 = inputInt("Введите номер первого массива для объединения", 0, arr_len) - 1;
+    selected_index2 = inputInt("Введите номер второго массива для объединения", 0, arr_len) - 1;
+    int* temp = new int[sizes[selected_index1] + sizes[selected_index2]]{};
+    copyElements(temp, mass[selected_index1], sizes[selected_index1]);
+    copyElements(temp, mass[selected_index2], sizes[selected_index2], sizes[selected_index1]);
+    sort(temp, temp + sizes[selected_index1] + sizes[selected_index2]);
+    delete [] mass[selected_index1];
+    mass[selected_index1] = new int[sizes[selected_index1] + sizes[selected_index2]]{};
+    copyElements(mass[selected_index1], temp, sizes[selected_index1] + sizes[selected_index2]); 
+    sizes[selected_index1] = sizes[selected_index1] + sizes[selected_index2];
+    delete [] temp;
+}
 
 //Открытие и закрытие*********************************************
-void SaveFile(int** mass, int rows, int columns)
+void SaveFile(int** mass, int row, int size)
 {
     string filename;
         filename = checkOpenOutputFile("Введите название файла для сохранения:");
         ofstream fout(filename, ios::out);  
-        fout << rows << " " << columns;
-        for (int i=0; i< rows; i++) {
-            fout << endl;
-            for (int j=0; j< columns; j++) {
-                fout << *(mass[i] + j) << " ";
-            }
+        fout << size <<endl;
+        for (int i=0; i< size; i++) {
+            fout << *(mass[row] + i) << " ";
         }
         fout.close();
         cout << "Файл был сохранен."  << endl;
-        for (int i=0; i< rows; i++) {
-            delete mass[i];
-        }
 }
 
-void readFile (int** mass, int& rows, int& columns) {
+void readFile (int** mass, int* sizes, int& arr_len) {
     string filename;
+    int rows;
     filename = checkOpenInputFile("Введите название файла для чтения:");
     ifstream fin(filename, ios::in);
+    if(arr_len == N) {
+        inputString("Невозможно считать массив, достигнут лимит количесва записей");
+    }
     fin >> rows;
     if(fin.fail()) {
         inputString("Не задано количество строк массива");
         fin.close();
         return;
     }
-    if(rows > N) {
-        inputString("Слишком большое число строк массива, будет использавано " + to_string(N) + " строк");
-        fin.close();
-        return;
-    }
-    fin >> columns;
-    if(fin.fail()) {
-        inputString("Не задано количество колонок массива");
-        fin.close();
-        return;
-    }
     int buf = 0;
-    for (int i=0; i<rows && !fin.eof(); i++)
-    {
-        mass[i] = new int[columns]{};
-        for (int j=0; j<columns && !fin.eof(); j++) {
-            fin >> buf;
-            if(fin.fail()) {
-                inputString("Неверно считан массив");
-                fin.close();
-                return;
-            }
-           *(mass[i]+j) = buf;
+    mass[arr_len] = new int[rows]{};
+    for (int j=0; j<rows && !fin.eof(); j++) {
+        fin >> buf;
+        if(fin.fail()) {
+            inputString("Неверно считан массив");
+            delete [] mass[arr_len];
+            fin.close();
+            return;
         }
-        cout<<endl;
-        
+        *(mass[arr_len]+j) = buf;
     }
+    cout<<endl;
+    sizes[arr_len] = rows;
+    arr_len++;
     fin.close(); 
     cout << "Файл был считан."  << endl;
 }  
+
+/**Осовобождение памяти*/
+
+void memoryFree(int** mass, int mass_length) {
+    for (int i = 0; i<mass_length; i++) {
+        delete [] mass[i];
+    }
+}
