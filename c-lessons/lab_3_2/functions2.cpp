@@ -106,19 +106,6 @@ void outContent (int** mass, int* sizes, int arr_len) {
     }
 }  
 
-void replaceSymbols(string &input, string substring, int count, string replacement) {
-    size_t i = input.find(substring);
-    if (i==string::npos) {
-        return;
-    }
-    if (i < count) {
-        count = i;
-    }
-    //i -= count;
-    input.replace(i-count, count, replacement);
-    return;
-}
-
 void copyElements(int* arr1, int* arr2, int count, int start = 0) {
     int arr2_index = 0;
     for(int i=start; arr2_index<count; i++) {
@@ -129,13 +116,17 @@ void copyElements(int* arr1, int* arr2, int count, int start = 0) {
 
 void changeArr(int** mass, int* sizes, int arr_len) 
 {
+    if (arr_len ==0) {
+        inputString("Не считан ни один массив");
+        return;
+    }
     int selected_index1, selected_index2;
     selected_index1 = inputInt("Введите номер первого массива для объединения", 0, arr_len) - 1;
     selected_index2 = inputInt("Введите номер второго массива для объединения", 0, arr_len) - 1;
     int* temp = new int[sizes[selected_index1] + sizes[selected_index2]]{};
     copyElements(temp, mass[selected_index1], sizes[selected_index1]);
     copyElements(temp, mass[selected_index2], sizes[selected_index2], sizes[selected_index1]);
-    sort(temp, temp + sizes[selected_index1] + sizes[selected_index2]);
+    sort(temp, temp + sizes[selected_index1] + sizes[selected_index2],  greater<int>());
     delete [] mass[selected_index1];
     mass[selected_index1] = new int[sizes[selected_index1] + sizes[selected_index2]]{};
     copyElements(mass[selected_index1], temp, sizes[selected_index1] + sizes[selected_index2]); 
@@ -143,8 +134,17 @@ void changeArr(int** mass, int* sizes, int arr_len)
     delete [] temp;
 }
 
+void saveFileByIndex(int **mass, int* sizes, int arr_len) {
+    if (arr_len ==0) {
+        inputString("Не считан ни один массив");
+        return;
+    }
+    int row = inputInt("Введите номер массива для сохранения", 0, arr_len) - 1;
+    saveFile(mass, row, sizes[row]);
+}
+
 //Открытие и закрытие*********************************************
-void SaveFile(int** mass, int row, int size)
+void saveFile(int** mass, int row, int size)
 {
     string filename;
         filename = checkOpenOutputFile("Введите название файла для сохранения:");
