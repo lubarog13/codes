@@ -5,7 +5,7 @@ string inputString(string message); string checkOpenInputFile(string message);
 string checkOpenOutputFile(string message);
 void outContent (int** mass, int* sizes, int arr_len);
 void copyElements(int* arr1, int* arr2, int count, int start);
-void changeArr(int** mass, int* sizes, int arr_len) ;
+void changeArr(int** mass, int* sizes, int& arr_len) ;
 void readFile (int** mass, int* sizes, int& arr_len);
 void saveFile(int** mass, int row, int size);
 void saveFileByIndex(int **mass, int* sizes, int arr_len);

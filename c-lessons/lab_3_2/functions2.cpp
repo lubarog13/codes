@@ -1,4 +1,5 @@
 #include "functions2.h"
+#include <iostream>
 #include <iterator>
 #include <string>
 
@@ -114,29 +115,35 @@ void copyElements(int* arr1, int* arr2, int count, int start = 0) {
     }
 }
 
-void changeArr(int** mass, int* sizes, int arr_len) 
+void changeArr(int** mass, int* sizes, int& arr_len) 
 {
     if (arr_len ==0) {
-        inputString("Не считан ни один массив");
+        cout<< "Не считан ни один массив"<<endl;
+        return;
+    }
+    if (arr_len == N) {
+         cout<< "Нет места для записи нового массива"<<endl;
         return;
     }
     int selected_index1, selected_index2;
     selected_index1 = inputInt("Введите номер первого массива для объединения", 0, arr_len) - 1;
     selected_index2 = inputInt("Введите номер второго массива для объединения", 0, arr_len) - 1;
-    int* temp = new int[sizes[selected_index1] + sizes[selected_index2]]{};
+    int new_size = sizes[selected_index1] + sizes[selected_index2];
+    int* temp = new int[new_size]{};
     copyElements(temp, mass[selected_index1], sizes[selected_index1]);
     copyElements(temp, mass[selected_index2], sizes[selected_index2], sizes[selected_index1]);
-    sort(temp, temp + sizes[selected_index1] + sizes[selected_index2],  greater<int>());
-    delete [] mass[selected_index1];
-    mass[selected_index1] = new int[sizes[selected_index1] + sizes[selected_index2]]{};
-    copyElements(mass[selected_index1], temp, sizes[selected_index1] + sizes[selected_index2]); 
-    sizes[selected_index1] = sizes[selected_index1] + sizes[selected_index2];
+    sort(temp, temp + new_size,  greater<int>());
+    mass[arr_len] = new int[new_size]{};
+    copyElements(mass[arr_len], temp, new_size); 
+    sizes[arr_len] = new_size;
+    arr_len++;
     delete [] temp;
+    std::cout<<"Добавлен новый массив"<<endl;
 }
 
 void saveFileByIndex(int **mass, int* sizes, int arr_len) {
     if (arr_len ==0) {
-        inputString("Не считан ни один массив");
+        cout<<"Не считан ни один массив"<<endl;
         return;
     }
     int row = inputInt("Введите номер массива для сохранения", 0, arr_len) - 1;
@@ -163,11 +170,11 @@ void readFile (int** mass, int* sizes, int& arr_len) {
     filename = checkOpenInputFile("Введите название файла для чтения:");
     ifstream fin(filename, ios::in);
     if(arr_len == N) {
-        inputString("Невозможно считать массив, достигнут лимит количесва записей");
+        cout<<"Невозможно считать массив, достигнут лимит количесва записей"<<endl;
     }
     fin >> rows;
     if(fin.fail()) {
-        inputString("Не задано количество строк массива");
+        cout<<"Не задано количество строк массива"<<endl;
         fin.close();
         return;
     }
@@ -176,7 +183,7 @@ void readFile (int** mass, int* sizes, int& arr_len) {
     for (int j=0; j<rows && !fin.eof(); j++) {
         fin >> buf;
         if(fin.fail()) {
-            inputString("Неверно считан массив");
+            cout<<"Неверно считан массив"<<endl;
             delete [] mass[arr_len];
             fin.close();
             return;
