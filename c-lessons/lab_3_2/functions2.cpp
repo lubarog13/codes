@@ -23,21 +23,22 @@ int inputInt(string message)
 
 int inputInt(string message, int min, int max)
 {
-    int n;
+    int n=min-1;
     do
     {
       cout << message << endl;    
       if ((!(cin >> n)) || (n < min) || (n > max))
       {
-          cout << "Размер должен быть больше " << min << " и меньше " << max << endl;
+          cout << "Размер должен быть больше " << min << " и меньше либо равен " << max << endl;
+          n=min-1;
           cin.clear();
           cin.ignore(numeric_limits<streamsize>::max(), '\n');
       } 
     }
     while ((n < min) || (n > max));
-    // cin.clear();
+    //cin.clear();
     cin.ignore(numeric_limits<streamsize>::max(), '\n');;
-    
+    cout<<n<<endl;
     return n;
 }
 
@@ -115,24 +116,33 @@ void copyElements(int* arr1, int* arr2, int count, int start = 0) {
     }
 }
 
-void changeArr(int** mass, int* sizes, int& arr_len) 
+void stretchArray(int**& mass, int*& sizes, int arr_len) {
+    int** temp = new int*[arr_len+1]{};
+    copy(mass, mass + arr_len, temp);
+    delete[] mass;
+    mass = temp;
+    int* sizeTemp = new int[arr_len+1]{};
+    copy(sizes, sizes + arr_len, sizeTemp);
+    delete[] sizes;
+    sizes = sizeTemp;
+}   
+
+
+void changeArr(int**& mass, int*& sizes, int& arr_len) 
 {
     if (arr_len ==0) {
         cout<< "Не считан ни один массив"<<endl;
         return;
     }
-    if (arr_len == N) {
-         cout<< "Нет места для записи нового массива"<<endl;
-        return;
-    }
     int selected_index1, selected_index2;
-    selected_index1 = inputInt("Введите номер первого массива для объединения", 0, arr_len) - 1;
-    selected_index2 = inputInt("Введите номер второго массива для объединения", 0, arr_len) - 1;
+    selected_index1 = inputInt("Введите номер первого массива для объединения", 1, arr_len) - 1;
+    selected_index2 = inputInt("Введите номер второго массива для объединения", 1, arr_len) - 1;
     int new_size = sizes[selected_index1] + sizes[selected_index2];
     int* temp = new int[new_size]{};
     copyElements(temp, mass[selected_index1], sizes[selected_index1]);
     copyElements(temp, mass[selected_index2], sizes[selected_index2], sizes[selected_index1]);
     sort(temp, temp + new_size,  greater<int>());
+    stretchArray(mass, sizes,arr_len);
     mass[arr_len] = new int[new_size]{};
     copyElements(mass[arr_len], temp, new_size); 
     sizes[arr_len] = new_size;
@@ -146,7 +156,7 @@ void saveFileByIndex(int **mass, int* sizes, int arr_len) {
         cout<<"Не считан ни один массив"<<endl;
         return;
     }
-    int row = inputInt("Введите номер массива для сохранения", 0, arr_len) - 1;
+    int row = inputInt("Введите номер массива для сохранения", 1, arr_len) - 1;
     saveFile(mass, row, sizes[row]);
 }
 
@@ -164,14 +174,11 @@ void saveFile(int** mass, int row, int size)
         cout << "Файл был сохранен."  << endl;
 }
 
-void readFile (int** mass, int* sizes, int& arr_len) {
+void readFile (int**& mass, int*& sizes, int& arr_len) {
     string filename;
     int rows;
     filename = checkOpenInputFile("Введите название файла для чтения:");
     ifstream fin(filename, ios::in);
-    if(arr_len == N) {
-        cout<<"Невозможно считать массив, достигнут лимит количесва записей"<<endl;
-    }
     fin >> rows;
     if(fin.fail()) {
         cout<<"Не задано количество строк массива"<<endl;
@@ -179,6 +186,7 @@ void readFile (int** mass, int* sizes, int& arr_len) {
         return;
     }
     int buf = 0;
+    stretchArray(mass, sizes, arr_len);
     mass[arr_len] = new int[rows]{};
     for (int j=0; j<rows && !fin.eof(); j++) {
         fin >> buf;

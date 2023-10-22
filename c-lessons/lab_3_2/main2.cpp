@@ -1,8 +1,8 @@
 #include "functions2.h"
 int main ()
 {
-    int* int_mass[N];
-    int sizes[N];
+    int** int_mass = new int*[0];
+    int* sizes = new int[0];
     int arr_len=0;
     setlocale(LC_ALL, "Russian");
     int menu_item; 
@@ -16,7 +16,7 @@ int main ()
         menu_text += "\n0 - Выход из программы\n";
         menu_text += "\nВведите номер пункта меню: ";
         //Поменять команды меню: считать данные, сместиться, вывести, вставить, заменить, удалить, сохранить
-        menu_item = inputInt(menu_text, 0, 8);
+        menu_item = inputInt(menu_text, 0, 4);
         switch (menu_item)
         {
             
@@ -46,7 +46,9 @@ int main ()
                 continue;
             }
         } 
-    }while (menu_item != 0);
+    } while (menu_item != 0);
     memoryFree(int_mass, arr_len);
+    delete [] sizes;
+    delete [] int_mass;
     return 0;
 }
