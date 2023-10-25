@@ -1,5 +1,4 @@
 #include "functions.h"
-#include <iostream>
 
 // Внесение****************************************************************************************************
 int inputInt(string message)
@@ -36,7 +35,7 @@ int inputInt(string message, int min, int max)
     while ((n < min) || (n > max));
     //cin.clear();
     cin.ignore(numeric_limits<streamsize>::max(), '\n');;
-    cout<<n<<endl;
+    //cout<<n<<endl;
     return n;
 }
 
@@ -90,27 +89,33 @@ string checkOpenOutputFile(string message) {
     return filename;
 }
 
+
 /*Вывод массива на экран*/
 void outContent (int* mass,  int arr_len) {
     for (int i=0; i<arr_len; i++) {
         cout << mass[i] << " ";
     }
+    cout<<endl;
 }  
 
-void copyElements(int* arr1, int* arr2, int count, int start = 0) {
+int copyElements(int* arr1, int* arr2, int count, int start = 0) {
     int arr2_index = 0;
-    cout << endl;
-    for(int i=start; arr2_index<count; i++) {
-        arr1[i] = arr2[arr2_index];
-        arr2_index++;
+    for(int i=start; arr2_index<count; i++, arr2_index++) {
+        try {
+            arr1[i] = arr2[arr2_index];
+        } catch (exception e) {
+            cout << "Неверный размер массива для копирования"<<endl;
+            return 1;
+        }
     }
+    return 0;
 }
 
 /*Для сортировки*/
-void swap(int* a, int* b) {
-    int temp = *a;
-    *a = *b;
-    *b = temp;
+void swap(int& a, int& b) {
+    int temp = a;
+    a = b;
+    b = temp;
 }
 
 int partition(int *arr, int low, int high) {
@@ -120,10 +125,10 @@ int partition(int *arr, int low, int high) {
     for (int j = low; j <= high - 1; j++) {
         if (arr[j] > pivot) {
             i++;
-            swap(&arr[i], &arr[j]);
+            swap(arr[i], arr[j]);
         }
     }
-    swap(&arr[i + 1], &arr[high]);
+    swap(arr[i + 1], arr[high]);
     return (i + 1);
 }
 
@@ -135,6 +140,16 @@ void quickSort(int* arr, int low, int high) {
     }
 }
 
+int duplicatesCount(int *arr, int arr_len) {  
+    int duplicates = 0;  
+    for (int i=0; i<arr_len-1; i++) {
+        if (arr[i]==arr[i+1]) {
+            duplicates++;
+        }
+    }
+    return duplicates;
+}
+
 /*Объединение массивов*/
 
 void changeArr(int* &arr, int &size, int* mass1, int* mass2, int arr_len1, int arr_len2) 
@@ -143,7 +158,6 @@ void changeArr(int* &arr, int &size, int* mass1, int* mass2, int arr_len1, int a
         cout<< "Не считаны массивы"<<endl;
         return;
     }
-    cout<<size<<" ";
     if (size>=0) delete [] arr;
     size = arr_len1 + arr_len2;
     try {
@@ -153,9 +167,41 @@ void changeArr(int* &arr, int &size, int* mass1, int* mass2, int arr_len1, int a
         size = -1;
         return;
     }
-    copyElements(arr, mass1, arr_len1);
-    copyElements(arr,mass2, arr_len2, arr_len1);
+    int error = 0;
+    error =copyElements(arr, mass1, arr_len1);
+    if (error == 1) {
+        delete [] arr;
+        size = -1;
+        return;
+    }
+    error = copyElements(arr,mass2, arr_len2, arr_len1);
+    if (error == 1) {
+        delete [] arr;
+        size = -1;
+        return;
+    }
+    cout<<endl;
+    cout<<"Объединенный массив"<<endl;
+    outContent(arr, size);
     quickSort(arr, 0, size-1);
+    cout<<"Отсортированный массив"<<endl;
+    outContent(arr, size);
+    try {
+        int duplicate = duplicatesCount(arr, size);
+        int* temp = new int[size - duplicate]{};
+        int index = 0;
+        for (int i =0;i<size;i++) {
+            if((i==size-1) || (arr[i]!=arr[i+1])) {
+                temp[index] = arr[i];
+                index++;
+            }
+        }
+        delete [] arr;
+        arr = temp;
+        size = size - duplicate; // index
+    } catch (exception e) {
+        return;
+    }
 }
 
 //Открытие и закрытие*********************************************
