@@ -2,8 +2,9 @@
 
 
 int main() {
-    Track* track = new Track;
-    newTrackFromUser(track);
-    printTrack(track);
+    LinkedList* list = new LinkedList;
+    readFile(list);
+    printList(list);
+    saveFile(list);
     return 0;
 }
