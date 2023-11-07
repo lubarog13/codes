@@ -18,6 +18,27 @@ int inputInt(string message)
     return n;
 }
 
+int inputInt(string message, int min)
+{
+    int n=min-1;
+    do
+    {
+      cout << message << endl;    
+      if ((!(cin >> n)) || (n < min))
+      {
+          cout << "Число должно быть больше " << min;
+          n=min-1;
+          cin.clear();
+          cin.ignore(numeric_limits<streamsize>::max(), '\n');
+      } 
+    }
+    while ((n < min));
+    //cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');;
+    //cout<<n<<endl;
+    return n;
+}
+
 int inputInt(string message, int min, int max)
 {
     int n=min-1;
@@ -164,19 +185,31 @@ void addNode(LinkedList* list, ListNode* element, int position, bool direction) 
     }
 }
 
-void editNodeValue(LinkedList* list, int position) {
+void editNodeValueFromMenu(LinkedList *list) {
+    int position = inputInt("Введите элемент списка", 1) - 1;
+    if(editNodeValue(list, position)) {
+        cout<<"Элемент был не найден"<<endl<<endl;
+    }
+    cout<<"Список после изменения: "<<endl;
+    printList(list);
+
+}
+
+int editNodeValue(LinkedList* list, int position) {
     ListNode* current = list->head;
     int counter = 0;
     while (counter!=(position+1) && current!=nullptr) {
         if (counter==position) {
             newTrackFromUser(current->track);
+            return 0;
             break;
         }
         counter++;
     }
+    return 1;
 }
 
-void deleteNode(LinkedList* list, ListNode* element) {
+void deleteNode(LinkedList* list) {
     ListNode* current = list->tail;
     if (current != nullptr) {
         ListNode* previous = current->prev;
@@ -190,7 +223,7 @@ void deleteNode(LinkedList* list, ListNode* element) {
     }
 }
 
-void deleteNode(LinkedList* list, int position, bool direction) {
+int deleteNode(LinkedList* list, int position, bool direction) {
     ListNode* current;
     if (direction) { current = list->head; }
     else { 
@@ -228,6 +261,7 @@ void deleteNode(LinkedList* list, int position, bool direction) {
                 delete current->track;
                 delete current;
             }
+            return 0;
             break;
         }
         counter++;
@@ -239,6 +273,7 @@ void deleteNode(LinkedList* list, int position, bool direction) {
         }
         previous = current->prev;
     }
+    return 1;
 }
 
 
