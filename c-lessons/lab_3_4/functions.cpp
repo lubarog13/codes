@@ -139,6 +139,30 @@ void newTrackFromUser(Track* track) {
     }
 }
 
+void addNodeToEndFromMenu(LinkedList*& list) {
+    Track* track = new Track;
+    cout<<endl<<endl;
+    newTrackFromUser(track);
+    ListNode* node = new ListNode;
+    newNode(node, track);
+    addNode(list, node);
+}
+
+
+void addNodeFromMenu(LinkedList*& list) {
+    Track* track = new Track;
+    cout<<endl<<endl;
+    newTrackFromUser(track);
+    ListNode* node = new ListNode;
+    newNode(node, track);
+    addNode(list, node);
+    int position = inputInt("Введите позицию, куда поставить элемент", 1) - 1;
+    int direction = inputInt("Введите направление, по которому считается позиция\n1 - с начала списка\n2 - с конца", 1, 2);
+    if(addNode(list, node, position, direction==1)) {
+        cout<<"Невозможно добавить в данную позицию"<<endl<<endl;
+    }
+}
+
 void addNode(LinkedList* list, ListNode* element) {
     ListNode* current = list->tail;
     if (list->head == nullptr) {
@@ -146,12 +170,14 @@ void addNode(LinkedList* list, ListNode* element) {
     }
     if (current != nullptr) {
         current->next = element;
+        element->prev = element;
     }
     list->tail = element;
 }
 
-void addNode(LinkedList* list, ListNode* element, int position, bool direction) {
+int addNode(LinkedList* list, ListNode* element, int position, bool direction) {
     ListNode* current;
+    int error = 1;
     if (direction) { current = list->head; }
     else { 
         current = list->tail;
@@ -166,6 +192,7 @@ void addNode(LinkedList* list, ListNode* element, int position, bool direction) 
             if (previous!=nullptr) previous->next = element;
             element->next = current;
             current->prev = element;
+            error = 0;
             break;
         }
         counter++;
@@ -183,6 +210,7 @@ void addNode(LinkedList* list, ListNode* element, int position, bool direction) 
     if ((position == 0 && !direction) || list->tail==nullptr) {
         list->tail = element;
     }
+    return error;
 }
 
 void editNodeValueFromMenu(LinkedList *list) {
@@ -207,6 +235,15 @@ int editNodeValue(LinkedList* list, int position) {
         counter++;
     }
     return 1;
+}
+
+void deleteFromMenu(LinkedList* list) {
+    int position = inputInt("Введите элемент списка", 1) - 1;
+    if(deleteNode(list, position)) {
+        cout<<"Элемент был не найден"<<endl<<endl;
+    }
+    cout<<"Список после изменения: "<<endl;
+    printList(list);
 }
 
 void deleteNode(LinkedList* list) {
@@ -276,6 +313,10 @@ int deleteNode(LinkedList* list, int position, bool direction) {
     return 1;
 }
 
+void printFromMenu(LinkedList *list) {
+    int position = inputInt("Введите элемент списка", 1) - 1;
+    printList(list, position);
+}
 
 void printTrack(Track* track) {
     if (track == nullptr) {return;}

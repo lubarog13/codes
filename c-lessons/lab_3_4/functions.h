@@ -15,9 +15,15 @@ void newNode(ListNode* node, Track* track);
 void newTrackFromUser(Track* track);
 
 void addNode(LinkedList* list, ListNode* element);
-void addNode(LinkedList* list, ListNode* element, int position, bool direction=true);
+int addNode(LinkedList* list, ListNode* element, int position, bool direction=true);
 
 int editNodeValue(LinkedList* list, int position);
+
+void addNodeFromMenu(LinkedList*& list);
+void addNodeToEndFromMenu(LinkedList*& list);
+void editNodeValueFromMenu(LinkedList *list);
+void deleteFromMenu(LinkedList* list);
+void printFromMenu(LinkedList* list);
 
 void deleteNode(LinkedList* list);
 int deleteNode(LinkedList* list, int position, bool direction=true);

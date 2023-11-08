@@ -25,29 +25,29 @@ int main() {
         {
             
             case 1:
-                
+                readFile(list);
                 break;
             case 2:
-                
+                addNodeToEndFromMenu(list);
                 break;
             case 3:
-                
+                addNodeFromMenu(list);
                 break;
             case 4:
-                
+                editNodeValueFromMenu(list);
                 break;
             case 5:
-                
+                deleteFromMenu(list);
                 break;
             case 6:
-               
-                break;
+               printFromMenu(list);
+;                break;
             case 7:
-                
+                printList(list);
                 break;   
             case 8:
             {
-                
+                saveFile(list);   
                 break;
             }
             case 0:
