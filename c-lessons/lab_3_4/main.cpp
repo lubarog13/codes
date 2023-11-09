@@ -4,6 +4,7 @@
 int main() {
     setlocale(LC_ALL, "Russian");
     LinkedList* list = new LinkedList;
+    newList(list);
     int menu_item; 
     //readFile(text_array, array_length);
     do

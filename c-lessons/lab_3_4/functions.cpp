@@ -1,4 +1,7 @@
 #include "functions.h"
+#include <cstddef>
+#include <exception>
+#include <iostream>
 
 // Внесение****************************************************************************************************
 int inputInt(string message)
@@ -129,9 +132,11 @@ void newTrackFromUser(Track* track) {
     track->artist = inputString("Введите исполнителя трека");
     track->author = inputString("Введите автора текста");
     track->year = inputInt("Введите год выпуска", 0, 2023);
-    if (track->genres!=nullptr) {
-        delete [] track->genres;
-    }
+    /*if (track->genres!=nullptr) {
+        try {
+            delete [] track->genres;
+        } catch (exception e) {}
+    }*/
     track->genresCount = inputInt("Введите количество жанров");
     track->genres = new string[track->genresCount];
     for (int i=0; i<track->genresCount; i++) {
@@ -146,6 +151,8 @@ void addNodeToEndFromMenu(LinkedList*& list) {
     ListNode* node = new ListNode;
     newNode(node, track);
     addNode(list, node);
+    cout<<"Список после изменения: "<<endl;
+    printList(list);
 }
 
 
@@ -161,6 +168,8 @@ void addNodeFromMenu(LinkedList*& list) {
     if(addNode(list, node, position, direction==1)) {
         cout<<"Невозможно добавить в данную позицию"<<endl<<endl;
     }
+    cout<<"Список после изменения: "<<endl;
+    //printList(list);
 }
 
 void addNode(LinkedList* list, ListNode* element) {
@@ -188,12 +197,25 @@ int addNode(LinkedList* list, ListNode* element, int position, bool direction) {
         previous = current->prev;
     }
     while (counter!=(position+1) && current!=nullptr) {
+        cout<<counter<<endl;
+        printTrack(current->track);
+        if(previous!=nullptr) {
+            printTrack(previous->next->track);
+            printTrack(previous->track);
+        }
+        cout<<endl;
         if (counter==position) {
-            if (previous!=nullptr) previous->next = element;
+            if (previous!=nullptr) {
+                previous->next = element;
+                element->prev = previous;
+            }
             element->next = current;
             current->prev = element;
             error = 0;
-            break;
+            cout<<counter<<endl;
+            printTrack(current->track);
+            printTrack(previous->next->track);
+            printTrack(previous->track);
         }
         counter++;
         if (direction) { 
@@ -202,7 +224,18 @@ int addNode(LinkedList* list, ListNode* element, int position, bool direction) {
         else {
             current = current->prev;
         }
-        previous = current->prev;
+        if(current!=nullptr) {
+            previous = current->prev;
+        }
+    }
+    if (position == counter+1) {
+        if (previous!=nullptr) {
+            previous->next = element;
+            element->prev = previous;
+            element->next = nullptr;
+        }
+        list->tail = element;
+        return 0;
     }
     if (position == 0 && direction) {
         list->head = element;
@@ -230,8 +263,8 @@ int editNodeValue(LinkedList* list, int position) {
         if (counter==position) {
             newTrackFromUser(current->track);
             return 0;
-            break;
         }
+        current = current->next;
         counter++;
     }
     return 1;
@@ -314,7 +347,7 @@ int deleteNode(LinkedList* list, int position, bool direction) {
 }
 
 void printFromMenu(LinkedList *list) {
-    int position = inputInt("Введите элемент списка", 1) - 1;
+    int position = inputInt("Введите элемент списка", 1);
     printList(list, position);
 }
 
@@ -410,6 +443,7 @@ void readFile (LinkedList*& list) {
     }
     fin.close(); 
     cout << "Файл был считан."  << endl;
+    printList(list);
 }  
 
 void clearList(LinkedList* list) {
