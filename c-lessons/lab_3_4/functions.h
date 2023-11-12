@@ -15,7 +15,7 @@ void newNode(ListNode* node, Track* track);
 void newTrackFromUser(Track* track);
 
 void addNode(LinkedList* list, ListNode* element);
-int addNode(LinkedList* list, ListNode* element, int position, bool direction=true);
+int addNode(LinkedList* list, ListNode* element, int position);
 
 int editNodeValue(LinkedList* list, int position);
 

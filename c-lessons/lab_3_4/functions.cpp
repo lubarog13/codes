@@ -162,14 +162,12 @@ void addNodeFromMenu(LinkedList*& list) {
     newTrackFromUser(track);
     ListNode* node = new ListNode;
     newNode(node, track);
-    addNode(list, node);
     int position = inputInt("Введите позицию, куда поставить элемент", 1) - 1;
-    int direction = inputInt("Введите направление, по которому считается позиция\n1 - с начала списка\n2 - с конца", 1, 2);
-    if(addNode(list, node, position, direction==1)) {
+    if(addNode(list, node, position)) {
         cout<<"Невозможно добавить в данную позицию"<<endl<<endl;
     }
     cout<<"Список после изменения: "<<endl;
-    //printList(list);
+    printList(list);
 }
 
 void addNode(LinkedList* list, ListNode* element) {
@@ -179,70 +177,58 @@ void addNode(LinkedList* list, ListNode* element) {
     }
     if (current != nullptr) {
         current->next = element;
-        element->prev = element;
+        element->prev = current;
     }
     list->tail = element;
 }
 
-int addNode(LinkedList* list, ListNode* element, int position, bool direction) {
+
+//Отладочная функция
+void printElement(ListNode* node, int n) {
+    cout<<"Элемент №"<<n<<endl;
+    if (node==nullptr) {
+        cout<<"nullptr"<<endl;
+        return;
+    }
+    cout<<node->track->name<<" ";
+    if (node->prev!=nullptr) {
+         cout<<"Пред.элемент: "<<node->prev->track->name<<", ";
+    } else {
+        cout<<"Пред.элемент: "<<"nullptr"<<", ";
+    }
+    if (node->next!=nullptr) {
+         cout<<"Сл.элемент: "<<node->next->track->name<<endl;
+    } else {
+        cout<<"Сл.элемент: "<<"nullptr"<<endl;
+    }
+}
+
+int addNode(LinkedList* list, ListNode* element, int position) {
     ListNode* current;
     int error = 1;
-    if (direction) { current = list->head; }
-    else { 
-        current = list->tail;
-    }
+    current = list->head;
     int counter = 0;
-    ListNode* previous;
-    if (current!=nullptr) {
-        previous = current->prev;
-    }
     while (counter!=(position+1) && current!=nullptr) {
-        cout<<counter<<endl;
-        printTrack(current->track);
-        if(previous!=nullptr) {
-            printTrack(previous->next->track);
-            printTrack(previous->track);
-        }
-        cout<<endl;
         if (counter==position) {
-            if (previous!=nullptr) {
-                previous->next = element;
-                element->prev = previous;
+            if (current->prev!=nullptr) {
+                current->prev->next = element;
+                element->prev = current->prev;
             }
-            element->next = current;
             current->prev = element;
+            element->next = current;
             error = 0;
-            cout<<counter<<endl;
-            printTrack(current->track);
-            printTrack(previous->next->track);
-            printTrack(previous->track);
+            break;
         }
         counter++;
-        if (direction) { 
-            current = current->next;
-        }
-        else {
-            current = current->prev;
-        }
-        if(current!=nullptr) {
-            previous = current->prev;
-        }
+        current = current->next;
     }
-    if (position == counter+1) {
-        if (previous!=nullptr) {
-            previous->next = element;
-            element->prev = previous;
-            element->next = nullptr;
-        }
-        list->tail = element;
-        return 0;
+    if (current==nullptr && position == counter) {
+        addNode(list, element);
     }
-    if (position == 0 && direction) {
+    if (position == 0) {
         list->head = element;
     }
-    if ((position == 0 && !direction) || list->tail==nullptr) {
-        list->tail = element;
-    }
+    
     return error;
 }
 
