@@ -21,16 +21,15 @@ struct List
 void NewList(List* &list_pt);
 void ClearList(List* list_pt);
 void NewElement(Node* &node);
-void AddElement(List* list_pt, Node* node);
+void InsertElementToFront(List* list_pt, Node* node);
 void InsertElement (List* list_pt, Node* node, int n);
+void InsertLastElement(List* list_pt, Node* node);
 void OutList(List* list_pt);
 void OutElement(List* list_pt, int n);
 void EditElement(List* list_pt, int n);
-void FindElementByPerformer(List* list_pt, string performer);
-void FindElementByGenre(List* list_pt, string genre);
-void SortListByName(List* list_pt);
-void SortListByYear(List* list_pt);
+void DeleteFirstElement(List* list_pt);
 void DeleteElement(List* list_pt, int n);
+void DeleteLastElement(List* list_pt);
 void SaveList(List* list_pt);
 void ReadList(List* list_pt);
 void DeleteList(List* &list_pt);
@@ -68,19 +67,17 @@ void NewElement(Node* &node)
   node->next = NULL;
 }
 
-void AddElement(List* list_pt, Node* node)
-{
+void InsertElementToFront(List* list_pt, Node* node)
+{   
     list_pt->cur = node;
-    if (list_pt->last == NULL)
+    if (list_pt->head == NULL)
     {
         list_pt->head = list_pt->cur;
         list_pt->last = list_pt->cur;
+        return;
     }
-    else 
-    {
-        list_pt->last->next = list_pt->cur;
-        list_pt->last = list_pt->cur;
-    }    
+    list_pt->cur->next = list_pt->head;
+    list_pt->head = list_pt->cur;
 }
 
 void InsertElement(List* list_pt, Node* node, int n)
@@ -115,6 +112,21 @@ void InsertElement(List* list_pt, Node* node, int n)
     }
 }
 
+void InsertLastElement(List* list_pt, Node* node)
+{
+    list_pt->cur = node;
+    if (list_pt->last == NULL)
+    {
+        list_pt->head = list_pt->cur;
+        list_pt->last = list_pt->cur;
+    }
+    else 
+    {
+        list_pt->last->next = list_pt->cur;
+        list_pt->last = list_pt->cur;
+    }
+}
+
 void OutList(List* list_pt)
 {
     if (list_pt->head == NULL)
@@ -128,6 +140,7 @@ void OutList(List* list_pt)
     {
         cout << "Произведение №" << i << ": " << endl;
         OutData(list_pt->cur->data);
+        cout << endl;
         list_pt->cur = list_pt->cur->next;
         i++;
     }
@@ -160,6 +173,11 @@ void OutElement(List* list_pt, int n)
 
 void EditElement(List* list_pt, int n)
 {
+    if (list_pt->head == NULL)
+    {
+        cout << "Ошибка! Список пустой." << endl;
+        return;
+    }
     list_pt->cur = list_pt->head;
     int i = 1;
     while ((list_pt->cur != NULL) && (i < n))
@@ -177,7 +195,7 @@ void EditElement(List* list_pt, int n)
     }
 }
 
-void FindElementByPerformer(List* list_pt, string performer)
+void DeleteFirstElement(List* list_pt)
 {
     if (list_pt->head == NULL)
     {
@@ -185,110 +203,14 @@ void FindElementByPerformer(List* list_pt, string performer)
         return;
     }
     list_pt->cur = list_pt->head;
-    int i = 1;
-    while (list_pt->cur != NULL)
-    {
-        if (list_pt->cur->data->performer == performer)
-        {
-            cout << "Произведение №" << i << ": " << endl;
-            OutData(list_pt->cur->data);
-        }
-        list_pt->cur = list_pt->cur->next;
-        i++;
-    }
-    cout << "Поиск завершён." << endl;
-}
-
-void FindElementByGenre(List* list_pt, string genre)
-{
+    list_pt->head = list_pt->head->next;
     if (list_pt->head == NULL)
     {
-        cout << "Ошибка! Список пустой." << endl;
-        return;
+        list_pt->last = NULL;
     }
-    string str = "";
-    int l;
-    char cut = ',';
-    string sub = "\0";
-    list_pt->cur = list_pt->head;
-    int i = 1;
-    int j;
-    while (list_pt->cur != NULL)
-    { 
-        str = list_pt->cur->data->genre;
-        l=str.size();
-        for (j = 0; j < l; j++)
-        {
-            if (str[j] == cut)
-            {
-                if (sub == genre)
-                {
-                    cout << "Произведение №" << i << ": " << endl;
-                    OutData(list_pt->cur->data);
-                }
-                sub="\0";
-            }
-            if(str[j] != cut)
-            {
-                sub += str[j];
-            }
-        }
-        list_pt->cur = list_pt->cur->next;
-        i++;
-    }
-    cout << "Поиск завершён." << endl;
-}
-
-void SortListByName(List* list_pt)
-{
-    if (list_pt->head == NULL)
-    {
-        cout << "Список пустой." << endl;
-        return;
-    }
-    list_pt->prev = list_pt->head;
-    while (list_pt->prev != list_pt->last)
-    {
-        list_pt->cur = list_pt->prev->next;
-        while (list_pt->cur != NULL)
-        {
-            if(list_pt->prev->data->name > list_pt->cur->data->name)
-            {
-                Track* data = list_pt->prev->data;
-                list_pt->prev->data = list_pt->cur->data;
-                list_pt->cur->data = data;
-            }
-            list_pt->cur = list_pt->cur->next;
-        }
-        list_pt->prev = list_pt->prev->next;
-    }
-    cout << "Сортировка завершена." << endl;
-}
-
-void SortListByYear(List* list_pt)
-{
-    if (list_pt->head == NULL)
-    {
-        cout << "Список пустой." << endl;
-        return;
-    }
-    list_pt->prev = list_pt->head;
-    while (list_pt->prev != list_pt->last)
-    {
-        list_pt->cur = list_pt->prev->next;
-        while (list_pt->cur != NULL)
-        {
-            if(list_pt->prev->data->year < list_pt->cur->data->year)
-            {
-                Track* data = list_pt->prev->data;
-                list_pt->prev->data = list_pt->cur->data;
-                list_pt->cur->data = data;
-            }
-            list_pt->cur = list_pt->cur->next;
-        }
-        list_pt->prev = list_pt->prev->next;
-    }
-    cout << "Сортировка завершена." << endl;
+    delete list_pt->cur->data;
+    delete list_pt->cur;
+    cout << "Элемент удалён." << endl;
 }
 
 void DeleteElement(List* list_pt, int n)
@@ -304,6 +226,10 @@ void DeleteElement(List* list_pt, int n)
     if (n == 1)
     {
         list_pt->head = list_pt->head->next;
+        if (list_pt->head == NULL)
+        {
+            list_pt->last = NULL;
+        }
     }
     else 
     {
@@ -313,11 +239,47 @@ void DeleteElement(List* list_pt, int n)
             list_pt->cur = list_pt->cur->next;
             i++;
         }
-        list_pt->prev->next = list_pt->cur->next;
+        if (list_pt->prev == NULL)
+        { 
+            list_pt->head = list_pt->head->next;
+        }
+        else
+        {
+            list_pt->prev->next = list_pt->cur->next;
+        }
         if (list_pt->cur == list_pt->last)
         {
             list_pt->last = list_pt->prev;
         }
+    }
+    delete list_pt->cur->data;
+    delete list_pt->cur;
+    cout << "Элемент удалён." << endl;
+}
+
+void DeleteLastElement(List* list_pt)
+{
+    if (list_pt->head == NULL)
+    {
+        cout << "Ошибка! Список пустой." << endl;
+        return;
+    }
+    list_pt->cur = list_pt->head;
+    list_pt->prev = NULL;
+    while (list_pt->cur->next != NULL)
+    {
+        list_pt->prev = list_pt->cur;
+        list_pt->cur = list_pt->cur->next;
+    }
+    if (list_pt->prev == NULL)
+    {
+        list_pt->head = NULL;
+        list_pt->last = NULL;
+    }
+    else
+    {
+        list_pt->prev->next = NULL;
+        list_pt->last = list_pt->prev;
     }
     delete list_pt->cur->data;
     delete list_pt->cur;
@@ -333,7 +295,7 @@ void ReadList(List* list_pt)
     {
         NewElement(list_pt->cur);
         ReadData(list_pt->cur->data, fin);
-        AddElement(list_pt, list_pt->cur);
+        InsertLastElement(list_pt, list_pt->cur);
         string str = InputStringFile(fin);
     }
     fin.close(); 
@@ -348,6 +310,10 @@ void SaveList(List* list_pt)
     while (list_pt->cur != NULL)
     {
         SaveData(list_pt->cur->data, fout);
+        if (list_pt->cur->next != NULL)
+        {
+            fout << endl;
+        }
         list_pt->cur = list_pt->cur->next;
     }
     fout.close();

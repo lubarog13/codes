@@ -18,15 +18,15 @@ int main()
     {
         string menu_text = "";
         menu_text += "\n1 - Очистить список";
-        menu_text += "\n2 - Вставить новый элемент в список";
-        menu_text += "\n3 - Вывод списка";
-        menu_text += "\n4 - Вывод элемента списка";
-        menu_text += "\n5 - Редактирование элемента списка";
-        menu_text += "\n6 - Поиск элементов списка по исполнителю";
-        menu_text += "\n7 - Поиск элементов списка по жанру";
-        menu_text += "\n8 - Сортировка списка по названию";
-        menu_text += "\n9 - Сортировка списка по году";
-        menu_text += "\n10 - Удаление элемента из списка";
+        menu_text += "\n2 - Вставить новый элемент в начало списка";
+        menu_text += "\n3 - Вставить новый элемент в произвольное место списка";
+        menu_text += "\n4 - Вставить новый элемент в конец списка";
+        menu_text += "\n5 - Вывод списка";
+        menu_text += "\n6 - Вывод элемента списка";
+        menu_text += "\n7 - Редактирование элемента списка";
+        menu_text += "\n8 - Удаление элемента из начала списка";
+        menu_text += "\n9 - Удаление элемента из произвольного места списка";
+        menu_text += "\n10 - Удаление элемента из конца списка";
         menu_text += "\n11 - Сохранить список в файл";
         menu_text += "\n12 - Считать  список из файла"; 
         menu_text += "\n0 - Выход из программы";
@@ -44,46 +44,48 @@ int main()
             case 2: 
                 NewElement(node);
                 InputData(node->data);
+                InsertElementToFront(list_pt, node);
+                break;
+
+            case 3: 
+                NewElement(node);
+                InputData(node->data);
                 n = InputInt("Введите порядковый номер элемента списка: ", 1);
                 InsertElement(list_pt, node, n);
                 break;
 
-            case 3: 
+            case 4: 
+                NewElement(node);
+                InputData(node->data);
+                InsertLastElement(list_pt, node);
+                break;
+
+            case 5: 
                 OutList(list_pt);
                 break;
 
-            case 4: 
+            case 6: 
                 n = InputInt("Введите порядковый номер элемента списка: ", 1);
                 OutElement(list_pt, n);
                 break;
 
-            case 5: 
+            case 7: 
                 n = InputInt("Введите порядковый номер элемента списка: ", 1);
                 EditElement(list_pt, n);
                 break;
 
-            case 6: 
-                performer = InputString("Введите имя исполнителя: ");
-                FindElementByPerformer(list_pt, performer);
-                break;
-
-            case 7: 
-                genre = InputString("Введите жанр: ");
-                FindElementByGenre(list_pt, genre);
-                break;
-
             case 8: 
-                SortListByName(list_pt);
-                break;
+                DeleteFirstElement(list_pt);
+                break;  
 
             case 9: 
-                SortListByYear(list_pt);
-                break;
-
-            case 10: 
                 n = InputInt("Введите порядковый номер элемента списка: ", 1);
                 DeleteElement(list_pt, n);
                 break;
+
+            case 10: 
+                DeleteLastElement(list_pt);
+                break;    
 
             case 11: 
                 SaveList(list_pt);

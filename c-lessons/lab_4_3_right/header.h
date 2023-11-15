@@ -72,10 +72,10 @@ string InputGenre(string message)
 {
     string str = "";
     cout << message << endl;
-    while (str[str.size()!=','] )
+    while (str[str.size()-1]!=',' )
     {
         getline(cin, str, '\n');
-        if (str[str.size()]!=',')
+        if (str[str.size()-1]!=',')
         {
             cout << "Ошибка! Неверно записаны жанры: " << str << " Они должны быть через запятую!" << endl;
         }
