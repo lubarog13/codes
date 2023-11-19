@@ -1,5 +1,7 @@
-#include "header.h"
+#pragma once
 
+#include "header.h"
+#include "base.h"
 
 struct Track {
     string name;
@@ -20,3 +22,7 @@ struct LinkedList {
     ListNode* head;
     ListNode* tail;
 };
+
+void newList(LinkedList* list, ListNode* element = nullptr);
+void newNode(ListNode* node, Track* track);
+void newTrackFromUser(Track* track);

@@ -1,24 +1,14 @@
+#pragma once
+
 #include "models.h"
-
-
-int inputInt(string message);
-int inputInt(string message, int min);
-int inputInt(string message, int min, int max);
-string inputString(string message);
-
-string checkOpenInputFile(string message);
-string checkOpenOutputFile(string message);
-
-
-void newList(LinkedList* list, ListNode* element = nullptr);
-void newNode(ListNode* node, Track* track);
-void newTrackFromUser(Track* track);
+#include "base.h"
 
 void addNode(LinkedList* list, ListNode* element);
 int addNode(LinkedList* list, ListNode* element, int position);
 
 int editNodeValue(LinkedList* list, int position);
 
+void addNodeToFrontFromMenu(LinkedList*& list);
 void addNodeFromMenu(LinkedList*& list);
 void addNodeToEndFromMenu(LinkedList*& list);
 void editNodeValueFromMenu(LinkedList *list);

@@ -42,20 +42,20 @@ int main()
                 break;
 
             case 2: 
-                NewElement(node);
+                NewNode(node);
                 InputData(node->data);
                 InsertElementToFront(list_pt, node);
                 break;
 
             case 3: 
-                NewElement(node);
+                NewNode(node);
                 InputData(node->data);
                 n = InputInt("Введите порядковый номер элемента списка: ", 1);
                 InsertElement(list_pt, node, n);
                 break;
 
             case 4: 
-                NewElement(node);
+                NewNode(node);
                 InputData(node->data);
                 InsertLastElement(list_pt, node);
                 break;

@@ -1,160 +1,4 @@
 #include "functions.h"
-#include <cstddef>
-#include <exception>
-#include <iostream>
-
-// Внесение****************************************************************************************************
-int inputInt(string message)
-{
-    int n;
-    cout << message << endl;
-    while (!(cin >> n))
-    {
-        cout << "Неправильно введено число" << endl;
-        cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');;
-        cout << message;
-    }
-    // cin.clear();
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');;
-
-    return n;
-}
-
-int inputInt(string message, int min)
-{
-    int n=min-1;
-    do
-    {
-      cout << message << endl;    
-      if ((!(cin >> n)) || (n < min))
-      {
-          cout << "Число должно быть больше " << min;
-          n=min-1;
-          cin.clear();
-          cin.ignore(numeric_limits<streamsize>::max(), '\n');
-      } 
-    }
-    while ((n < min));
-    //cin.clear();
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');;
-    //cout<<n<<endl;
-    return n;
-}
-
-int inputInt(string message, int min, int max)
-{
-    int n=min-1;
-    do
-    {
-      cout << message << endl;    
-      if ((!(cin >> n)) || (n < min) || (n > max))
-      {
-          cout << "Размер должен быть больше " << min << " и меньше либо равен " << max << endl;
-          n=min-1;
-          cin.clear();
-          cin.ignore(numeric_limits<streamsize>::max(), '\n');
-      } 
-    }
-    while ((n < min) || (n > max));
-    //cin.clear();
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');;
-    //cout<<n<<endl;
-    return n;
-}
-
-string inputString(string message) {
-    string str = "";
-    //while (str.empty()) { // ?
-        cout << message << endl;
-        getline(cin, str, '\n');
-    //}
-    return str;
-}
-
-// Чтение***************************************************************************************************
-
-string checkOpenInputFile(string message) {
-    string filename;
-    bool is_open = false;
-    while (!is_open) {
-        filename = inputString(message);
-        ifstream fs(filename, ios::in);
-        if (!fs.is_open()) // fs.is_open()
-        {
-            cout << "Ошибка. Имя или путь к файлу неправильный.\n";
-            is_open = false;
-        }
-        else {
-            fs.close();
-            is_open = true;
-        }
-    }
-    return filename;
-}
-
-string checkOpenOutputFile(string message) {
-    string filename;
-    bool is_open = false;
-    while (!is_open) {
-        filename = inputString(message);
-        ofstream fs(filename, ios::out);
-
-        if (!fs.is_open()) // fs.is_open()
-        {
-            cout << "Ошибка. Имя или путь к файлу неправильный.\n";
-            is_open = false;
-        }
-        else {
-            fs.close();
-            is_open = true;
-        }
-    }
-    return filename;
-}
-
-// Инициализация типов**********************************************************************************************
-
-void newList(LinkedList* list, ListNode* element) {
-    list->head = element;
-    list->tail = element;
-}
-
-
-void newNode(ListNode* node, Track* track) {
-        node->track = track;
-        node->next = nullptr;
-        node->prev = nullptr;
-}
-
-void newTrackFromUser(Track* track) {
-    track->name = inputString("Введите название трека");
-    track->artist = inputString("Введите исполнителя трека");
-    track->author = inputString("Введите автора текста");
-    track->year = inputInt("Введите год выпуска", 0, 2023);
-    /*if (track->genres!=nullptr) {
-        try {
-            delete [] track->genres;
-        } catch (exception e) {}
-    }*/
-    track->genresCount = inputInt("Введите количество жанров");
-    track->genres = new string[track->genresCount];
-    for (int i=0; i<track->genresCount; i++) {
-        track->genres[i] = inputString("Введите жанр");
-    }
-}
-
-void addNodeToEndFromMenu(LinkedList*& list) {
-    Track* track = new Track;
-    cout<<endl<<endl;
-    newTrackFromUser(track);
-    ListNode* node = new ListNode;
-    newNode(node, track);
-    addNode(list, node);
-    cout<<"Список после изменения: "<<endl;
-    printList(list);
-}
-
 
 void addNodeFromMenu(LinkedList*& list) {
     Track* track = new Track;
@@ -166,6 +10,28 @@ void addNodeFromMenu(LinkedList*& list) {
     if(addNode(list, node, position)) {
         cout<<"Невозможно добавить в данную позицию"<<endl<<endl;
     }
+    cout<<"Список после изменения: "<<endl;
+    printList(list);
+}
+
+void addNodeToFrontFromMenu(LinkedList*& list) {
+    Track* track = new Track;
+    cout<<endl<<endl;
+    newTrackFromUser(track);
+    ListNode* node = new ListNode;
+    newNode(node, track);
+    addNode(list, node, 0);
+    cout<<"Список после изменения: "<<endl;
+    printList(list);
+}
+
+void addNodeToEndFromMenu(LinkedList*& list) {
+    Track* track = new Track;
+    cout<<endl<<endl;
+    newTrackFromUser(track);
+    ListNode* node = new ListNode;
+    newNode(node, track);
+    addNode(list, node);
     cout<<"Список после изменения: "<<endl;
     printList(list);
 }
