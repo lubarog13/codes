@@ -216,6 +216,7 @@ void printTrack(Track* track) {
 
 
 void printList(LinkedList* list, int node) {
+    cout<<endl<<endl;
     if (list == nullptr) {return;}
     int counter = 0;
     ListNode* current = list->head;

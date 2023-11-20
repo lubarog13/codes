@@ -25,11 +25,12 @@ int main() {
         menu_text += "\n0 - Выход из программы\n";
         menu_text += "\nВведите номер пункта меню: ";
         //Поменять команды меню: считать данные, сместиться, вывести, вставить, заменить, удалить, сохранить
-        menu_item = inputInt(menu_text, 0, 8);
+        menu_item = inputInt(menu_text, 0, 12);
         switch (menu_item)
         {
             
             case 1:
+                clearList(list);
                 readFile(list);
                 break;
             case 2:
@@ -45,13 +46,13 @@ int main() {
                 editNodeValueFromMenu(list);
                 break;
             case 6:
-                deleteNode(list);
+                deleteNode(list, 0);
                 break;
             case 7:
                 deleteFromMenu(list);
 ;                break;
             case 8:
-                deleteNode(list, 0);
+                deleteNode(list);
                 break;   
             case 9:
                 printFromMenu(list);   
