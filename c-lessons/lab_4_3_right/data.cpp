@@ -37,13 +37,6 @@ void EditData(Track* data)
     data->year = InputInt("Введите новый год (от 0 до 2023): ", 0, 2023);
 }
 
-void SwapData(Track* &data1, Track* &data2)
-{
-    Track* data = data1;
-    data1 = data2;
-    data2 = data;
-}
-
 void ReadData(Track* data, ifstream &fin)
 {
     data->name = ReadString(fin);

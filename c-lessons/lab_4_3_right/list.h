@@ -21,6 +21,7 @@ void DeleteNode(Node* &node);
 
 void NewList(List* &list_pt);
 void ClearList(List* list_pt);
+void AddElement(List* list, Node* node);
 void InsertElementToFront(List* list_pt, Node* node);
 void InsertElement (List* list_pt, Node* node, int n);
 void InsertLastElement(List* list_pt, Node* node);
