@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": false,
-      "cwd": "/home/lubarog13/VS_code/codes/c-lessons/lab_2_2",
-      "program": "/home/lubarog13/VS_code/codes/c-lessons/lab_2_2/build/Debug/outDebug",
+      "cwd": "/home/lubarog13/VS_code/codes/c-lessons",
+      "program": "/home/lubarog13/VS_code/codes/c-lessons/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
