@@ -24,7 +24,7 @@ int main()
         menu_text += "\n 0 - Выход из программы";
         menu_text += "\n";
         menu_text += "\nВведите номер пункта меню: ";
-        menu_item = InputInt(menu_text, 0, 12);
+        menu_item = InputInt(menu_text, 0, 6);
         cout << endl;
         
         switch (menu_item)
