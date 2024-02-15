@@ -5,24 +5,20 @@
 
 sf::RenderWindow window;
 sf::Mutex mutex;
+sf::CircleShape circle;
+sf::CircleShape triangle;
 
 void drawCircle(int R)
 {
-	int X = R + 200;
-	int Y = 300;
-    sf::CircleShape circle(R);
-    circle.setOutlineThickness(5);
-    circle.setOutlineColor(sf::Color::Red);
-    circle.setFillColor(sf::Color::White);
-    circle.setPosition(X, Y);
-    for(int i = 0; i < 20; i++)
+    for(int i = 0; i < 25; i++)
     {
         mutex.lock();
         window.setActive(true);
         window.clear();
         circle.move(-i, 0.0f);
         window.draw(circle);
-        sleep(sf::milliseconds(50));
+        window.draw(triangle);
+        sf::sleep(sf::milliseconds(50));
         window.display();
         window.setActive(false);
         mutex.unlock();
@@ -32,13 +28,6 @@ void drawCircle(int R)
 
 void drawTriangle(int W)
 {
-	int X = 300;
-	int Y = W + 200;
-    sf::CircleShape triangle(W, 3);
-    triangle.setOutlineThickness(5);
-    triangle.setOutlineColor(sf::Color::Yellow);
-    triangle.setFillColor(sf::Color::Yellow);
-    triangle.setPosition(X, Y);
     for(int i = 0; i < 20; i++)
     {
         mutex.lock();
@@ -46,7 +35,8 @@ void drawTriangle(int W)
         window.clear();
         triangle.move(0.0f, -i);
         window.draw(triangle);
-        sleep(sf::milliseconds(50));
+        window.draw(circle);
+        sf::sleep(sf::milliseconds(50));
         window.display();
         window.setActive(false);
         mutex.unlock();
@@ -75,18 +65,28 @@ int main(int argc, char **argv)
     int radius, width;
     radius = inputInt("Введите радиус круга: ", 0, 600);
     width = inputInt("Введите длину стороны треугольника: ", 0, 600);
-    sf::CircleShape circle(radius);
-    sf::CircleShape triangle(radius, 3);
+    circle.setRadius(radius);
+    triangle.setRadius(width);
+    triangle.setPointCount(3);
     window.create(sf::VideoMode(radius + 400, width + 400), L"Двигающиеся фигуры");
-
+    circle.setOutlineThickness(5);
+    circle.setOutlineColor(sf::Color::Red);
+    circle.setFillColor(sf::Color::White);
+    circle.setPosition(radius + 300, 300);
+    triangle.setOutlineThickness(5);
+    triangle.setOutlineColor(sf::Color::Yellow);
+    triangle.setFillColor(sf::Color::Yellow);
+    triangle.setPosition(300, width + 300);
     window.clear();
     window.setActive(false);
 
-  sf::Thread thread1(&drawCircle, radius);
+    sf::Thread thread2(&drawTriangle, width);
+    sf::Thread thread1(&drawCircle, radius);
   thread1.launch();
+  thread1.wait();
 
-  sf::Thread thread2(&drawTriangle, width);
   thread2.launch();
+  thread2.wait();
 
   while (window.isOpen())
   {
