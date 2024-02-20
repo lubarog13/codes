@@ -10,6 +10,10 @@ sf::CircleShape triangle;
 
 void drawCircle(int R)
 {
+    circle.setOutlineThickness(5);
+    circle.setOutlineColor(sf::Color::Red);
+    circle.setFillColor(sf::Color::White);
+    circle.setPosition(R + 300, 300);
     for(int i = 0; i < 25; i++)
     {
         mutex.lock();
@@ -28,6 +32,10 @@ void drawCircle(int R)
 
 void drawTriangle(int W)
 {
+    triangle.setOutlineThickness(5);
+    triangle.setOutlineColor(sf::Color::Yellow);
+    triangle.setFillColor(sf::Color::Yellow);
+    triangle.setPosition(300, W + 300);
     for(int i = 0; i < 20; i++)
     {
         mutex.lock();
@@ -69,19 +77,11 @@ int main(int argc, char **argv)
     triangle.setRadius(width);
     triangle.setPointCount(3);
     window.create(sf::VideoMode(radius + 400, width + 400), L"Двигающиеся фигуры");
-    circle.setOutlineThickness(5);
-    circle.setOutlineColor(sf::Color::Red);
-    circle.setFillColor(sf::Color::White);
-    circle.setPosition(radius + 300, 300);
-    triangle.setOutlineThickness(5);
-    triangle.setOutlineColor(sf::Color::Yellow);
-    triangle.setFillColor(sf::Color::Yellow);
-    triangle.setPosition(300, width + 300);
     window.clear();
     window.setActive(false);
 
-    sf::Thread thread2(&drawTriangle, width);
     sf::Thread thread1(&drawCircle, radius);
+    sf::Thread thread2(&drawTriangle, width);
   thread1.launch();
   thread1.wait();
 
