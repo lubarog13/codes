@@ -5,3 +5,6 @@
 #include <iostream>
 #include <limits>
 #include <vector>
+
+extern int minesCount;
+extern int gameEnd;

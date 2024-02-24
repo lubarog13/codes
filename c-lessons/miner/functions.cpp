@@ -1,6 +1,6 @@
 #include "functions.h"
 
-int InputInt(std::string message, int min, int max)
+int inputInt(std::string message, int min, int max)
 {
     int n;
     std::cout << message;

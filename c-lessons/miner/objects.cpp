@@ -9,31 +9,55 @@ Cell::Cell(int xIndex, int yIndex, int size) : RectangleShape()
     this->setOutlineColor(sf::Color::Blue);
     this->setFillColor(sf::Color::White);
     this->setOutlineThickness(2);
-    this->setPosition(xIndex*size, yIndex*size);
+    this->setPosition(xIndex*size + 10, yIndex*size + 10);
 };
+Cell::Cell(const Cell& c)
+{
+    this->xIndex = c.xIndex;
+    this->yIndex = c.yIndex;
+    this->size = c.size;
+    this->setSize(sf::Vector2f(size, size));
+    this->setOutlineColor(sf::Color::Blue);
+    this->setFillColor(sf::Color::White);
+    this->setOutlineThickness(2);
+    this->setPosition(xIndex*size + 10, yIndex*size + 10);
+    if(c.parentCell!=nullptr) {
+        this->parentCell=c.parentCell;
+        this->setFillColor(sf::Color::Blue);
+        this->setOutlineColor(sf::Color::White);
+    }
+}
 
-Cell::Cell(Cell* parentCell) : Cell(parentCell->getXIndex(), parentCell->getYIndex(), parentCell->getSize())
+
+Cell::Cell(Cell* parentCell, bool gameMode) : Cell(parentCell->getXIndex(), parentCell->getYIndex(), parentCell->getSize())
 {
     this->parentCell=parentCell;
+    if(gameMode) {
+        this->setFillColor(sf::Color::Blue);
+        this->setOutlineColor(sf::Color::White);
+    }
+    std::cout<<"ok1 "<<std::endl;
 };
 
 
 Cell::~Cell() {
-    delete mine;
+    if (this->mine!=nullptr) {
+        delete mine;
+    }
 };
 
 int Cell::checkHasMine() {
     return mine!=nullptr;
 }
 
-int Cell::setMine()
+void Cell::setMine()
 {
     if (!checkHasMine()) {
         mine = new Mine(xIndex, yIndex, size);
-        return 1;
+        minesCount+=1;
     } else {
         delete mine;
-        return -1;
+       minesCount-=1;
     }
 };
 
@@ -65,23 +89,29 @@ Field::Field(int n, int m)
 {
     N=n;
     M=m;
-    cells = std::vector<Cell>();
+    std::cout<<n<<" "<<m<<std::endl;
+
     for (int i=0;i<n;i++) {
         for (int j=0;j<m;j++) {
+            std::cout<<i<<" "<<j<<std::endl;
             cells.push_back(Cell(i, j, cellSize));
         }
     }
 };
 
+// //@ToDo: разобраться с конструкторами копий для поля
+
 Field::Field(Field* parentField): Field(parentField->getN(), parentField->getM())
 {
     cells = std::vector<Cell>();
+    std::cout<<"ok2"<<std::endl;
     for (int i=0;i<parentField->getN();i++) {
         for (int j=0;j<parentField->getM();j++) {
-            cells.push_back(parentField->getCellAt(i, j));
+            cells.push_back(Cell(parentField->getCellAt(i, j), true));
         }
     }
 };
+
 
 Cell * Field::getCellAt(int xIndex, int yIndex)
 {
@@ -131,3 +161,44 @@ int Field::getCountMinesNearCell(Cell* cell)
     }
     return count;
 }
+
+int Field::getN()
+{
+    return N;
+}
+
+int Field::getM()
+{
+    return M;
+}
+
+std::vector<Cell> * Field::getCells()
+{
+    return &this->cells;
+}
+
+Mine::Mine(int xIndex, int yIndex, int size) : sf::Sprite()
+{
+    this->setPosition(xIndex*size, yIndex*size);
+    sf::Vector2f targetSize(15.0f, 15.0f);
+    sf::Texture texture;
+    if (!texture.loadFromFile("mine.png"))
+    {
+        std::cout<<"Ошибка загрузки изображения! "<<std::endl;
+    }
+    else {
+        this->setTexture(texture);
+        this->setScale(
+        targetSize.x / this->getLocalBounds().width,
+        targetSize.y / this->getLocalBounds().height);
+    }
+}
+
+void Mine::touch()
+{
+    gameEnd = true;
+}
+
+
+
+
