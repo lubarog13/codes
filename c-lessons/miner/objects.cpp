@@ -9,7 +9,7 @@ Cell::Cell(int xIndex, int yIndex, int size) : RectangleShape()
     this->setOutlineColor(sf::Color::Blue);
     this->setFillColor(sf::Color::White);
     this->setOutlineThickness(2);
-    this->setPosition(xIndex*size + 10, yIndex*size + 10);
+    this->setPosition(xIndex*size + 10, yIndex*size + 30);
 };
 Cell::Cell(const Cell& c)
 {
@@ -19,12 +19,15 @@ Cell::Cell(const Cell& c)
     this->setSize(sf::Vector2f(size, size));
     this->setOutlineColor(sf::Color::Blue);
     this->setFillColor(sf::Color::White);
+    this->minesNear = c.minesNear;
     this->setOutlineThickness(2);
-    this->setPosition(xIndex*size + 10, yIndex*size + 10);
+    this->mine = c.mine;
+    this->setPosition(xIndex*size + 10, yIndex*size + 30);
     if(c.parentCell!=nullptr) {
         this->parentCell=c.parentCell;
         this->setFillColor(sf::Color::Blue);
         this->setOutlineColor(sf::Color::White);
+        this->setIsOpened();
     }
 }
 
@@ -36,14 +39,10 @@ Cell::Cell(Cell* parentCell, bool gameMode) : Cell(parentCell->getXIndex(), pare
         this->setFillColor(sf::Color::Blue);
         this->setOutlineColor(sf::Color::White);
     }
-    std::cout<<"ok1 "<<std::endl;
 };
 
 
 Cell::~Cell() {
-    if (this->mine!=nullptr) {
-        delete mine;
-    }
 };
 
 int Cell::checkHasMine() {
@@ -57,7 +56,32 @@ void Cell::setMine()
         minesCount+=1;
     } else {
         delete mine;
+        mine = nullptr;
        minesCount-=1;
+    }
+};
+
+void Cell::setMinesNear(int mines)
+{
+    minesNear = mines;
+};
+
+void Cell::setIsOpened() {
+    if(this->isOpened) {
+        this->setFillColor(sf::Color::Transparent);
+        sf::Text text;
+        sf::Font font;
+        if (!font.loadFromFile("VelaSans-Regular.ttf"))
+        {
+            std::cout<<"Невозможно найти шрифт"<<std::endl;
+        }
+        text.setFont(font);
+        text.setString(std::to_string(minesNear));
+
+        text.setCharacterSize(15);
+        text.setFillColor(sf::Color::Red);
+
+        text.setPosition(this->getPosition().x + 3, this->getPosition().y + 3);
     }
 };
 
@@ -68,8 +92,10 @@ void Cell::clickCell(bool gameMode)
     } else {
         if (parentCell!=nullptr) {
             parentCell->clickCell(true);
-            this->~Cell();
+            isOpened = true;
+            this->setIsOpened();
         } else if (mine!=nullptr) {
+            this->setFillColor(sf::Color::Transparent);
             mine->touch();
         }
     }
@@ -89,11 +115,9 @@ Field::Field(int n, int m)
 {
     N=n;
     M=m;
-    std::cout<<n<<" "<<m<<std::endl;
 
     for (int i=0;i<n;i++) {
         for (int j=0;j<m;j++) {
-            std::cout<<i<<" "<<j<<std::endl;
             cells.push_back(Cell(i, j, cellSize));
         }
     }
@@ -101,10 +125,9 @@ Field::Field(int n, int m)
 
 // //@ToDo: разобраться с конструкторами копий для поля
 
-Field::Field(Field* parentField): Field(parentField->getN(), parentField->getM())
+Field::Field(Field* parentField, bool gameMode): Field(parentField->getN(), parentField->getM())
 {
     cells = std::vector<Cell>();
-    std::cout<<"ok2"<<std::endl;
     for (int i=0;i<parentField->getN();i++) {
         for (int j=0;j<parentField->getM();j++) {
             cells.push_back(Cell(parentField->getCellAt(i, j), true));
@@ -116,7 +139,7 @@ Field::Field(Field* parentField): Field(parentField->getN(), parentField->getM()
 Cell * Field::getCellAt(int xIndex, int yIndex)
 {
     if (cells.size()==0) return nullptr;
-    return &cells[xIndex + yIndex*M];
+    return &cells[xIndex*N + yIndex];
 }
 
 int Field::getCountMinesNearCell(Cell* cell)
@@ -179,20 +202,18 @@ std::vector<Cell> * Field::getCells()
 
 Mine::Mine(int xIndex, int yIndex, int size) : sf::Sprite()
 {
-    this->setPosition(xIndex*size, yIndex*size);
-    sf::Vector2f targetSize(15.0f, 15.0f);
-    sf::Texture texture;
-    if (!texture.loadFromFile("mine.png"))
-    {
-        std::cout<<"Ошибка загрузки изображения! "<<std::endl;
-    }
-    else {
-        this->setTexture(texture);
-        this->setScale(
+    this->setPosition(xIndex*size + 10, yIndex*size + 30);
+    this->setTexture(mineTexture);
+        /*this->setScale(
         targetSize.x / this->getLocalBounds().width,
-        targetSize.y / this->getLocalBounds().height);
-    }
-}
+        targetSize.y / this->getLocalBounds().height);*/
+};
+
+Mine::~Mine()
+{
+    std::cout<<"destroyed"<<std::endl;
+};
+
 
 void Mine::touch()
 {

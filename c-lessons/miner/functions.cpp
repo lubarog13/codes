@@ -15,3 +15,13 @@ int inputInt(std::string message, int min, int max)
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     return n;
 }
+
+
+void clear(Field* field) {
+    for (auto cell : *field->getCells()) {
+        if(cell.checkHasMine()) {
+            delete cell.mine;
+            cell.mine = nullptr;
+        }
+    }
+}
