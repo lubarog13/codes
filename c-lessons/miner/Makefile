@@ -1,6 +1,6 @@
 LIBS=-lsfml-graphics -lsfml-window -lsfml-system
 
-all: lab_4_3
+all: main
 
 main.o: main.cpp functions.h header.h objects.h
 	g++ -c main.cpp
@@ -9,7 +9,7 @@ objects.o: objects.cpp functions.h header.h objects.h
 	g++ -c objects.cpp
 
 functions.o: functions.cpp functions.h header.h
-	g++ -c objects.cpp
+	g++ -c functions.cpp
 
 main: main.o objects.o functions.o
 	@echo "** Building the module"

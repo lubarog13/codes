@@ -1,6 +1,6 @@
 #include "functions.h"
 
-int InputInt(std::string message, int min, int max)
+int inputInt(std::string message, int min, int max)
 {
     int n;
     std::cout << message;
@@ -14,4 +14,14 @@ int InputInt(std::string message, int min, int max)
     // cin.clear();
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     return n;
+}
+
+
+void clear(Field* field) {
+    for (auto cell : *field->getCells()) {
+        if(cell.checkHasMine()) {
+            delete cell.mine;
+            cell.mine = nullptr;
+        }
+    }
 }
