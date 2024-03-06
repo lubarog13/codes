@@ -2,15 +2,5 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/ISRPO" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/ISRPO/cloned_hello" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/ISRPO/hello" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/ISRPO/new_repo" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/ISRPO/vtt" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/Projects_UP/ITMO_FSPO_PP_web_development_2020-2021" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/Projects_UP/ITMO_FSPO_PP_web_development_2020-2021/students/Y2333/Rogozina_Liubov/practical_works/simple_django_web_project" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/QT_RPM/Registration" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/QT_RPM/example" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/Robot_arm" vcs="Git" />
   </component>
 </project>
