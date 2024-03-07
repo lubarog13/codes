@@ -18,10 +18,10 @@ int inputInt(std::string message, int min, int max)
 
 
 void clear(Field* field) {
-    for (auto cell : *field->getCells()) {
-        if(cell.checkHasMine()) {
-            delete cell.mine;
-            cell.mine = nullptr;
+     for(std::vector<Cell>::iterator it = field->getCells()->begin(); it != field->getCells()->end(); ++it) {
+        if(it->checkHasMine()) {
+            delete it->mine;
+            it->mine = nullptr;
         }
     }
 }

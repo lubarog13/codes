@@ -1,14 +1,24 @@
 #include "objects.h"
 
-Cell::Cell(int xIndex, int yIndex, int size) : RectangleShape()
+Cell::Cell(int xIndex, int yIndex, int size, bool gameField) : RectangleShape()
 {
     this->xIndex = xIndex;
     this->yIndex = yIndex;
     this->size = size;
     this->setSize(sf::Vector2f(size, size));
-    this->setOutlineColor(sf::Color::Blue);
-    this->setFillColor(sf::Color::White);
+    if(gameField) {
+        this->setOutlineColor(sf::Color::White);
+        this->setFillColor(sf::Color::Blue);
+    }
+    else {
+        this->setOutlineColor(sf::Color::Blue);
+        this->setFillColor(sf::Color::White);
+    }
+    if(this->isOpened) {
+        this->setFillColor(sf::Color::White);
+    }
     this->setOutlineThickness(2);
+    this->gameField = gameField;
     this->setPosition(xIndex*size + 10, yIndex*size + 30);
 };
 Cell::Cell(const Cell& c)
@@ -17,32 +27,28 @@ Cell::Cell(const Cell& c)
     this->yIndex = c.yIndex;
     this->size = c.size;
     this->setSize(sf::Vector2f(size, size));
-    this->setOutlineColor(sf::Color::Blue);
-    this->setFillColor(sf::Color::White);
     this->minesNear = c.minesNear;
     this->setOutlineThickness(2);
     this->mine = c.mine;
+    this->gameField = c.gameField;
     this->setPosition(xIndex*size + 10, yIndex*size + 30);
-    if(c.parentCell!=nullptr) {
-        this->parentCell=c.parentCell;
+    if(this->gameField) {
         this->setFillColor(sf::Color::Blue);
         this->setOutlineColor(sf::Color::White);
-        this->setIsOpened();
+    } else {
+        this->setOutlineColor(sf::Color::Blue);
+        this->setFillColor(sf::Color::White);
+    }
+    this->isOpened = c.isOpened;
+   // std::cout<<this->isOpened<<std::endl;
+    if(this->isOpened) {
+        this->setFillColor(sf::Color::White);
     }
 }
 
 
-Cell::Cell(Cell* parentCell, bool gameMode) : Cell(parentCell->getXIndex(), parentCell->getYIndex(), parentCell->getSize())
-{
-    this->parentCell=parentCell;
-    if(gameMode) {
-        this->setFillColor(sf::Color::Blue);
-        this->setOutlineColor(sf::Color::White);
-    }
-};
-
-
 Cell::~Cell() {
+ //   std::cout<<"destroyed"<<std::endl;
 };
 
 int Cell::checkHasMine() {
@@ -67,31 +73,43 @@ void Cell::setMinesNear(int mines)
 };
 
 void Cell::setIsOpened() {
+    //std::cout<<this->getXIndex()<<" "<<this->getYIndex()<<" "<<this->isOpened<<std::endl;
     if(this->isOpened) {
         this->setFillColor(sf::Color::Transparent);
-        sf::Text text;
-        sf::Font font;
-        if (!font.loadFromFile("VelaSans-Regular.ttf"))
-        {
-            std::cout<<"Невозможно найти шрифт"<<std::endl;
-        }
-        text.setFont(font);
-        text.setString(std::to_string(minesNear));
-
-        text.setCharacterSize(15);
-        text.setFillColor(sf::Color::Red);
-
-        text.setPosition(this->getPosition().x + 3, this->getPosition().y + 3);
+        this->setScale(0, 0);
     }
 };
 
+bool Cell::checkIsOpened()
+{
+    return this->isOpened;
+}
+
+int Cell::getMinesNear()
+{
+    return minesNear;
+}
+
+bool Cell::checkHasParentMine()
+{
+    return this->hasParentMine;
+}
+
+void Cell::setParentMine(bool mine)
+{
+    this->hasParentMine = mine;
+}
+
+
+
+
 void Cell::clickCell(bool gameMode)
 {
+    std::cout<<"clicked "<<this->gameField<<" "<<this->xIndex<<std::endl;
     if (!gameMode) {
         setMine();
     } else {
-        if (parentCell!=nullptr) {
-            parentCell->clickCell(true);
+        if (gameField) {
             isOpened = true;
             this->setIsOpened();
         } else if (mine!=nullptr) {
@@ -111,26 +129,14 @@ int Cell::getSize() {
 };
 
 
-Field::Field(int n, int m)
+Field::Field(int n, int m, bool gameField)
 {
     N=n;
     M=m;
 
     for (int i=0;i<n;i++) {
         for (int j=0;j<m;j++) {
-            cells.push_back(Cell(i, j, cellSize));
-        }
-    }
-};
-
-// //@ToDo: разобраться с конструкторами копий для поля
-
-Field::Field(Field* parentField, bool gameMode): Field(parentField->getN(), parentField->getM())
-{
-    cells = std::vector<Cell>();
-    for (int i=0;i<parentField->getN();i++) {
-        for (int j=0;j<parentField->getM();j++) {
-            cells.push_back(Cell(parentField->getCellAt(i, j), true));
+            cells.push_back(Cell(i, j, cellSize, gameField));
         }
     }
 };

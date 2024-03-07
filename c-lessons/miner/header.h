@@ -9,3 +9,4 @@
 extern int minesCount;
 extern int gameEnd;
 extern sf::Texture mineTexture;
+extern int cellSize;

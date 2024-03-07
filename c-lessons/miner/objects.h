@@ -12,19 +12,21 @@ class Mine : public sf::Sprite {
 class Cell : public sf::RectangleShape
 {
     public:
-        Cell(int xIndex, int yIndex,  int size);
-        Cell(Cell *parentCell, bool gameMode);
+        Cell(int xIndex, int yIndex,  int size, bool gameField);
         Cell(const Cell &c);
-        Cell *parentCell = nullptr;
         Mine *mine = nullptr;
         void setMine();
         int checkHasMine();
         int getXIndex();
         int getYIndex();
         int getSize();
+        bool checkIsOpened();
         void setIsOpened();
         void clickCell(bool gameMode);
         void setMinesNear(int mines);
+        bool checkHasParentMine();
+        void setParentMine(bool mine);
+        int getMinesNear();
         ~Cell();
 
 private:
@@ -33,6 +35,8 @@ private:
         int yIndex;
         int size;
         bool isOpened;
+        bool gameField;
+        bool hasParentMine;
 };
 
 class Field {
@@ -43,8 +47,7 @@ private:
     std::vector<Cell> cells;
 
 public:
-    Field(int n, int m);
-    Field(Field* parentField, bool gameMode);
+    Field(int n, int m, bool gameField);
     int getCountMinesNearCell(Cell* cell);
     int getN();
     int getM();

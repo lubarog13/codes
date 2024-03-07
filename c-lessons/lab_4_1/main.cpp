@@ -2,6 +2,9 @@
 #include <iostream>
 #include <limits>
 
+int screenWidth = 640;
+int screenHeight = 480;
+
 int inputInt(std::string message, int min, int max)
 {
     int n;
@@ -21,10 +24,10 @@ int inputInt(std::string message, int min, int max)
 int main()
 {
     int startX, startY, endX, endY;
-    startX = inputInt("Введите координату X первой точки линии: ", 0, 640);
-    startY = inputInt("Введите координату Y первой точки линии: ", 0, 480);
-    endX = inputInt("Введите координату X последней точки линии: ", 0, 640);
-    endY = inputInt("Введите координату Y последней точки линии: ", 0, 480);
+    startX = inputInt("Введите координату X первой точки линии: ", 0, screenWidth);
+    startY = inputInt("Введите координату Y первой точки линии: ", 0, screenHeight);
+    endX = inputInt("Введите координату X последней точки линии: ", 0, screenWidth);
+    endY = inputInt("Введите координату Y последней точки линии: ", 0, screenHeight);
     sf::Vertex startDot = sf::Vector2f(startX, startY);
     sf::Vertex endDot = sf::Vector2f(endX, endY);
     startDot.color = sf::Color::Red;
@@ -47,7 +50,7 @@ int main()
         window.display();
     }
 
-    std::cout << "Введите любую клавишу для завершения программы ... "<<std::flush;
+    std::cout << "Введите enter для завершения программы ... "<<std::flush;
     std::cin.ignore( std::numeric_limits <std::streamsize> ::max(), '\n' );
 
     return 0;
