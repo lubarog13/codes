@@ -7,6 +7,7 @@
 #include <vector>
 
 extern int minesCount;
-extern int gameEnd;
+extern int gameStatus;
 extern sf::Texture mineTexture;
 extern int cellSize;
+extern int closedCellsCount;

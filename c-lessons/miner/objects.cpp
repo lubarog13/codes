@@ -111,6 +111,8 @@ void Cell::clickCell(bool gameMode)
     } else {
         if (gameField) {
             isOpened = true;
+            closedCellsCount--;
+            if (closedCellsCount == minesCount) gameStatus = 3;
             this->setIsOpened();
         } else if (mine!=nullptr) {
             this->setFillColor(sf::Color::Transparent);
@@ -223,7 +225,7 @@ Mine::~Mine()
 
 void Mine::touch()
 {
-    gameEnd = true;
+    gameStatus = 2;
 }
 
 

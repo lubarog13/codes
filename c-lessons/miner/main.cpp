@@ -3,9 +3,10 @@
 #include "objects.h"
 
 int minesCount = 0;
-int gameEnd = false;
+int gameStatus = 1;
 sf::Texture mineTexture;
 int cellSize = 20;
+int closedCellsCount =0;
 
 int main()
 {
@@ -17,7 +18,7 @@ int main()
     else {
         mineTexture.setSmooth(true);
     }
-    int cellsCountX=10, cellsCountY=10;
+    int cellsCountX=4, cellsCountY=4;
     bool gameMode = false;
     /*cellsCountX = inputInt("Введите размер поля по горизонтали (максимум - 20): ", 0, 20);
     cellsCountY = inputInt("Введите размер поля по вертикали (максимум - 20): ", 0, 20);*/
@@ -26,6 +27,8 @@ int main()
     Field gameField = Field(cellsCountX, cellsCountY, true);
 
     sf::RenderWindow window(sf::VideoMode(cellsCountX * cellSize + 20, cellsCountY * cellSize + 40), L"Сапер");
+
+    closedCellsCount = cellsCountX * cellsCountY;
 
     sf::Text text;
     sf::Font font;
@@ -101,12 +104,19 @@ int main()
           }
         }
 
-        if(gameEnd) {
+        if(gameStatus == 2) {
             text.setString(L"Вы проиграли");
             text.setFillColor(sf::Color::Red);
             text.setPosition(10, window.getSize().y / 2 - 15);
             text.setCharacterSize(30);
-        } else {
+        }
+        else if (gameStatus == 3) {
+            text.setString(L"Вы выиграли!!!");
+            text.setFillColor(sf::Color::Green);
+            text.setPosition(10, window.getSize().y / 2 - 15);
+            text.setCharacterSize(30);
+        }
+        else {
             if(gameMode) {
                 text.setString(L"Игра началась");
                 for(std::vector<Cell>::iterator it = gameField.getCells()->begin(); it != gameField.getCells()->end(); ++it) {
