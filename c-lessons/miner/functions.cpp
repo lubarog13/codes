@@ -20,8 +20,7 @@ int inputInt(std::string message, int min, int max)
 void clear(Field* field) {
      for(std::vector<Cell>::iterator it = field->getCells()->begin(); it != field->getCells()->end(); ++it) {
         if(it->checkHasMine()) {
-            delete it->mine;
-            it->mine = nullptr;
+            it->setMine();
         }
     }
 }

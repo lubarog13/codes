@@ -1,4 +1,5 @@
 #include "objects.h"
+#include "functions.h"
 
 Cell::Cell(int xIndex, int yIndex, int size, bool gameField) : RectangleShape()
 {
@@ -40,17 +41,11 @@ Cell::Cell(const Cell& c)
         this->setFillColor(sf::Color::White);
     }
     this->isOpened = c.isOpened;
-   // std::cout<<this->isOpened<<std::endl;
     if(this->isOpened) {
         std::cout<<"Opened"<<std::endl;
         this->setFillColor(sf::Color::White);
     }
 }
-
-
-Cell::~Cell() {
- //   std::cout<<"destroyed"<<std::endl;
-};
 
 int Cell::checkHasMine() {
     return mine!=nullptr;
@@ -68,13 +63,17 @@ void Cell::setMine()
     }
 };
 
+Mine* Cell::getMine()
+{
+    return mine;
+}
+
 void Cell::setMinesNear(int mines)
 {
     minesNear = mines;
 };
 
 void Cell::setIsOpened() {
-    //std::cout<<this->getXIndex()<<" "<<this->getYIndex()<<" "<<this->isOpened<<std::endl;
     if(this->isOpened) {
         this->setFillColor(sf::Color::Transparent);
         this->setScale(0, 0);
@@ -106,7 +105,6 @@ void Cell::setParentMine(bool mine)
 
 void Cell::clickCell(bool gameMode)
 {
-    std::cout<<"clicked "<<this->gameField<<" "<<this->xIndex<<std::endl;
     if (!gameMode) {
         setMine();
     } else {
@@ -217,16 +215,35 @@ Mine::Mine(int xIndex, int yIndex, int size) : sf::Sprite()
         targetSize.y / this->getLocalBounds().height);*/
 };
 
-Mine::~Mine()
-{
-    std::cout<<"destroyed"<<std::endl;
-};
-
 
 void Mine::touch()
 {
     gameStatus = 2;
 }
+
+void Cell::clear()
+{
+    this->isOpened = false;
+    this->minesNear = 0;
+    this->hasParentMine = false;
+    this->setScale(1, 1);
+    if(this->gameField) {
+        this->setFillColor(sf::Color::Blue);
+        this->setOutlineColor(sf::Color::White);
+    } else {
+        this->setOutlineColor(sf::Color::Blue);
+        this->setFillColor(sf::Color::White);
+    }
+}
+
+
+void Field::clearField()
+{
+    clear(this);
+    for(std::vector<Cell>::iterator it = cells.begin(); it != cells.end(); ++it) {
+        it->clear();
+    }
+};
 
 
 

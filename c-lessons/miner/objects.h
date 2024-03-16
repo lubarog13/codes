@@ -4,7 +4,6 @@
 class Mine : public sf::Sprite {
     public:
         Mine(int xIndex, int yIndex, int size);
-        ~Mine();
         void touch();
 };
 
@@ -14,8 +13,8 @@ class Cell : public sf::RectangleShape
     public:
         Cell(int xIndex, int yIndex,  int size, bool gameField);
         Cell(const Cell &c);
-        Mine *mine = nullptr;
         void setMine();
+        Mine* getMine();
         int checkHasMine();
         int getXIndex();
         int getYIndex();
@@ -27,7 +26,7 @@ class Cell : public sf::RectangleShape
         bool checkHasParentMine();
         void setParentMine(bool mine);
         int getMinesNear();
-        ~Cell();
+        void clear();
 
 private:
         int minesNear;
@@ -37,6 +36,7 @@ private:
         bool isOpened = false;
         bool gameField;
         bool hasParentMine;
+        Mine *mine = nullptr;
 };
 
 class Field {
@@ -52,4 +52,5 @@ public:
     int getM();
     Cell* getCellAt(int xIndex, int yIndex);
     std::vector<Cell>* getCells();
+    void clearField();
 };

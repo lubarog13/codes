@@ -19,30 +19,36 @@ int main()
         mineTexture.setSmooth(true);
     }
     int cellsCountX=4, cellsCountY=4;
-    /*cellsCountX = inputInt("Введите размер поля по горизонтали (максимум - 20): ", 0, 20);
-    cellsCountY = inputInt("Введите размер поля по вертикали (максимум - 20): ", 0, 20);*/
+    cellsCountX = inputInt("Введите размер поля по горизонтали (максимум - 20): ", 0, 20);
+    cellsCountY = inputInt("Введите размер поля по вертикали (максимум - 20): ", 0, 20);
+    sf::sleep(sf::milliseconds(70));;
 
     Field startField = Field(cellsCountX, cellsCountY, false);
     Field gameField = Field(cellsCountX, cellsCountY, true);
 
-    sf::RenderWindow window(sf::VideoMode(cellsCountX * cellSize + 20, cellsCountY * cellSize + 40), L"Сапер");
+    sf::RenderWindow window(sf::VideoMode(std::max(cellsCountX * cellSize + 20, 200), std::max(cellsCountY * cellSize + 70, 200)), L"Сапер");
 
     closedCellsCount = cellsCountX * cellsCountY;
 
     sf::Text text;
+    sf::Text textBottom;
     sf::Font font;
-    if (!font.loadFromFile("VelaSans-Regular.ttf"))
+    if (!font.loadFromFile("VelaSans-SemiBold.ttf"))
     {
         std::cout<<"Невозможно найти шрифт"<<std::endl;
         return 1;
     }
     text.setFont(font);
+    textBottom.setFont(font);
     text.setString(L"Разместите мины и нажмите enter");
 
     text.setCharacterSize(10);
     text.setFillColor(sf::Color::Black);
 
     text.setPosition(10, 5);
+    textBottom.setPosition(10, 30 + cellSize * cellsCountY + 10);
+    textBottom.setCharacterSize(10);
+    textBottom.setFillColor(sf::Color::Black);
 
     while (window.isOpen())
     {
@@ -54,6 +60,7 @@ int main()
         }
 
         window.clear(sf::Color::White);
+        window.setKeyRepeatEnabled(false);
 
          static bool lock_click;
 
@@ -61,7 +68,6 @@ int main()
         {
             if (event.mouseButton.button == sf::Mouse::Left && lock_click != true) {//specifies
                 sf::Vector2i localPosition = sf::Mouse::getPosition(window);
-               // std::cout<<"pressed"<<std::endl;
                 lock_click = true;
                 if (!(localPosition.x < 10 || localPosition.x > (cellsCountX * cellSize + 10) || localPosition.y < 30 || localPosition.y > (cellsCountY * cellSize + 30))) {
                     Cell *cell;
@@ -75,7 +81,6 @@ int main()
                         }
 
                     } else {
-                        std::cout<<localPosition.x<<" "<<localPosition.y<<" "<<ceil((localPosition.x - 10) / cellSize)<< " "<< ceil((localPosition.y - 30) / cellSize)<<std::endl;
                         cell = startField.getCellAt(ceil((localPosition.x - 10) / cellSize), ceil((localPosition.y - 30) / cellSize));
                     }
                     cell->clickCell(gameStatus==1);
@@ -88,7 +93,22 @@ int main()
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
-            gameStatus = 1;
+            if(gameStatus == 0) {
+                gameStatus = 1;
+            }
+        }
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+            if (gameStatus == 2 || gameStatus==3) {
+                startField.clearField();
+                gameField.clearField();
+                minesCount = 0;
+                closedCellsCount = cellsCountX * cellsCountY;
+                text.setString(L"Разместите мины и нажмите enter");
+                text.setCharacterSize(10);
+                text.setFillColor(sf::Color::Black);
+                gameStatus = 0;
+            }
         }
 
          if (event.type == sf::Event::MouseButtonReleased) //Mouse button Released now.
@@ -101,7 +121,7 @@ int main()
         for(std::vector<Cell>::iterator it = startField.getCells()->begin(); it != startField.getCells()->end(); ++it) {
           window.draw(*it);
           if(it->checkHasMine()) {
-              window.draw(*it->mine);
+              window.draw(*it->getMine());
           }
         }
 
@@ -109,11 +129,15 @@ int main()
             text.setString(L"Вы проиграли");
             text.setFillColor(sf::Color::Red);
             text.setCharacterSize(minesCount<10? 13 : 30);
+            textBottom.setString(L"Нажмите пробел, \nчтобы начать заново");
+            window.draw(textBottom);
         }
         else if (gameStatus == 3) {
             text.setString(L"Вы выиграли!!!");
             text.setFillColor(sf::Color::Green);
             text.setCharacterSize(minesCount<10? 13 : 30);
+            textBottom.setString(L"Нажмите пробел, \nчтобы начать заново");
+            window.draw(textBottom);
         }
         else {
             if(gameStatus==1) {
@@ -121,7 +145,6 @@ int main()
                 for(std::vector<Cell>::iterator it = gameField.getCells()->begin(); it != gameField.getCells()->end(); ++it) {
                     window.draw(*it);
                     if (it->checkIsOpened() && !it->checkHasParentMine()) {
-                        std::cout<<it->getMinesNear()<<std::endl;;
                         sf::Text number;
                         number.setFont(font);
                         number.setString(std::to_string(it->getMinesNear()));
