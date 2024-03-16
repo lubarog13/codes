@@ -5,6 +5,7 @@
 #include <iostream>
 #include <limits>
 #include <vector>
+#include <math.h>
 
 extern int minesCount;
 extern int gameStatus;

@@ -3,9 +3,9 @@
 #include "objects.h"
 
 int minesCount = 0;
-int gameStatus = 1;
+int gameStatus = 0;
 sf::Texture mineTexture;
-int cellSize = 20;
+int cellSize = 30;
 int closedCellsCount =0;
 
 int main()
@@ -19,7 +19,6 @@ int main()
         mineTexture.setSmooth(true);
     }
     int cellsCountX=4, cellsCountY=4;
-    bool gameMode = false;
     /*cellsCountX = inputInt("Введите размер поля по горизонтали (максимум - 20): ", 0, 20);
     cellsCountY = inputInt("Введите размер поля по вертикали (максимум - 20): ", 0, 20);*/
 
@@ -62,12 +61,12 @@ int main()
         {
             if (event.mouseButton.button == sf::Mouse::Left && lock_click != true) {//specifies
                 sf::Vector2i localPosition = sf::Mouse::getPosition(window);
-                std::cout<<"pressed"<<std::endl;
+               // std::cout<<"pressed"<<std::endl;
                 lock_click = true;
-                if (!(localPosition.x < 20 || localPosition.x > (cellsCountX * cellSize + 10) || localPosition.y < 30 || localPosition.y > (cellsCountY * cellSize + 30))) {
+                if (!(localPosition.x < 10 || localPosition.x > (cellsCountX * cellSize + 10) || localPosition.y < 30 || localPosition.y > (cellsCountY * cellSize + 30))) {
                     Cell *cell;
                     Cell* parentCell = nullptr;
-                    if(gameMode) {
+                    if(gameStatus==1) {
                         cell = gameField.getCellAt((localPosition.x - 10) / cellSize, (localPosition.y - 30) / cellSize);
                         parentCell=startField.getCellAt(cell->getXIndex(), cell->getYIndex());
                         cell->setMinesNear(startField.getCountMinesNearCell(parentCell));
@@ -76,18 +75,20 @@ int main()
                         }
 
                     } else {
-                        cell = startField.getCellAt((localPosition.x - 10) / cellSize, (localPosition.y - 30) / cellSize);
+                        std::cout<<localPosition.x<<" "<<localPosition.y<<" "<<ceil((localPosition.x - 10) / cellSize)<< " "<< ceil((localPosition.y - 30) / cellSize)<<std::endl;
+                        cell = startField.getCellAt(ceil((localPosition.x - 10) / cellSize), ceil((localPosition.y - 30) / cellSize));
                     }
-                    cell->clickCell(gameMode);
+                    cell->clickCell(gameStatus==1);
                     if (parentCell!=nullptr) {
-                        parentCell->clickCell(gameMode);
+                        parentCell->clickCell(gameStatus==1);
                     }
+                    if (closedCellsCount == minesCount && gameStatus==1) gameStatus = 3;
                 }
             }
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
-            gameMode = true;
+            gameStatus = 1;
         }
 
          if (event.type == sf::Event::MouseButtonReleased) //Mouse button Released now.
@@ -107,17 +108,15 @@ int main()
         if(gameStatus == 2) {
             text.setString(L"Вы проиграли");
             text.setFillColor(sf::Color::Red);
-            text.setPosition(10, window.getSize().y / 2 - 15);
-            text.setCharacterSize(30);
+            text.setCharacterSize(minesCount<10? 13 : 30);
         }
         else if (gameStatus == 3) {
             text.setString(L"Вы выиграли!!!");
             text.setFillColor(sf::Color::Green);
-            text.setPosition(10, window.getSize().y / 2 - 15);
-            text.setCharacterSize(30);
+            text.setCharacterSize(minesCount<10? 13 : 30);
         }
         else {
-            if(gameMode) {
+            if(gameStatus==1) {
                 text.setString(L"Игра началась");
                 for(std::vector<Cell>::iterator it = gameField.getCells()->begin(); it != gameField.getCells()->end(); ++it) {
                     window.draw(*it);
@@ -130,7 +129,7 @@ int main()
                         number.setCharacterSize(15);
                         number.setFillColor(sf::Color::Red);
 
-                        number.setPosition(it->getPosition().x + 3, it->getPosition().y);
+                        number.setPosition(it->getPosition().x + 5, it->getPosition().y);
                         window.draw(number);
                     }
                 }

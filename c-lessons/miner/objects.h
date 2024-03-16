@@ -34,7 +34,7 @@ private:
         int xIndex;
         int yIndex;
         int size;
-        bool isOpened;
+        bool isOpened = false;
         bool gameField;
         bool hasParentMine;
 };
@@ -43,7 +43,6 @@ class Field {
 private:
     int N = 8;
     int M = 8;
-    int cellSize = 20;
     std::vector<Cell> cells;
 
 public:

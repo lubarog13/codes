@@ -42,6 +42,7 @@ Cell::Cell(const Cell& c)
     this->isOpened = c.isOpened;
    // std::cout<<this->isOpened<<std::endl;
     if(this->isOpened) {
+        std::cout<<"Opened"<<std::endl;
         this->setFillColor(sf::Color::White);
     }
 }
@@ -112,7 +113,6 @@ void Cell::clickCell(bool gameMode)
         if (gameField) {
             isOpened = true;
             closedCellsCount--;
-            if (closedCellsCount == minesCount) gameStatus = 3;
             this->setIsOpened();
         } else if (mine!=nullptr) {
             this->setFillColor(sf::Color::Transparent);
@@ -163,14 +163,14 @@ int Field::getCountMinesNearCell(Cell* cell)
             count += getCellAt(cell->getXIndex()+1, cell->getYIndex()-1)->checkHasMine();
         } else if (cell->getXIndex()<N-1) {
             count += getCellAt(cell->getXIndex()+1, cell->getYIndex()-1)->checkHasMine();
-        } else if (cell->getYIndex()<M+1) {
+        } else if (cell->getYIndex()<M-1) {
             count+= getCellAt(cell->getXIndex()-1, cell->getYIndex()+1)->checkHasMine();
         }
     } else if (cell->getXIndex()>0) {
         count += getCellAt(cell->getXIndex()-1, cell->getYIndex())->checkHasMine();
         if(cell->getXIndex()<N-1 && cell->getYIndex()<M-1) {
             count += getCellAt(cell->getXIndex()-1, cell->getYIndex()+1)->checkHasMine();
-        } else if (cell->getYIndex()<M+1) {
+        } else if (cell->getYIndex()<M-1) {
             count+= getCellAt(cell->getXIndex()-1, cell->getYIndex()+1)->checkHasMine();
         }
     } else if (cell->getYIndex()>0) {
@@ -187,7 +187,7 @@ int Field::getCountMinesNearCell(Cell* cell)
         count+= getCellAt(cell->getXIndex(), cell->getYIndex()+1)->checkHasMine();
     } else if (cell->getXIndex()<N-1) {
         count += getCellAt(cell->getXIndex()+1, cell->getYIndex())->checkHasMine();
-    } else if (cell->getYIndex()<M+1) {
+    } else if (cell->getYIndex()<M-1) {
         count+= getCellAt(cell->getXIndex(), cell->getYIndex()+1)->checkHasMine();
     }
     return count;
