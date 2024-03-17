@@ -12,3 +12,7 @@ extern int gameStatus;
 extern sf::Texture mineTexture;
 extern int cellSize;
 extern int closedCellsCount;
+extern int maxScreenWidth;
+extern int maxScreenHeight;
+extern int minScreenWidth;
+extern int minScreenHeight;

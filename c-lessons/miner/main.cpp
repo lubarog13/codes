@@ -7,6 +7,10 @@ int gameStatus = 0;
 sf::Texture mineTexture;
 int cellSize = 30;
 int closedCellsCount =0;
+int minScreenHeight = 200;
+int minScreenWidth = 200;
+int maxScreenWidth = 680;
+int maxScreenHeight = 730;
 
 int main()
 {
@@ -19,14 +23,16 @@ int main()
         mineTexture.setSmooth(true);
     }
     int cellsCountX=4, cellsCountY=4;
-    cellsCountX = inputInt("Введите размер поля по горизонтали (максимум - 20): ", 0, 20);
-    cellsCountY = inputInt("Введите размер поля по вертикали (максимум - 20): ", 0, 20);
+    int maxCellsCountX = (maxScreenWidth - 20) / cellSize;
+    int maxCellsCountY = (maxScreenHeight - 70) / cellSize;
+    cellsCountX = inputInt("Введите размер поля по горизонтали (максимум - " + std::to_string(maxCellsCountX) + "): ", 0, maxCellsCountX);
+    cellsCountY = inputInt("Введите размер поля по вертикали (максимум - " +  std::to_string(maxCellsCountY) + "): ", 0, maxCellsCountY);
     sf::sleep(sf::milliseconds(70));;
 
     Field startField = Field(cellsCountX, cellsCountY, false);
     Field gameField = Field(cellsCountX, cellsCountY, true);
 
-    sf::RenderWindow window(sf::VideoMode(std::max(cellsCountX * cellSize + 20, 200), std::max(cellsCountY * cellSize + 70, 200)), L"Сапер");
+    sf::RenderWindow window(sf::VideoMode(std::max(cellsCountX * cellSize + 20, minScreenWidth), std::max(cellsCountY * cellSize + 70, minScreenHeight)), L"Сапер");
 
     closedCellsCount = cellsCountX * cellsCountY;
 

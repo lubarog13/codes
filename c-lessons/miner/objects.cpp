@@ -113,7 +113,7 @@ void Cell::clickCell(bool gameMode)
             closedCellsCount--;
             this->setIsOpened();
         } else if (mine!=nullptr) {
-            this->setFillColor(sf::Color::Transparent);
+            this->setFillColor(sf::Color::Red);
             mine->touch();
         }
     }
