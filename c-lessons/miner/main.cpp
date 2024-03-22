@@ -32,7 +32,7 @@ int main()
     Field startField = Field(cellsCountX, cellsCountY, false);
     Field gameField = Field(cellsCountX, cellsCountY, true);
 
-    sf::RenderWindow window(sf::VideoMode(std::max(cellsCountX * cellSize + 20, minScreenWidth), std::max(cellsCountY * cellSize + 70, minScreenHeight)), L"Сапер");
+    sf::RenderWindow window(sf::VideoMode(std::max(cellsCountY * cellSize + 20, minScreenWidth), std::max(cellsCountX * cellSize + 70, minScreenHeight)), L"Сапер");
 
     closedCellsCount = cellsCountX * cellsCountY;
 
@@ -52,7 +52,7 @@ int main()
     text.setFillColor(sf::Color::Black);
 
     text.setPosition(10, 5);
-    textBottom.setPosition(10, 30 + cellSize * cellsCountY + 10);
+    textBottom.setPosition(10, 30 + cellSize * cellsCountX + 10);
     textBottom.setCharacterSize(10);
     textBottom.setFillColor(sf::Color::Black);
 
@@ -75,8 +75,8 @@ int main()
             if (event.mouseButton.button == sf::Mouse::Left && lock_click != true) {//specifies
                 sf::Vector2i localPosition = sf::Mouse::getPosition(window);
                 lock_click = true;
-                if (!(localPosition.x < 10 || localPosition.x > (cellsCountX * cellSize + 10) || localPosition.y < 30 || localPosition.y > (cellsCountY * cellSize + 30))) {
-                    Cell *cell;
+                if (!(localPosition.x < 10 || localPosition.x > (cellsCountY * cellSize + 10) || localPosition.y < 30 || localPosition.y > (cellsCountX * cellSize + 30))) {
+                    Cell *cell = nullptr;
                     Cell* parentCell = nullptr;
                     if(gameStatus==1) {
                         cell = gameField.getCellAt((localPosition.x - 10) / cellSize, (localPosition.y - 30) / cellSize);
@@ -86,12 +86,14 @@ int main()
                             cell->setParentMine(true);
                         }
 
-                    } else {
+                    } else if (gameStatus==0) {
                         cell = startField.getCellAt(ceil((localPosition.x - 10) / cellSize), ceil((localPosition.y - 30) / cellSize));
                     }
-                    cell->clickCell(gameStatus==1);
-                    if (parentCell!=nullptr) {
-                        parentCell->clickCell(gameStatus==1);
+                    if (cell!=nullptr) {
+                        cell->clickCell(gameStatus==1);
+                        if (parentCell!=nullptr) {
+                            parentCell->clickCell(gameStatus==1);
+                        }
                     }
                     if (closedCellsCount == minesCount && gameStatus==1) gameStatus = 3;
                 }

@@ -41,12 +41,12 @@ private:
 
 class Field {
 private:
-    int N = 8;
-    int M = 8;
+    int countX = 8;
+    int countY = 8;
     std::vector<Cell> cells;
 
 public:
-    Field(int n, int m, bool gameField);
+    Field(int countX, int countY, bool gameField);
     int getCountMinesNearCell(Cell* cell);
     int getN();
     int getM();

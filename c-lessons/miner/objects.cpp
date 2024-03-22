@@ -129,13 +129,13 @@ int Cell::getSize() {
 };
 
 
-Field::Field(int n, int m, bool gameField)
+Field::Field(int countX, int countY, bool gameField)
 {
-    N=n;
-    M=m;
+    this->countX=countX;
+    this->countY=countY;
 
-    for (int i=0;i<n;i++) {
-        for (int j=0;j<m;j++) {
+    for (int i=0;i<countY;i++) {
+        for (int j=0;j<countX;j++) {
             cells.push_back(Cell(i, j, cellSize, gameField));
         }
     }
@@ -145,7 +145,7 @@ Field::Field(int n, int m, bool gameField)
 Cell * Field::getCellAt(int xIndex, int yIndex)
 {
     if (cells.size()==0) return nullptr;
-    return &cells[xIndex*N + yIndex];
+    return &cells[xIndex*countX + yIndex];
 }
 
 int Field::getCountMinesNearCell(Cell* cell)
@@ -156,36 +156,36 @@ int Field::getCountMinesNearCell(Cell* cell)
         count += getCellAt(cell->getXIndex()-1, cell->getYIndex())->checkHasMine();
         count += getCellAt(cell->getXIndex()-1, cell->getYIndex()-1)->checkHasMine();
         count+= getCellAt(cell->getXIndex(), cell->getYIndex()-1)->checkHasMine();
-        if(cell->getXIndex()<N-1 && cell->getYIndex()<M-1) {
+        if(cell->getXIndex()<countX-1 && cell->getYIndex()<countY-1) {
             count += getCellAt(cell->getXIndex()-1, cell->getYIndex()+1)->checkHasMine();
             count += getCellAt(cell->getXIndex()+1, cell->getYIndex()-1)->checkHasMine();
-        } else if (cell->getXIndex()<N-1) {
+        } else if (cell->getXIndex()<countX-1) {
             count += getCellAt(cell->getXIndex()+1, cell->getYIndex()-1)->checkHasMine();
-        } else if (cell->getYIndex()<M-1) {
+        } else if (cell->getYIndex()<countY-1) {
             count+= getCellAt(cell->getXIndex()-1, cell->getYIndex()+1)->checkHasMine();
         }
     } else if (cell->getXIndex()>0) {
         count += getCellAt(cell->getXIndex()-1, cell->getYIndex())->checkHasMine();
-        if(cell->getXIndex()<N-1 && cell->getYIndex()<M-1) {
+        if(cell->getXIndex()<countX-1 && cell->getYIndex()<countY-1) {
             count += getCellAt(cell->getXIndex()-1, cell->getYIndex()+1)->checkHasMine();
-        } else if (cell->getYIndex()<M-1) {
+        } else if (cell->getYIndex()<countY-1) {
             count+= getCellAt(cell->getXIndex()-1, cell->getYIndex()+1)->checkHasMine();
         }
     } else if (cell->getYIndex()>0) {
         count+= getCellAt(cell->getXIndex(), cell->getYIndex()-1)->checkHasMine();
-        if(cell->getXIndex()<N-1 && cell->getYIndex()<M-1) {
+        if(cell->getXIndex()<countX-1 && cell->getYIndex()<countY-1) {
             count += getCellAt(cell->getXIndex()+1, cell->getYIndex()-1)->checkHasMine();
-        } else if (cell->getXIndex()<N-1) {
+        } else if (cell->getXIndex()<countX-1) {
             count += getCellAt(cell->getXIndex()+1, cell->getYIndex()-1)->checkHasMine();
         }
     }
-    if(cell->getXIndex()<N-1 && cell->getYIndex()<M-1) {
+    if(cell->getXIndex()<countX-1 && cell->getYIndex()<countY-1) {
         count += getCellAt(cell->getXIndex()+1, cell->getYIndex())->checkHasMine();
         count += getCellAt(cell->getXIndex()+1, cell->getYIndex()+1)->checkHasMine();
         count+= getCellAt(cell->getXIndex(), cell->getYIndex()+1)->checkHasMine();
-    } else if (cell->getXIndex()<N-1) {
+    } else if (cell->getXIndex()<countX-1) {
         count += getCellAt(cell->getXIndex()+1, cell->getYIndex())->checkHasMine();
-    } else if (cell->getYIndex()<M-1) {
+    } else if (cell->getYIndex()<countY-1) {
         count+= getCellAt(cell->getXIndex(), cell->getYIndex()+1)->checkHasMine();
     }
     return count;
@@ -193,12 +193,12 @@ int Field::getCountMinesNearCell(Cell* cell)
 
 int Field::getN()
 {
-    return N;
+    return countX;
 }
 
 int Field::getM()
 {
-    return M;
+    return countY;
 }
 
 std::vector<Cell> * Field::getCells()
