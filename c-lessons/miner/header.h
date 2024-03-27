@@ -16,3 +16,4 @@ extern int maxScreenWidth;
 extern int maxScreenHeight;
 extern int minScreenWidth;
 extern int minScreenHeight;
+extern int border[];

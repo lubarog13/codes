@@ -24,3 +24,18 @@ void clear(Field* field) {
         }
     }
 }
+
+void createTexts(sf::Text& textTop, sf::Text& textBottom, sf::Font& font, int cellsCountX, int cellsCountY) {
+    textTop.setFont(font);
+    textBottom.setFont(font);
+    textTop.setString(L"Разместите мины и нажмите enter");
+
+    textTop.setCharacterSize(10);
+    textTop.setFillColor(sf::Color::Black);
+
+    textTop.setPosition(border[3], 5);
+    textBottom.setPosition(border[3], border[0] + cellSize * cellsCountX + border[3]);
+    textBottom.setCharacterSize(10);
+    textBottom.setFillColor(sf::Color::Black);
+    textBottom.setString(L"Нажмите пробел, \nчтобы начать заново");
+}

@@ -1,42 +1,50 @@
 #pragma once
 #include "header.h"
 
-class Mine : public sf::Sprite {
+class Mine  {
     public:
-        Mine(int xIndex, int yIndex, int size);
+        Mine(int xIndex, int yIndex);
         void touch();
+        int getXIndex();
+        int getYIndex();
+
+    private:
+        int xIndex;
+        int yIndex;
 };
 
 
-class Cell : public sf::RectangleShape
+class Cell
 {
     public:
-        Cell(int xIndex, int yIndex,  int size, bool gameField);
+        Cell(int xIndex, int yIndex, bool gameField);
         Cell(const Cell &c);
         void setMine();
         Mine* getMine();
         int checkHasMine();
         int getXIndex();
         int getYIndex();
-        int getSize();
         bool checkIsOpened();
         void setIsOpened();
-        void clickCell(bool gameMode);
+        void clickCell();
         void setMinesNear(int mines);
         bool checkHasParentMine();
         void setParentMine(bool mine);
         int getMinesNear();
+        sf::Color getFillColor();
+        sf::Color getOutlineColor();
         void clear();
 
 private:
         int minesNear;
         int xIndex;
         int yIndex;
-        int size;
         bool isOpened = false;
         bool gameField;
         bool hasParentMine;
         Mine *mine = nullptr;
+        sf::Color outlineColor;
+        sf::Color fillColor;
 };
 
 class Field {
