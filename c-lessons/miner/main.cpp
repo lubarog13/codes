@@ -71,7 +71,7 @@ int main()
             if (event.mouseButton.button == sf::Mouse::Left && lock_click != true) {//specifies
                 sf::Vector2i localPosition = sf::Mouse::getPosition(window);
                 lock_click = true;
-                if (!(localPosition.x < border[3] || localPosition.x > (cellsCountY * cellSize + border[1]) || localPosition.y < border[0] || localPosition.y > (cellsCountX * cellSize + border[0]))) {
+                if (!(localPosition.x < border[3] || localPosition.x > (cellsCountY * cellSize + border[3]) || localPosition.y < border[0] || localPosition.y > (cellsCountX * cellSize + border[0]))) {
                     Cell *cell = nullptr;
                     Cell* parentCell = nullptr;
                     if(gameStatus==1) {
@@ -125,7 +125,7 @@ int main()
           cell.setFillColor(it->getFillColor());
           cell.setOutlineColor(it->getOutlineColor());
           window.draw(cell);
-          if(it->checkHasMine()) {
+          if(gameStatus != 1 && it->checkHasMine()) {
               mine.setPosition((*it->getMine()).getXIndex()*cellSize + border[3], (*it->getMine()).getYIndex()*cellSize + border[0]);
               window.draw(mine);
           }
@@ -153,10 +153,6 @@ int main()
                     cell.setFillColor(it->getFillColor());
                     cell.setOutlineColor(it->getOutlineColor());
                     window.draw(cell);
-                    if(it->checkHasMine()) {
-                        mine.setPosition((*it->getMine()).getXIndex()*cellSize + border[3], (*it->getMine()).getYIndex()*cellSize + border[0]);
-                        window.draw(mine);
-                    }
                     if (it->checkIsOpened() && !it->checkHasParentMine()) {
                         sf::Text number;
                         number.setFont(font);

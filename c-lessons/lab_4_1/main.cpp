@@ -34,7 +34,7 @@ int main()
     endDot.color= sf::Color::White;
     sf::Vertex line[] = {startDot, endDot};
 
-    sf::RenderWindow window(sf::VideoMode(640, 480), L"Простые фигуры");
+    sf::RenderWindow window(sf::VideoMode(screenWidth, screenHeight), L"Простые фигуры");
 
     while (window.isOpen())
     {
