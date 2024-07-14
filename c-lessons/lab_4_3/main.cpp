@@ -16,18 +16,12 @@ void drawCircle(int R)
     circle.setOutlineColor(sf::Color::Red);
     circle.setFillColor(sf::Color::White);
     circle.setPosition(screenWidth -(R + 190), screenHeight - 190);
-    for(int i = 0; i < 20; i++)
+    for(int i = 0; i < 1; i++)
     {
-        //mutex.lock();
-        //window.setActive(true);
-        //window.clear();
-        circle.move(-i, 0.0f);
-        //window.draw(circle);
-        //window.draw(triangle);
+        if (circle.getPosition().x > i) {
+          circle.move(-i, 0.0f);
+        }
         sf::sleep(sf::milliseconds(70));
-        //window.display();
-        //window.setActive(false);
-        //mutex.unlock();
     }
     return;
 }
@@ -40,16 +34,10 @@ void drawTriangle(int W)
     triangle.setPosition(screenWidth - 190, screenHeight - (W + 190));
     for(int i = 0; i < 20; i++)
     {
-        //mutex.lock();
-        //window.setActive(true);
-        //window.clear();
+      if (triangle.getPosition().y > i) {
         triangle.move(0.0f, -i);
-        //window.draw(triangle);
-        //window.draw(circle);
+      }
         sf::sleep(sf::milliseconds(70));
-        //window.display();
-        //window.setActive(false);
-        //mutex.unlock();
     }
     return;
 }
@@ -65,7 +53,6 @@ int inputInt(std::string message, int min, int max)
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cout << message;
     }
-    // cin.clear();
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     return n;
 }
