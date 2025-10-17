@@ -23,9 +23,10 @@ void var2() {
         printf("pid: %d\n", pid);
         printf("ppid: %d\n", ppid);
         if (id == 0) {
-            sleep(1);
+            sleep(40);
+        } else {
+            waitpid(id, NULL, 0);
         }
-        waitpid(pid, NULL, 0);
         free(command);
 }
 
@@ -41,13 +42,31 @@ void var3() {
             i = 2;
         }
         printf("pid: %d, ppid: %d, i: %d, p: %p, *i: %d \n", pid, ppid, i, p, *p);
-        waitpid(pid, NULL, 0);
+        waitpid(id, NULL, 0);
+        printf("pid: %d, ppid: %d, i: %d, p: %p, *i: %d \n", pid, ppid, i, p, *p);
         free(command);
 }
+
+
+void makeProcessTree(int depth) {
+    if (depth == 0) {
+        return;
+    }
+    int id = fork();
+    if (id == 0) {
+        printf("pid: %d, depth: %d\n", getpid(), depth);
+        makeProcessTree(depth - 1);
+    } else {
+        waitpid(id, NULL, 0);
+    }
+}
+
 int main(int argc, char **argv, char **env) {
     //var1();
     //var2();
-    var3();
+    //var3();
+    int count = atoi(argv[1]);
+    makeProcessTree(count);
     return 0;
 
 }
