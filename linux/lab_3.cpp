@@ -41,9 +41,6 @@ int main(int argc, char *argv[])
         execl(argv[0], argv[0], "-child2", argv[1], argv[4], NULL); // Замена процесса потомка на новый процесс
         _exit(1); // Если execl не удается, завершаем процесс с ошибкой
     }
-
     write_info(argv[1], "Предок", atoi(argv[2]));
-    wait(NULL); // Ожидание завершения потомков
-    wait(NULL);
     return 0;
 }

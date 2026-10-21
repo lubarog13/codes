@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
 	}
 
 	int data_pipe[2];
-	int info_pipe[2];
+	int info_pipe[2]; // использовать группу (для себя блокирует, остальные остаются)
 	int ready_pipe[2];
 	if (pipe(data_pipe) == -1 || pipe(info_pipe) == -1 || pipe(ready_pipe) == -1) {
 		perror("pipe");

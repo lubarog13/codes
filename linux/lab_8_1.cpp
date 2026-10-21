@@ -9,7 +9,7 @@
 #include <cstdint>
 
 #include "lab_8.h"
-
+//Удалить общую очередь
 int main(int argc, char *argv[])
 {
 	if (argc != 2) {

@@ -154,6 +154,7 @@ int main(int argc, char *argv[])
 		}
 
         // В дочернем процессе
+		// Перенести в функцию
 		if (child_pid == 0) {
 			close(result_pipe[0]); // Закрытие канала для чтения в дочернем процессе
 			clock_gettime(CLOCK_MONOTONIC, &child_start);
