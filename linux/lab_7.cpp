@@ -10,19 +10,19 @@
 
 volatile sig_atomic_t got_turn = 0; // разрешение на чтение символа
 
-// разбудить потомка после окончания записи в канал
+// разбудить потомка (SIGUSR1 / SIGUSR2)
 void turn_handler(int)
 {
 	got_turn = 1;
 }
 
-// SIGQUIT: родитель закончил запись в канал
+// перехватчик сигнала SIGQUIT
 void quit_handler(int) {}
 
 // настройка сигналов
 void setup_signals()
 {
-    // настройка сигнала SIGUSR1
+	// настройка сигнала SIGUSR1 / SIGUSR2
 	struct sigaction turn_action{};
 	turn_action.sa_handler = turn_handler;
 	sigemptyset(&turn_action.sa_mask);
@@ -33,7 +33,7 @@ void setup_signals()
 		_exit(1);
 	}
 
-    // настройка сигнала SIGQUIT
+	// настройка сигнала SIGQUIT
 	struct sigaction quit_action{};
 	quit_action.sa_handler = quit_handler;
 	sigemptyset(&quit_action.sa_mask);
@@ -44,21 +44,39 @@ void setup_signals()
 	}
 }
 
-// ожидание сигнала SIGUSR1 или SIGUSR2
-void wait_for_turn()
+// ожидание своей очереди
+void wait_for_turn(int send_sig)
 {
 	while (!got_turn) {
 		sigset_t wait_mask;
 		sigemptyset(&wait_mask);
+		sigaddset(&wait_mask, send_sig); // себе этот сигнал не принимаем
 		sigsuspend(&wait_mask);
 	}
-    // сброс флага разрешения на чтение символа
 	got_turn = 0;
 }
 
-// работа потомка
-void child_work(int pipe_fd, const char *out_name, pid_t sibling, int send_sig)
+// передать очередь через группу процессов
+void pass_turn(int send_sig)
 {
+	if (kill(-getpgrp(), send_sig) == -1) {
+		perror("kill");
+		_exit(1);
+	}
+}
+
+// работа потомка
+void child_work(int pipe_fd, const char *out_name, int send_sig)
+{
+	// блокировка сигнала send_sig для себя
+	sigset_t block_self;
+	sigemptyset(&block_self);
+	sigaddset(&block_self, send_sig);
+	if (sigprocmask(SIG_BLOCK, &block_self, nullptr) == -1) {
+		perror("sigprocmask");
+		_exit(1);
+	}
+
 	int out_file = open(out_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (out_file < 0) {
 		perror(out_name);
@@ -66,13 +84,22 @@ void child_work(int pipe_fd, const char *out_name, pid_t sibling, int send_sig)
 	}
 
 	while (true) {
-        // ожидание сигнала SIGUSR1 или SIGUSR2
-		wait_for_turn();
+		wait_for_turn(send_sig);
 
 		char c = 0;
-		int n = read(pipe_fd, &c, 1); // чтение одного символа из канала
-		if (n <= 0) { // если нечего читать
-			kill(sibling, send_sig); // разбудить второго потомка для выхода
+		int n = 0;
+		do {
+			n = read(pipe_fd, &c, 1); // чтение символа из канала
+		} while (n < 0 && errno == EINTR); // SIGQUIT не должен обрывать чтение
+
+		if (n < 0) {
+			perror("read");
+			close(out_file);
+			_exit(1);
+		}
+		// EOF
+		if (n == 0) {
+			pass_turn(send_sig) // передать очередь через группу
 			break;
 		}
 
@@ -82,7 +109,7 @@ void child_work(int pipe_fd, const char *out_name, pid_t sibling, int send_sig)
 			_exit(1);
 		}
 
-		kill(sibling, send_sig); // передать очередь другому потомку
+		pass_turn(send_sig); // передать очередь через группу
 	}
 
 	close(out_file);
@@ -99,14 +126,12 @@ int main(int argc, char *argv[])
 	}
 
 	int data_pipe[2];
-	int info_pipe[2]; // использовать группу (для себя блокирует, остальные остаются)
-	int ready_pipe[2];
-	if (pipe(data_pipe) == -1 || pipe(info_pipe) == -1 || pipe(ready_pipe) == -1) {
+	if (pipe(data_pipe) == -1) {
 		perror("pipe");
 		return 1;
 	}
 
-    // блокировка сигналов SIGUSR1, SIGUSR2, SIGQUIT
+	// блокировка сигналов SIGUSR1, SIGUSR2, SIGQUIT
 	sigset_t block_set, old_set;
 	sigemptyset(&block_set);
 	sigaddset(&block_set, SIGUSR1);
@@ -122,32 +147,18 @@ int main(int argc, char *argv[])
 		perror("fork");
 		return 1;
 	}
-	if (odd_pid == 0) { 
-        // закрытие канала записи данных, канала для передачи PID и канала для ожидания готовности
+	if (odd_pid == 0) {
 		close(data_pipe[1]);
-		close(info_pipe[1]);
-		close(ready_pipe[0]);
 
 		setup_signals();
-        // сброс блокировки сигналов
-		sigprocmask(SIG_SETMASK, &old_set, nullptr); 
-
-		pid_t even_pid = 0;
-		if (read(info_pipe[0], &even_pid, sizeof(even_pid)) !=
-		    static_cast<int>(sizeof(even_pid))) {
-			perror("read even_pid");
+		// лидер группы процессов
+		if (setpgid(0, 0) == -1) {
+			perror("setpgid");
 			_exit(1);
 		}
-		close(info_pipe[0]);
+		sigprocmask(SIG_SETMASK, &old_set, nullptr);
 
-		char ready = 1;
-		if (write(ready_pipe[1], &ready, 1) != 1) {
-			perror("write ready");
-			_exit(1);
-		}
-		close(ready_pipe[1]);
-
-		child_work(data_pipe[0], argv[2], even_pid, SIGUSR2);
+		child_work(data_pipe[0], argv[2], SIGUSR2);
 	}
 
 	pid_t even_pid = fork(); // второй потомок — четные символы
@@ -157,47 +168,35 @@ int main(int argc, char *argv[])
 	}
 	if (even_pid == 0) {
 		close(data_pipe[1]);
-		close(info_pipe[0]);
-		close(info_pipe[1]);
-		close(ready_pipe[0]);
 
 		setup_signals();
-		sigprocmask(SIG_SETMASK, &old_set, nullptr);
-
-		char ready = 1;
-		if (write(ready_pipe[1], &ready, 1) != 1) {
-			perror("write ready");
+		// вступаем в группу первого потомка
+		if (setpgid(0, odd_pid) == -1) {
+			perror("setpgid");
 			_exit(1);
 		}
-		close(ready_pipe[1]);
+		sigprocmask(SIG_SETMASK, &old_set, nullptr);
 
-		child_work(data_pipe[0], argv[3], odd_pid, SIGUSR1);
+		child_work(data_pipe[0], argv[3], SIGUSR1);
 	}
 
 	close(data_pipe[0]);
-	close(info_pipe[0]);
-	close(ready_pipe[1]);
-	sigprocmask(SIG_SETMASK, &old_set, nullptr);
-
-	// передать первому потомку PID второго
-	if (write(info_pipe[1], &even_pid, sizeof(even_pid)) !=
-	    static_cast<int>(sizeof(even_pid))) {
-		perror("write");
+	// блокировка сигнала SIGQUIT
+	if (std::signal(SIGQUIT, SIG_IGN) == SIG_ERR) {
+		perror("signal");
 		return 1;
 	}
-	close(info_pipe[1]);
+	sigprocmask(SIG_SETMASK, &old_set, nullptr);
 
-	char ready_buf[2];
-	int ready_got = 0;
-	while (ready_got < 2) {
-		int n = read(ready_pipe[0], ready_buf + ready_got, 2 - ready_got);
-		if (n <= 0) {
-			perror("read ready");
-			return 1;
-		}
-		ready_got += n;
+	// выставление группы процессов
+	if (setpgid(odd_pid, odd_pid) == -1 && errno != EACCES) {
+		perror("setpgid odd");
+		return 1;
 	}
-	close(ready_pipe[0]);
+	if (setpgid(even_pid, odd_pid) == -1 && errno != EACCES) {
+		perror("setpgid even");
+		return 1;
+	}
 
 	FILE *input = fopen(argv[1], "r");
 	if (input == nullptr) {
@@ -205,17 +204,18 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	kill(odd_pid, SIGUSR1); // запуск поочередного чтения с нечетного символа
+	// отправка сигнала первому потомку
+	kill(odd_pid, SIGUSR1);
 
 	char *line = nullptr;
 	size_t cap = 0;
-	while (getline(&line, &cap, input) != -1) { // Построчное чтение входного файла
+	while (getline(&line, &cap, input) != -1) {
 		int len = strlen(line);
 		int written = 0;
 		while (written < len) {
 			int n = write(data_pipe[1], line + written, len - written);
 			if (n < 0) {
-				if (errno == EINTR) { // если сигнал прервал запись
+				if (errno == EINTR) {
 					continue;
 				}
 				perror("write");
@@ -229,12 +229,12 @@ int main(int argc, char *argv[])
 	free(line);
 	fclose(input);
 
-	kill(odd_pid, SIGQUIT); // оповещение об окончании записи в канал
-	kill(even_pid, SIGQUIT);
-	close(data_pipe[1]); // закрытие канала — потомки получают EOF
+	// оповещение группы об окончании записи
+	kill(-odd_pid, SIGQUIT);
+	close(data_pipe[1]); // закрытие канала
 
 	int status = 0;
-	waitpid(odd_pid, &status, 0); // ожидание завершения потомков
+	waitpid(odd_pid, &status, 0);
 	waitpid(even_pid, &status, 0);
 
 	return 0;

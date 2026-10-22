@@ -9,7 +9,7 @@
 #include <cstdint>
 
 #include "lab_8.h"
-//Удалить общую очередь
+
 int main(int argc, char *argv[])
 {
 	if (argc != 2) {
@@ -85,5 +85,22 @@ int main(int argc, char *argv[])
 	sleep(5);
 
 	msgctl(local_qid, IPC_RMID, nullptr);
+
+	
+	msqid_ds info{};
+	if (msgctl(shared_qid, IPC_STAT, &info) == -1) {
+		perror("msgctl IPC_STAT");
+		return 1;
+	}
+	if (info.msg_qnum != 0) {
+		printf("В общей очереди ещё %lu сообщений — удаление невозможно\n",
+		       static_cast<unsigned long>(info.msg_qnum));
+		return 1;
+	}
+	if (msgctl(shared_qid, IPC_RMID, nullptr) == -1) {
+		perror("msgctl IPC_RMID");
+		return 1;
+	}
+	printf("Общая очередь удалена\n");
 	return 0;
 }
