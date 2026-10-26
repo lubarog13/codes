@@ -85,5 +85,20 @@ int main(int argc, char *argv[])
 	sleep(5);
 
 	msgctl(local_qid, IPC_RMID, nullptr);
+	msqid_ds info{};
+
+	if (msgctl(shared_qid, IPC_STAT, &info) == -1) {
+		return 0;
+	}
+	if (info.msg_qnum != 0) {
+		printf("В общей очереди ещё %lu сообщений — удаление невозможно\n",
+		       static_cast<unsigned long>(info.msg_qnum));
+		return 1;
+	}
+	if (msgctl(shared_qid, IPC_RMID, nullptr) == -1) {
+		perror("msgctl IPC_RMID");
+		return 1;
+	}
+	printf("Общая очередь удалена\n");
 	return 0;
 }

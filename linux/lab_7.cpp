@@ -8,32 +8,30 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+#define TURN_SIG SIGUSR1 // один сигнал для передачи очереди
+
 volatile sig_atomic_t got_turn = 0; // разрешение на чтение символа
 
-// разбудить потомка (SIGUSR1 / SIGUSR2)
 void turn_handler(int)
 {
 	got_turn = 1;
 }
 
-// перехватчик сигнала SIGQUIT
+// пустой обработчик для SIGQUIT
 void quit_handler(int) {}
 
-// настройка сигналов
+// установка обработчиков сигналов
 void setup_signals()
 {
-	// настройка сигнала SIGUSR1 / SIGUSR2
 	struct sigaction turn_action{};
 	turn_action.sa_handler = turn_handler;
 	sigemptyset(&turn_action.sa_mask);
 	turn_action.sa_flags = 0;
-	if (sigaction(SIGUSR1, &turn_action, nullptr) == -1 ||
-	    sigaction(SIGUSR2, &turn_action, nullptr) == -1) {
+	if (sigaction(TURN_SIG, &turn_action, nullptr) == -1) {
 		perror("sigaction");
 		_exit(1);
 	}
 
-	// настройка сигнала SIGQUIT
 	struct sigaction quit_action{};
 	quit_action.sa_handler = quit_handler;
 	sigemptyset(&quit_action.sa_mask);
@@ -45,38 +43,48 @@ void setup_signals()
 }
 
 // ожидание своей очереди
-void wait_for_turn(int send_sig)
+void wait_for_turn()
 {
 	while (!got_turn) {
 		sigset_t wait_mask;
 		sigemptyset(&wait_mask);
-		sigaddset(&wait_mask, send_sig); // себе этот сигнал не принимаем
 		sigsuspend(&wait_mask);
 	}
 	got_turn = 0;
 }
 
-// передать очередь через группу процессов
-void pass_turn(int send_sig)
+// передать очередь брату через группу (один сигнал)
+void pass_turn()
 {
-	if (kill(-getpgrp(), send_sig) == -1) {
-		perror("kill");
-		_exit(1);
-	}
-}
+	sigset_t turn_set, old_mask;
+	sigemptyset(&turn_set);
+	sigaddset(&turn_set, TURN_SIG);
 
-// работа потомка
-void child_work(int pipe_fd, const char *out_name, int send_sig)
-{
-	// блокировка сигнала send_sig для себя
-	sigset_t block_self;
-	sigemptyset(&block_self);
-	sigaddset(&block_self, send_sig);
-	if (sigprocmask(SIG_BLOCK, &block_self, nullptr) == -1) {
+	// блокировка сигнала TURN_SIG
+	if (sigprocmask(SIG_BLOCK, &turn_set, &old_mask) == -1) {
 		perror("sigprocmask");
 		_exit(1);
 	}
 
+	// передача очереди через группу
+	if (kill(-getpgrp(), TURN_SIG) == -1 && errno != ESRCH) {
+		perror("kill");
+		_exit(1);
+	}
+
+	// ожидание сигнала TURN_SIG
+	timespec zero{};
+	while (sigtimedwait(&turn_set, nullptr, &zero) == TURN_SIG) {
+	}
+
+	if (sigprocmask(SIG_SETMASK, &old_mask, nullptr) == -1) {
+		perror("sigprocmask");
+		_exit(1);
+	}
+}
+
+void child_work(int pipe_fd, const char *out_name)
+{
 	int out_file = open(out_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (out_file < 0) {
 		perror(out_name);
@@ -84,13 +92,13 @@ void child_work(int pipe_fd, const char *out_name, int send_sig)
 	}
 
 	while (true) {
-		wait_for_turn(send_sig);
+		wait_for_turn();
 
 		char c = 0;
 		int n = 0;
 		do {
-			n = read(pipe_fd, &c, 1); // чтение символа из канала
-		} while (n < 0 && errno == EINTR); // SIGQUIT не должен обрывать чтение
+			n = read(pipe_fd, &c, 1);
+		} while (n < 0 && errno == EINTR); // SIGQUIT / TURN_SIG не обрывают чтение
 
 		if (n < 0) {
 			perror("read");
@@ -99,7 +107,7 @@ void child_work(int pipe_fd, const char *out_name, int send_sig)
 		}
 		// EOF
 		if (n == 0) {
-			pass_turn(send_sig) // передать очередь через группу
+			pass_turn(); // передать очередь
 			break;
 		}
 
@@ -109,7 +117,7 @@ void child_work(int pipe_fd, const char *out_name, int send_sig)
 			_exit(1);
 		}
 
-		pass_turn(send_sig); // передать очередь через группу
+		pass_turn();
 	}
 
 	close(out_file);
@@ -131,64 +139,56 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	// блокировка сигналов SIGUSR1, SIGUSR2, SIGQUIT
+	// блокировка сигналов до установки обработчиков у потомков
 	sigset_t block_set, old_set;
 	sigemptyset(&block_set);
-	sigaddset(&block_set, SIGUSR1);
-	sigaddset(&block_set, SIGUSR2);
+	sigaddset(&block_set, TURN_SIG);
 	sigaddset(&block_set, SIGQUIT);
 	if (sigprocmask(SIG_BLOCK, &block_set, &old_set) == -1) {
 		perror("sigprocmask");
 		return 1;
 	}
 
-	pid_t odd_pid = fork(); // первый потомок — нечетные символы
+	pid_t odd_pid = fork();
 	if (odd_pid == -1) {
 		perror("fork");
 		return 1;
 	}
 	if (odd_pid == 0) {
-		close(data_pipe[1]);
-
+		close(data_pipe[1]); // закрытие канала для записи в дочернем процессе
 		setup_signals();
-		// лидер группы процессов
-		if (setpgid(0, 0) == -1) {
+		if (setpgid(0, 0) == -1) { // установка группы для дочернего процесса
 			perror("setpgid");
 			_exit(1);
 		}
-		sigprocmask(SIG_SETMASK, &old_set, nullptr);
-
-		child_work(data_pipe[0], argv[2], SIGUSR2);
+		sigprocmask(SIG_SETMASK, &old_set, nullptr); // снятие блокировки сигналов
+		child_work(data_pipe[0], argv[2]);
 	}
 
-	pid_t even_pid = fork(); // второй потомок — четные символы
+	pid_t even_pid = fork();
 	if (even_pid == -1) {
 		perror("fork");
 		return 1;
 	}
 	if (even_pid == 0) {
-		close(data_pipe[1]);
-
+		close(data_pipe[1]); // закрытие канала для записи в дочернем процессе
 		setup_signals();
-		// вступаем в группу первого потомка
-		if (setpgid(0, odd_pid) == -1) {
+		if (setpgid(0, odd_pid) == -1) { // установка группы для дочернего процесса
 			perror("setpgid");
 			_exit(1);
 		}
 		sigprocmask(SIG_SETMASK, &old_set, nullptr);
-
-		child_work(data_pipe[0], argv[3], SIGUSR1);
+		child_work(data_pipe[0], argv[3]);
 	}
 
 	close(data_pipe[0]);
-	// блокировка сигнала SIGQUIT
+	// родителю SIGQUIT не нужен
 	if (std::signal(SIGQUIT, SIG_IGN) == SIG_ERR) {
 		perror("signal");
 		return 1;
 	}
 	sigprocmask(SIG_SETMASK, &old_set, nullptr);
 
-	// выставление группы процессов
 	if (setpgid(odd_pid, odd_pid) == -1 && errno != EACCES) {
 		perror("setpgid odd");
 		return 1;
@@ -204,8 +204,8 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	// отправка сигнала первому потомку
-	kill(odd_pid, SIGUSR1);
+	// старт первого потомка
+	kill(odd_pid, TURN_SIG);
 
 	char *line = nullptr;
 	size_t cap = 0;
@@ -231,7 +231,7 @@ int main(int argc, char *argv[])
 
 	// оповещение группы об окончании записи
 	kill(-odd_pid, SIGQUIT);
-	close(data_pipe[1]); // закрытие канала
+	close(data_pipe[1]); // закрытие канала для записи в родительском процессе
 
 	int status = 0;
 	waitpid(odd_pid, &status, 0);

@@ -89,8 +89,7 @@ int main(int argc, char *argv[])
 	
 	msqid_ds info{};
 	if (msgctl(shared_qid, IPC_STAT, &info) == -1) {
-		perror("msgctl IPC_STAT");
-		return 1;
+		return 0;
 	}
 	if (info.msg_qnum != 0) {
 		printf("В общей очереди ещё %lu сообщений — удаление невозможно\n",
