@@ -1,4 +1,5 @@
-abcdefg
-rkgkg
-emej
-fmffjfj
+Standard API keys
+
+Standard API keys provide a way to associate a request with a project for billing and quota purposes. When you use a standard API key (an API key that has not been bound to a service account) to access an API, the API key doesn't identify a principal. Without a principal, the request can't use Identity and Access Management (IAM) to check whether the caller is authorized to perform the requested operation.
+
+Standard API keys can be used with any API that accepts API keys, unless API restrictions have been added to the key. Standard API keys can't be used with services that don't accept API keys, including in express mode.
