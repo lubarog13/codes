@@ -125,6 +125,8 @@ void child_work(int pipe_fd, const char *out_name)
 	_exit(0);
 }
 
+//породить потомка, передать каналы и файл, после передачи линии передать sigquit и ждать сигнала
+// три отдельных программы
 int main(int argc, char *argv[])
 {
 	if (argc != 4) {
